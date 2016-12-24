@@ -22,6 +22,10 @@ public class UserService {
         return Optional.ofNullable(userDao.findOne(id));
     }
 
+    public Optional<User> findByUsername(String username) {
+        return userDao.findByUsername(username);
+    }
+
     public List<User> findAll() {
         return userDao.findAll();
     }

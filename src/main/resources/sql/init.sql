@@ -43,3 +43,19 @@ CREATE TABLE IF NOT EXISTS waiting_users (
   register_key  VARCHAR(255),
   password      VARCHAR(128)
 );
+
+
+CREATE TABLE IF NOT EXISTS permissions (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255) NOT NULL
+);
+
+INSERT INTO permissions(name) VALUE ("ADMIN");
+
+CREATE TABLE IF NOT EXISTS user_permissions (
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT NOT NULL,
+  permission_id BIGINT NOT NULL,
+  CONSTRAINT `permission_user_id` FOREIGN KEY (`user_id`) REFERENCES users (`id`) ON DELETE CASCADE,
+  CONSTRAINT `permission_id` FOREIGN KEY (`permission_id`) REFERENCES permissions(`id`)
+);

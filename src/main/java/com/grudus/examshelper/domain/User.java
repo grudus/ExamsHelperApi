@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -32,6 +33,9 @@ public class User {
 
     @Column(name = "token")
     private String token;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<UserPermission> permissionList;
 
     public User() {}
 
@@ -90,5 +94,13 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public List<UserPermission> getPermissionList() {
+        return permissionList;
+    }
+
+    public void setPermissionList(List<UserPermission> permissionList) {
+        this.permissionList = permissionList;
     }
 }
