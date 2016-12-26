@@ -25,14 +25,14 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         Object credentials = authentication.getCredentials();
 
         if (username == null || credentials == null)
-            throw new UsernameNotFoundException("Username or password is null");
+            throw new UsernameNotFoundException("Bad username or password");
 
         final String password = (credentials.toString().trim());
         final User user = userService.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Cannot find user: " + username));
 
         if (!password.equals(user.getPassword()))
-            throw new RuntimeException("dupa");
+            throw new UsernameNotFoundException("Bad username or password");
 
 
         return new AuthenticatedUser(user);

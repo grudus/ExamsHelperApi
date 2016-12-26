@@ -1,17 +1,21 @@
 package com.grudus.examshelper.exceptions;
 
 
-import javax.security.sasl.AuthenticationException;
-
-public class UserNotFoundException extends AuthenticationException {
+public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException() {
+        super("Cannot find user");
     }
 
-    public UserNotFoundException(String detail) {
-        super(detail);
+    public UserNotFoundException(String username) {
+        super("Cannot find user: " + username);
+    }
+
+    public UserNotFoundException(Throwable cause) {
+        super(cause);
     }
 
     public UserNotFoundException(String detail, Throwable ex) {
         super(detail, ex);
     }
+
 }

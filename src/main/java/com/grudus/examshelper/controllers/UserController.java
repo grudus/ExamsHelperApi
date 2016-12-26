@@ -4,14 +4,14 @@ import com.grudus.examshelper.configuration.authenticated.AuthenticatedUser;
 import com.grudus.examshelper.domain.User;
 import com.grudus.examshelper.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/user")
+@PreAuthorize("hasAnyRole(ROLE_USER, ROLE_ADMIN)")
 public class UserController {
 
     private final UserService userService;
@@ -22,9 +22,18 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<User> getAllUsers(AuthenticatedUser currentUser) {
-        System.err.println("auth: " + currentUser);
-        return userService.findAll();
+    public User getUserInfo(AuthenticatedUser currentUser) {
+        return currentUser.getUser();
+    }
+
+    @RequestMapping(value = "/null")
+    public String nul() {
+        return ((String)null).length() + "";
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String addUser(User user) {
+        return user == null ? "ni ma " : user.toString();
     }
 
 }
