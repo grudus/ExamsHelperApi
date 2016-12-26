@@ -1,4 +1,4 @@
-package com.grudus.examshelper.configuration;
+package com.grudus.examshelper.configuration.authenticated;
 
 import com.grudus.examshelper.domain.User;
 import com.grudus.examshelper.domain.UserPermission;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserService userService;
 
     @Autowired
-    public UserDetailsService(UserService userService) {
+    public UserDetailsServiceImpl(UserService userService) {
         this.userService = userService;
     }
 
@@ -33,7 +34,7 @@ public class UserDetailsService implements org.springframework.security.core.use
                 generateAuthorities(user));
     }
 
-    private List<GrantedAuthority> generateAuthorities(User user) {
+    static List<GrantedAuthority> generateAuthorities(User user) {
         return user.getPermissionList().stream()
                 .map(UserPermission::getPermission)
                 .map(permission -> "ROLE_" + permission.getName().toString())

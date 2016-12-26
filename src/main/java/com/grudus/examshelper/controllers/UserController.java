@@ -1,5 +1,6 @@
 package com.grudus.examshelper.controllers;
 
+import com.grudus.examshelper.configuration.authenticated.AuthenticatedUser;
 import com.grudus.examshelper.domain.User;
 import com.grudus.examshelper.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,8 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(AuthenticatedUser currentUser) {
+        System.err.println("auth: " + currentUser);
         return userService.findAll();
     }
 
