@@ -26,14 +26,15 @@ public class UserController {
         return currentUser.getUser();
     }
 
-    @RequestMapping(value = "/null")
-    public String nul() {
-        return ((String)null).length() + "";
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public void deleteUser(AuthenticatedUser currentUser) {
+        userService.delete(currentUser.getUser());
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String addUser(User user) {
-        return user == null ? "ni ma " : user.toString();
+    @RequestMapping(method = RequestMethod.PUT)
+    public void updateUser(AuthenticatedUser currentUser) {
+        userService.update(currentUser.getUser());
     }
 
 }

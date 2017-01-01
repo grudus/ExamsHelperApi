@@ -37,6 +37,10 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserPermission> permissionList;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Subject> subjectList;
+
     public User() {}
 
     public User(String username, String password, String email) {
@@ -108,5 +112,13 @@ public class User {
 
     public void setPermissionList(List<UserPermission> permissionList) {
         this.permissionList = permissionList;
+    }
+
+    public List<Subject> getSubjectList() {
+        return subjectList;
+    }
+
+    public void setSubjectList(List<Subject> subjectList) {
+        this.subjectList = subjectList;
     }
 }

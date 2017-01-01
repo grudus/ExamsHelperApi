@@ -23,15 +23,22 @@ public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseBody
     ResponseEntity<Object> handleControllerException(HttpServletRequest req, Throwable ex) {
-        System.err.println("handled exception");
+        ex.printStackTrace();
         return new ResponseEntity<>("ERROR 404: CANNOT FIND USER", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     @ResponseBody
     ResponseEntity<Object> HANDLE(HttpServletRequest req, Throwable ex) {
-        System.err.println("handled exception");
+        ex.printStackTrace();
         return new ResponseEntity<>("USERNAME NOT FOUND EXC", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SubjectNotFoundException.class)
+    @ResponseBody
+    ResponseEntity<Object> handleSubjectException(HttpServletRequest req, Throwable ex) {
+        ex.printStackTrace();
+        return new ResponseEntity<>("Cannot find subject", HttpStatus.NOT_FOUND);
     }
 
 
@@ -39,6 +46,7 @@ public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({NullPointerException.class, RuntimeException.class})
     @ResponseBody
     ResponseEntity<Object> handleStrangeErrors(HttpServletRequest req, Throwable ex) {
+        ex.printStackTrace();
         return new ResponseEntity<>("ERROR 404: Unexpected error occurs", HttpStatus.NOT_FOUND);
 
     }
@@ -50,6 +58,7 @@ public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("path", request.getContextPath());
         responseBody.put("message", "The URL you have reached is not in service at this time (404).");
+        ex.printStackTrace();
         return new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
     }
 }

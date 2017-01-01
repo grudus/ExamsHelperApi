@@ -57,5 +57,5 @@ CREATE TABLE IF NOT EXISTS user_permissions (
   user_id BIGINT NOT NULL,
   permission_id BIGINT NOT NULL,
   CONSTRAINT `permission_user_id` FOREIGN KEY (`user_id`) REFERENCES users (`id`) ON DELETE CASCADE,
-  CONSTRAINT `permission_id` FOREIGN KEY (`permission_id`) REFERENCES permissions(`id`)
+  CONSTRAINT `permission_id` FOREIGN KEY (`permission_id`) REFERENCES permissions(`id`) ON DELETE CASCADE
 );

@@ -28,7 +28,15 @@ public class UserService {
 
     public Optional<User> findByToken(String token) {return userDao.findByToken(token);}
 
+    public void delete(User user) {
+        userDao.delete(user.getId());
+    }
+
     public List<User> findAll() {
         return userDao.findAll();
+    }
+
+    public void update(User user) {
+        userDao.save(user);
     }
 }
