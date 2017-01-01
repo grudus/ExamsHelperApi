@@ -3,6 +3,7 @@ package com.grudus.examshelper.exceptions;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,8 +25,16 @@ public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
     ResponseEntity<Object> handleControllerException(HttpServletRequest req, Throwable ex) {
         System.err.println("handled exception");
         return new ResponseEntity<>("ERROR 404: CANNOT FIND USER", HttpStatus.NOT_FOUND);
-
     }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseBody
+    ResponseEntity<Object> HANDLE(HttpServletRequest req, Throwable ex) {
+        System.err.println("handled exception");
+        return new ResponseEntity<>("USERNAME NOT FOUND EXC", HttpStatus.NOT_FOUND);
+    }
+
+
 
     @ExceptionHandler({NullPointerException.class, RuntimeException.class})
     @ResponseBody

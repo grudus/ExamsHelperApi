@@ -26,6 +26,8 @@ public class UserService {
         return userDao.findByUsername(username);
     }
 
+    public Optional<User> findByToken(String token) {return userDao.findByToken(token);}
+
     public List<User> findAll() {
         return userDao.findAll();
     }

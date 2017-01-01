@@ -9,7 +9,7 @@ public class AuthenticatedUser extends UsernamePasswordAuthenticationToken {
 
     private final User user;
 
-    AuthenticatedUser(User user) {
+    public AuthenticatedUser(User user) {
         super(user.getUsername(), user.getPassword(),  UserDetailsServiceImpl.generateAuthorities(user));
         this.user = user;
     }
