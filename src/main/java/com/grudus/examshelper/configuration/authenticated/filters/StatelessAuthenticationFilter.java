@@ -1,5 +1,6 @@
-package com.grudus.examshelper.configuration.authenticated.stateless;
+package com.grudus.examshelper.configuration.authenticated.filters;
 
+import com.grudus.examshelper.configuration.authenticated.stateless.TokenAuthenticationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;

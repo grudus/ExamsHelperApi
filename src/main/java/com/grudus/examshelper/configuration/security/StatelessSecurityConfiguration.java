@@ -1,8 +1,9 @@
 package com.grudus.examshelper.configuration.security;
 
 import com.grudus.examshelper.configuration.authenticated.UserAuthenticationProvider;
-import com.grudus.examshelper.configuration.authenticated.stateless.StatelessAuthenticationFilter;
-import com.grudus.examshelper.configuration.authenticated.stateless.StatelessLoginFilter;
+import com.grudus.examshelper.configuration.authenticated.filters.CorsFilter;
+import com.grudus.examshelper.configuration.authenticated.filters.StatelessAuthenticationFilter;
+import com.grudus.examshelper.configuration.authenticated.filters.StatelessLoginFilter;
 import com.grudus.examshelper.configuration.authenticated.stateless.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -36,11 +37,11 @@ public class StatelessSecurityConfiguration extends WebSecurityConfigurerAdapter
                 .antMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .addFilterBefore(new CorsFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new StatelessLoginFilter("/api/auth/login", tokenAuthenticationService, userAuthenticationProvider),
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService),
                         UsernamePasswordAuthenticationFilter.class)
         ;
     }
-
 }

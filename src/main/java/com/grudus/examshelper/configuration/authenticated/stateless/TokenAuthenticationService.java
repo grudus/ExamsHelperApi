@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
 @Service
 public class TokenAuthenticationService {
 
-    private static final String AUTH_HEADER_NAME = "X-AUTH-TOKEN";
+    public static final String AUTH_HEADER_NAME = "X-AUTH-TOKEN";
     private final TokenHandler tokenHandler;
     private final UserService userService;
 
@@ -56,7 +56,6 @@ public class TokenAuthenticationService {
 
             if (user == null)
                 return null;
-
 
             return new AuthenticatedUser(user);
 
