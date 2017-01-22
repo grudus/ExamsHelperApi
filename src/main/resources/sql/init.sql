@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS waiting_users, exams, subjects, user_permissions, permissions, users;
+
 CREATE TABLE IF NOT EXISTS users (
   id            BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
   username      VARCHAR(32) NOT NULL,
@@ -17,7 +19,7 @@ CREATE TABLE IF NOT EXISTS subjects (
   has_grade     BOOLEAN,
   last_modified TIMESTAMP,
 
-  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES users (`id`)
+  CONSTRAINT `subjects_to_users` FOREIGN KEY (`user_id`) REFERENCES users (`id`)
     ON DELETE CASCADE
 );
 
@@ -31,10 +33,26 @@ CREATE TABLE IF NOT EXISTS exams (
   last_modified TIMESTAMP,
   subject_id    BIGINT,
 
-  CONSTRAINT `subject_id` FOREIGN KEY (`subject_id`) REFERENCES subjects (`id`)
+  CONSTRAINT `exams_to_subjects` FOREIGN KEY (`subject_id`) REFERENCES subjects (`id`)
     ON DELETE CASCADE
 );
 
+
+CREATE TABLE IF NOT EXISTS permissions (
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE
+);
+
+INSERT IGNORE INTO permissions(name) VALUE ("ADMIN");
+INSERT IGNORE INTO permissions(name) VALUE ("USER");
+
+CREATE TABLE IF NOT EXISTS user_permissions (
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT NOT NULL,
+  permission_id BIGINT NOT NULL,
+  CONSTRAINT `user_permissions_to_users` FOREIGN KEY (`user_id`) REFERENCES users (`id`) ON DELETE CASCADE,
+  CONSTRAINT `user_permissions_to_permissions` FOREIGN KEY (`permission_id`) REFERENCES permissions(`id`) ON DELETE CASCADE
+);
 
 CREATE TABLE IF NOT EXISTS waiting_users (
   username      VARCHAR(32)  NOT NULL,
@@ -42,20 +60,4 @@ CREATE TABLE IF NOT EXISTS waiting_users (
   email         VARCHAR(255) NOT NULL,
   register_key  VARCHAR(255),
   password      VARCHAR(128)
-);
-
-
-CREATE TABLE IF NOT EXISTS permissions (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    name VARCHAR(255) NOT NULL
-);
-
-INSERT INTO permissions(name) VALUE ("ADMIN");
-
-CREATE TABLE IF NOT EXISTS user_permissions (
-  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  user_id BIGINT NOT NULL,
-  permission_id BIGINT NOT NULL,
-  CONSTRAINT `permission_user_id` FOREIGN KEY (`user_id`) REFERENCES users (`id`) ON DELETE CASCADE,
-  CONSTRAINT `permission_id` FOREIGN KEY (`permission_id`) REFERENCES permissions(`id`) ON DELETE CASCADE
 );
