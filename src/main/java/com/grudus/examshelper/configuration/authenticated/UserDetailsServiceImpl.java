@@ -2,7 +2,6 @@ package com.grudus.examshelper.configuration.authenticated;
 
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.UserService;
-import com.grudus.examshelper.users.permissions.UserPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.findByUsername(username)
+        User user = userService.findByUsernameWithRoles(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Cannot find user: " + username));
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
@@ -35,9 +34,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     static List<GrantedAuthority> generateAuthorities(User user) {
-        return user.getPermissionList().stream()
-                .map(UserPermission::getPermission)
-                .map(permission -> "ROLE_" + permission.getName().toString())
+        return user.getRoles().stream()
+                .map(role -> "ROLE_" + role.getName().toString())
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 

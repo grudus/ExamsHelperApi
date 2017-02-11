@@ -2,25 +2,18 @@ package com.grudus.examshelper.exams;
 
 import com.grudus.examshelper.subjects.Subject;
 
-import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Exam {
 
-                private long id;
-
-        private Long androidId;
-
-        private String examInfo;
-
-        private Date date;
-
-        private Double grade;
-
-        private Date lastModified;
-
-
-            private Subject subject;
+    private long id;
+    private Long androidId;
+    private String examInfo;
+    private Date date;
+    private Double grade;
+    private LocalDateTime lastModified;
+    private Subject subject;
 
     public Exam() {
     }
@@ -65,11 +58,11 @@ public class Exam {
         this.grade = grade;
     }
 
-    public Date getLastModified() {
+    public LocalDateTime getLastModified() {
         return lastModified;
     }
 
-    public void setLastModified(Date lastModified) {
+    public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
 

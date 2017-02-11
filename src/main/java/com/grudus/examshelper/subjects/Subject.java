@@ -3,25 +3,18 @@ package com.grudus.examshelper.subjects;
 import com.grudus.examshelper.exams.Exam;
 import com.grudus.examshelper.users.User;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Subject {
 
     private Long id;
-
     private Long androidId;
-
     private User user;
-
     private String label;
-
     private String color;
-
-    private Date lastModified;
-
+    private LocalDateTime lastModified;
     private Boolean hasGrade;
-
     private List<Exam> examList;
 
     public Subject() {
@@ -68,11 +61,11 @@ public class Subject {
         this.color = color;
     }
 
-    public Date getLastModified() {
+    public LocalDateTime getLastModified() {
         return lastModified;
     }
 
-    public void setLastModified(Date lastModified) {
+    public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
 

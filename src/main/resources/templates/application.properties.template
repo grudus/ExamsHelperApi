@@ -1,0 +1,6 @@
+token.secret=
+
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.username=
+spring.datasource.password=
+spring.datasource.url=jdbc:mysql://

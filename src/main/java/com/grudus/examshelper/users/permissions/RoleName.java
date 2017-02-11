@@ -1,6 +1,6 @@
 package com.grudus.examshelper.users.permissions;
 
-public enum PermissionLabel {
+public enum RoleName {
     ADMIN,
     USER
 }

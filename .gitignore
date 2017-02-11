@@ -8,3 +8,7 @@
 *.properties
 /mvnw.cmd
 /mvnw
+.mvn/
+mvnw
+mvnw.cmd
+target/

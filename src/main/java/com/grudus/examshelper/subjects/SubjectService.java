@@ -1,5 +1,6 @@
 package com.grudus.examshelper.subjects;
 
+import com.grudus.examshelper.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,27 +17,27 @@ public class SubjectService {
         this.subjectDao = subjectDao;
     }
 
-    public void deleteAll(List<Subject> subjects) {
-//        subjectDao.delete(subjects);
+    public void deleteAll(User user) {
+        subjectDao.deleteByUser(user.getId());
     }
 
     public void save(Subject subject) {
-//        subjectDao.saveAndFlush(subject);
+        subjectDao.save(subject);
     }
 
     public void update(Subject subject) {
-//        subjectDao.save(subject);
+        subjectDao.update(subject);
     }
 
-    public void deleteByUserIdAndId(Long userId, Long id) {
-        subjectDao.deleteByUserIdAndId(userId, id);
+    public void deleteByUserIdAndAndoridId(Long userId, Long id) {
+        subjectDao.deleteByUserIdAndAndroidId(userId, id);
     }
 
     public List<Subject> findByUser(Long id) {
         return subjectDao.findByUserId(id);
     }
 
-    public Optional<Subject> findByUserAndId(Long userId, Long id) {
-        return subjectDao.findByUserIdAndId(userId, id);
+    public Optional<Subject> findByUserAndAndroidId(Long userId, Long id) {
+        return subjectDao.findByUserIdAndAndroidId(userId, id);
     }
 }

@@ -1,9 +1,8 @@
 package com.grudus.examshelper.users;
 
-import com.grudus.examshelper.subjects.Subject;
-import com.grudus.examshelper.users.permissions.UserPermission;
+import com.grudus.examshelper.users.permissions.Role;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class User {
@@ -16,15 +15,15 @@ public class User {
 
     private String username;
 
-    private Date registerDate;
+    private LocalDateTime registerDate;
 
-    private Date lastModified;
+    private LocalDateTime lastModified;
 
     private String token;
 
-    private List<UserPermission> permissionList;
+    private List<Role> roles;
 
-    private List<Subject> subjectList;
+    private UserState state;
 
     public User() {
     }
@@ -68,19 +67,19 @@ public class User {
         this.username = username;
     }
 
-    public Date getRegisterDate() {
+    public LocalDateTime getRegisterDate() {
         return registerDate;
     }
 
-    public void setRegisterDate(Date registerDate) {
+    public void setRegisterDate(LocalDateTime registerDate) {
         this.registerDate = registerDate;
     }
 
-    public Date getLastModified() {
+    public LocalDateTime getLastModified() {
         return lastModified;
     }
 
-    public void setLastModified(Date lastModified) {
+    public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -92,19 +91,19 @@ public class User {
         this.token = token;
     }
 
-    public List<UserPermission> getPermissionList() {
-        return permissionList;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setPermissionList(List<UserPermission> permissionList) {
-        this.permissionList = permissionList;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
-    public List<Subject> getSubjectList() {
-        return subjectList;
+    public UserState getState() {
+        return state;
     }
 
-    public void setSubjectList(List<Subject> subjectList) {
-        this.subjectList = subjectList;
+    public void setState(UserState state) {
+        this.state = state;
     }
 }

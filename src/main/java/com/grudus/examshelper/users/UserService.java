@@ -17,26 +17,38 @@ public class UserService {
     }
 
     public Optional<User> findById(Long id) {
-//        return Optional.ofNullable(userDao.findOne(id));
-        return null;
+        return userDao.findById(id);
     }
 
     public Optional<User> findByUsername(String username) {
         return userDao.findByUsername(username);
     }
 
-    public Optional<User> findByToken(String token) {return userDao.findByToken(token);}
+    public Optional<User> findByUsernameWithRoles(String username) {
+        Optional<User> user = userDao.findByUsername(username);
+        user.ifPresent(userDao::fetchUserPermissions);
+        return user;
+    }
+
+    public Optional<User> findByToken(String token) {
+        Optional<User> user = userDao.findByToken(token);
+        user.ifPresent(userDao::fetchUserPermissions);
+        return user;
+    }
 
     public void delete(User user) {
-//        userDao.delete(user.getId());
+        userDao.delete(user.getId());
     }
 
     public List<User> findAll() {
-//        return userDao.findAll();
-        return null;
+        return userDao.findAll();
     }
 
     public void update(User user) {
-//        userDao.save(user);
+        userDao.update(user);
+    }
+
+    public void addToken(Long id, String token) {
+        userDao.addToken(id, token);
     }
 }

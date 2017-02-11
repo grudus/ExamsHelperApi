@@ -27,12 +27,12 @@ public class SubjectController {
 
     @RequestMapping(method = RequestMethod.DELETE)
     public void deleteAllSubjects(AuthenticatedUser currentUser) {
-        subjectService.deleteAll(currentUser.getUser().getSubjectList());
+//        subjectService.deleteAll(currentUser.getUser().getSubjectList());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public Subject getSubject(AuthenticatedUser currentUser, @PathVariable("id") Long id) {
-        return subjectService.findByUserAndId(currentUser.getUser().getId(), id)
+        return subjectService.findByUserAndAndroidId(currentUser.getUser().getId(), id)
                 .orElseThrow(SubjectNotFoundException::new);
     }
 
@@ -44,7 +44,7 @@ public class SubjectController {
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void removeSubject(AuthenticatedUser currentUser, @PathVariable("id") Long id) {
-        subjectService.deleteByUserIdAndId(currentUser.getUser().getId(), id);
+        subjectService.deleteByUserIdAndAndoridId(currentUser.getUser().getId(), id);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
