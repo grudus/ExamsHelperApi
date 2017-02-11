@@ -1,13 +1,11 @@
-package com.grudus.examshelper.configuration.security;
+package com.grudus.examshelper.configuration.authenticated;
 
-import com.grudus.examshelper.configuration.authenticated.UserAuthenticationProvider;
 import com.grudus.examshelper.configuration.authenticated.filters.CorsFilter;
 import com.grudus.examshelper.configuration.authenticated.filters.StatelessAuthenticationFilter;
 import com.grudus.examshelper.configuration.authenticated.filters.StatelessLoginFilter;
-import com.grudus.examshelper.configuration.authenticated.stateless.TokenAuthenticationService;
+import com.grudus.examshelper.configuration.authenticated.token.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -15,7 +13,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@Order(1)
 public class StatelessSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenAuthenticationService tokenAuthenticationService;
@@ -41,7 +38,6 @@ public class StatelessSecurityConfiguration extends WebSecurityConfigurerAdapter
                 .addFilterBefore(new StatelessLoginFilter("/api/auth/login", tokenAuthenticationService, userAuthenticationProvider),
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService),
-                        UsernamePasswordAuthenticationFilter.class)
-        ;
+                        UsernamePasswordAuthenticationFilter.class);
     }
 }

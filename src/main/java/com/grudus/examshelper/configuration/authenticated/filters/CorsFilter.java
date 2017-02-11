@@ -1,6 +1,6 @@
 package com.grudus.examshelper.configuration.authenticated.filters;
 
-import com.grudus.examshelper.configuration.authenticated.stateless.TokenAuthenticationService;
+import com.grudus.examshelper.configuration.authenticated.token.TokenAuthenticationService;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;

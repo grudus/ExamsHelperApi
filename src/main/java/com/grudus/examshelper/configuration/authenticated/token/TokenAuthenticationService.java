@@ -1,4 +1,4 @@
-package com.grudus.examshelper.configuration.authenticated.stateless;
+package com.grudus.examshelper.configuration.authenticated.token;
 
 import com.grudus.examshelper.configuration.authenticated.AuthenticatedUser;
 import com.grudus.examshelper.users.User;
@@ -47,9 +47,6 @@ public class TokenAuthenticationService {
 
         User user = userService.findByToken(token).orElse(null);
 
-        if (user == null)
-            return null;
-
-        return new AuthenticatedUser(user);
+        return user == null ? null : new AuthenticatedUser(user);
     }
 }

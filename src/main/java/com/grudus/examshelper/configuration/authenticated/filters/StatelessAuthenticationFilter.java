@@ -1,6 +1,6 @@
 package com.grudus.examshelper.configuration.authenticated.filters;
 
-import com.grudus.examshelper.configuration.authenticated.stateless.TokenAuthenticationService;
+import com.grudus.examshelper.configuration.authenticated.token.TokenAuthenticationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,9 +24,9 @@ public class StatelessAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        Authentication auth =  authenticationService.getAuthentication(request);
-        if (auth != null)
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        Authentication auth = authenticationService.getAuthentication(request);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
         filterChain.doFilter(request, response);
     }
 }

@@ -1,28 +1,23 @@
 package com.grudus.examshelper.users;
 
 import com.grudus.examshelper.users.permissions.Role;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class User {
 
     private Long id;
-
     private String email;
-
     private String password;
-
     private String username;
-
     private LocalDateTime registerDate;
-
     private LocalDateTime lastModified;
-
     private String token;
-
     private List<Role> roles;
-
     private UserState state;
 
     public User() {
@@ -34,6 +29,13 @@ public class User {
         this.email = email;
     }
 
+    public List<GrantedAuthority> generateAuthorities() {
+        return this.roles.stream()
+                .map(role -> "ROLE_" + role.getName().toString())
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+
+    }
 
     public Long getId() {
         return id;

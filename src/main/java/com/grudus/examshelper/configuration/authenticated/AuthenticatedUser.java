@@ -10,7 +10,7 @@ public class AuthenticatedUser extends UsernamePasswordAuthenticationToken {
     private final User user;
 
     public AuthenticatedUser(User user) {
-        super(user.getUsername(), user.getPassword(),  UserDetailsServiceImpl.generateAuthorities(user));
+        super(user.getUsername(), user.getPassword(),  user.generateAuthorities());
         this.user = user;
     }
 
