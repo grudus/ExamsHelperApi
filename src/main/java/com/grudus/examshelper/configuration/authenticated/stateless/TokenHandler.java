@@ -2,8 +2,8 @@ package com.grudus.examshelper.configuration.authenticated.stateless;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.grudus.examshelper.domain.User;
 import com.grudus.examshelper.helpers.JsonHelper;
+import com.grudus.examshelper.users.User;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;

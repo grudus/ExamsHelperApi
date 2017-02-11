@@ -1,7 +1,5 @@
-package com.grudus.examshelper.services;
+package com.grudus.examshelper.users;
 
-import com.grudus.examshelper.dao.UserDao;
-import com.grudus.examshelper.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

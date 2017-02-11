@@ -1,6 +1,6 @@
 package com.grudus.examshelper.configuration.authenticated;
 
-import com.grudus.examshelper.domain.User;
+import com.grudus.examshelper.users.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 

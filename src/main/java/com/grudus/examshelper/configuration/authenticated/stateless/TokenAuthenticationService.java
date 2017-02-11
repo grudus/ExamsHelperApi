@@ -2,8 +2,8 @@ package com.grudus.examshelper.configuration.authenticated.stateless;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.grudus.examshelper.configuration.authenticated.AuthenticatedUser;
-import com.grudus.examshelper.domain.User;
-import com.grudus.examshelper.services.UserService;
+import com.grudus.examshelper.users.User;
+import com.grudus.examshelper.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;

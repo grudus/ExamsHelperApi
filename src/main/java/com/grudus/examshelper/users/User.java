@@ -1,6 +1,8 @@
-package com.grudus.examshelper.domain;
+package com.grudus.examshelper.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.grudus.examshelper.subjects.Subject;
+import com.grudus.examshelper.users.permissions.UserPermission;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -34,7 +36,7 @@ public class User {
     @Column(name = "token")
     private String token;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<UserPermission> permissionList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)

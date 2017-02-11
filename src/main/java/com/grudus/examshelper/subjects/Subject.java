@@ -1,7 +1,12 @@
-package com.grudus.examshelper.domain;
+package com.grudus.examshelper.subjects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.grudus.examshelper.exams.Exam;
+import com.grudus.examshelper.users.User;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "subjects")
@@ -17,6 +22,7 @@ public class Subject {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @Column(name = "title")
@@ -30,6 +36,10 @@ public class Subject {
 
     @Column(name = "has_grade")
     private Boolean hasGrade;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.REMOVE)
+    private List<Exam> examList;
 
     public Subject() {}
 
@@ -88,5 +98,13 @@ public class Subject {
 
     public void setHasGrade(Boolean hasGrade) {
         this.hasGrade = hasGrade;
+    }
+
+    public List<Exam> getExamList() {
+        return examList;
+    }
+
+    public void setExamList(List<Exam> examList) {
+        this.examList = examList;
     }
 }

@@ -1,7 +1,8 @@
-package com.grudus.examshelper.domain;
+package com.grudus.examshelper.users.permissions;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.grudus.examshelper.users.User;
 
 import javax.persistence.*;
 

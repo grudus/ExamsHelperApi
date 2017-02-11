@@ -1,7 +1,5 @@
-package com.grudus.examshelper.services;
+package com.grudus.examshelper.subjects;
 
-import com.grudus.examshelper.dao.SubjectDao;
-import com.grudus.examshelper.domain.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ public class SubjectService {
     }
 
     public void save(Subject subject) {
-        subjectDao.save(subject);
+        subjectDao.saveAndFlush(subject);
     }
 
     public void update(Subject subject) {

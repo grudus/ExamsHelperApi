@@ -1,7 +1,7 @@
 package com.grudus.examshelper.configuration.authenticated;
 
-import com.grudus.examshelper.domain.User;
-import com.grudus.examshelper.services.UserService;
+import com.grudus.examshelper.users.User;
+import com.grudus.examshelper.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;

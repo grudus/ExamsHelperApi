@@ -2,7 +2,7 @@ package com.grudus.examshelper.helpers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grudus.examshelper.domain.User;
+import com.grudus.examshelper.users.User;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

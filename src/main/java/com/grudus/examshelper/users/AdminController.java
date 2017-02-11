@@ -1,8 +1,6 @@
-package com.grudus.examshelper.controllers;
+package com.grudus.examshelper.users;
 
-import com.grudus.examshelper.domain.User;
 import com.grudus.examshelper.exceptions.UserNotFoundException;
-import com.grudus.examshelper.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;

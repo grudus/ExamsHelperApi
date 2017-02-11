@@ -1,8 +1,8 @@
 package com.grudus.examshelper.configuration.authenticated;
 
-import com.grudus.examshelper.domain.User;
-import com.grudus.examshelper.domain.UserPermission;
-import com.grudus.examshelper.services.UserService;
+import com.grudus.examshelper.users.User;
+import com.grudus.examshelper.users.UserService;
+import com.grudus.examshelper.users.permissions.UserPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

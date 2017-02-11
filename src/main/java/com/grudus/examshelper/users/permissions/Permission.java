@@ -1,4 +1,4 @@
-package com.grudus.examshelper.domain;
+package com.grudus.examshelper.users.permissions;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,9 +17,9 @@ public class Permission {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private com.grudus.examshelper.domain.enums.Permission name;
+    private PermissionLabel name;
 
-    @OneToMany(mappedBy = "permission", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "permission", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<UserPermission> userPermissions;
 
@@ -33,11 +33,11 @@ public class Permission {
         this.id = id;
     }
 
-    public com.grudus.examshelper.domain.enums.Permission getName() {
+    public PermissionLabel getName() {
         return name;
     }
 
-    public void setName(com.grudus.examshelper.domain.enums.Permission name) {
+    public void setName(PermissionLabel name) {
         this.name = name;
     }
 

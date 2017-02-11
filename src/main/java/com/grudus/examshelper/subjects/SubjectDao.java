@@ -1,6 +1,5 @@
-package com.grudus.examshelper.dao;
+package com.grudus.examshelper.subjects;
 
-import com.grudus.examshelper.domain.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,15 +1,10 @@
-package com.grudus.examshelper.controllers;
+package com.grudus.examshelper.subjects;
 
 import com.grudus.examshelper.configuration.authenticated.AuthenticatedUser;
-import com.grudus.examshelper.domain.Subject;
 import com.grudus.examshelper.exceptions.SubjectNotFoundException;
-import com.grudus.examshelper.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,7 +37,8 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void addSubject(AuthenticatedUser currentUser, Subject subject) {
+    public void addSubject(AuthenticatedUser currentUser, @RequestBody Subject subject) {
+        subject.setUser(currentUser.getUser());
         subjectService.save(subject);
     }
 
@@ -53,6 +49,8 @@ public class SubjectController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     public void updateSubject(AuthenticatedUser currentUser, @PathVariable("id") Long id, Subject subject) {
+        subject.setUser(currentUser.getUser());
+        subject.setId(id);
         subjectService.update(subject);
     }
 }
