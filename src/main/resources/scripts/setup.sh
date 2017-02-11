@@ -8,11 +8,12 @@ echo "INSERT INTO users(username, password, email) VALUES
 ('kuba', 'kubakuba', 'kuba@kuba.com'), ('jgruda', 'tecd st123', 'jgruda@crazy.com'), ('admin', 'admin', 'admin@admin.com');" | $db
 echo "Inserted users"
 
-echo "INSERT INTO user_permissions(user_id, permission_id) VALUES (1, 2), (1, 1), (2, 2), (3, 1);" | $db
+echo "INSERT INTO user_roles(user_id, permission_id) VALUES (1, 2), (1, 1), (2, 2), (3, 1);" | $db
 echo "Added permissions"
 
-echo "INSERT INTO subjects(title, color, user_id) VALUES
-('Matematyka', '#666666', 1), ('Fizyka', '#abcdef', 1), ('Jezyk polski', '#fa31da', 2);" | $db
+echo "INSERT INTO subjects(label, color, user_id) VALUES
+('Matematyka', '#666666', 1), ('Fizyka', '#0288D1', 1), ('Algebra', '#004D40', 1), ('Programowanie', '#388E3C', 1), ('Jezyk niemiecki', '#5D4037', 1), 
+('Jezyk polski', '#fa31da', 2);" | $db
 echo "Inserted subjects"
 
 echo "INSERT INTO exams(info, subject_id) VALUES
