@@ -1,6 +1,6 @@
 package com.grudus.examshelper.users;
 
-import com.grudus.examshelper.users.permissions.Role;
+import com.grudus.examshelper.users.roles.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

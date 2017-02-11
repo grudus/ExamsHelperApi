@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
   register_date DATETIME DEFAULT NOW(),
   last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   token         VARCHAR(255) DEFAULT NULL,
-  state         VARCHAR(255) DEFAULT "ENABLED"
+  state         VARCHAR(255) DEFAULT 'ENABLED'
 );
 
 CREATE TABLE IF NOT EXISTS subjects (
@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS subjects (
   last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   UNIQUE INDEX (user_id, label),
+  UNIQUE INDEX (user_id, android_id),
   CONSTRAINT `subjects_to_users` FOREIGN KEY (`user_id`) REFERENCES users (`id`)
     ON DELETE CASCADE
 );
@@ -35,6 +36,7 @@ CREATE TABLE IF NOT EXISTS exams (
   last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   subject_id    BIGINT NOT NULL,
 
+  UNIQUE INDEX (android_id, subject_id),
   CONSTRAINT `exams_to_subjects` FOREIGN KEY (`subject_id`) REFERENCES subjects (`id`)
     ON DELETE CASCADE
 );
@@ -45,12 +47,12 @@ CREATE TABLE IF NOT EXISTS roles (
   name VARCHAR(255) NOT NULL UNIQUE
 );
 
-INSERT IGNORE INTO roles (name) VALUE ("ADMIN");
-INSERT IGNORE INTO roles (name) VALUE ("USER");
+INSERT IGNORE INTO roles (name) VALUE ('ADMIN');
+INSERT IGNORE INTO roles (name) VALUE ('USER');
 
 CREATE TABLE IF NOT EXISTS user_roles (
   user_id BIGINT NOT NULL,
-  permission_id BIGINT NOT NULL,
-  CONSTRAINT `user_permissions_to_users` FOREIGN KEY (`user_id`) REFERENCES users (`id`) ON DELETE CASCADE,
-  CONSTRAINT `user_permissions_to_permissions` FOREIGN KEY (`permission_id`) REFERENCES roles(`id`) ON DELETE CASCADE
+  role_id BIGINT NOT NULL,
+  CONSTRAINT `user_roles_to_users` FOREIGN KEY (`user_id`) REFERENCES users (`id`) ON DELETE CASCADE,
+  CONSTRAINT `user_roles_to_roles` FOREIGN KEY (`role_id`) REFERENCES roles(`id`) ON DELETE CASCADE
 );

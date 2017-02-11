@@ -1,4 +1,4 @@
-package com.grudus.examshelper.users.permissions;
+package com.grudus.examshelper.users.roles;
 
 
 public class Role {

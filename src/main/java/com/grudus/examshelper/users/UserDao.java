@@ -4,7 +4,7 @@ package com.grudus.examshelper.users;
 import com.grudus.examshelper.tables.Roles;
 import com.grudus.examshelper.tables.UserRoles;
 import com.grudus.examshelper.tables.Users;
-import com.grudus.examshelper.users.permissions.Role;
+import com.grudus.examshelper.users.roles.Role;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
