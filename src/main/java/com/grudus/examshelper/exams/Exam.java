@@ -5,34 +5,22 @@ import com.grudus.examshelper.subjects.Subject;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "exams")
 public class Exam {
 
-    @GeneratedValue
-    @Id
-    @Column
-    private long id;
+                private long id;
 
-    @Column(name = "android_id")
-    private Long androidId;
+        private Long androidId;
 
-    @Column(length = 128, name = "info")
-    private String examInfo;
+        private String examInfo;
 
-    @Column
-    private Date date;
+        private Date date;
 
-    @Column
-    private Double grade;
+        private Double grade;
 
-    @Column(name = "last_modified")
-    private Date lastModified;
+        private Date lastModified;
 
 
-    @ManyToOne
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+            private Subject subject;
 
     public Exam() {
     }

@@ -17,15 +17,15 @@ public class SubjectService {
     }
 
     public void deleteAll(List<Subject> subjects) {
-        subjectDao.delete(subjects);
+//        subjectDao.delete(subjects);
     }
 
     public void save(Subject subject) {
-        subjectDao.saveAndFlush(subject);
+//        subjectDao.saveAndFlush(subject);
     }
 
     public void update(Subject subject) {
-        subjectDao.save(subject);
+//        subjectDao.save(subject);
     }
 
     public void deleteByUserIdAndId(Long userId, Long id) {

@@ -1,27 +1,15 @@
 package com.grudus.examshelper.users.permissions;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.grudus.examshelper.users.User;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "user_permissions")
 public class UserPermission {
 
-    @Id
-    @JsonIgnore
-    private Long id;
+            private Long id;
 
-    @JoinColumn(name = "user_id")
-    @ManyToOne
-    @JsonIgnore
-    private User user;
+                private User user;
 
-    @JoinColumn(name = "permission_id")
-    @ManyToOne
-    private Permission permission;
+            private Permission permission;
 
     public UserPermission() {}
 

@@ -1,19 +1,14 @@
 package com.grudus.examshelper.subjects;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SubjectDao extends JpaRepository<Subject, Long> {
+public class SubjectDao {
 
-    List<Subject> findByUserId(Long userId);
-
-    Optional<Subject> findByUserIdAndId(Long userId, Long id);
-
-    @Transactional
-    void deleteByUserIdAndId(Long userId, Long id);
+    List<Subject> findByUserId(Long userId) {return null;}
+    Optional<Subject> findByUserIdAndId(Long userId, Long id) {return null;}
+    void deleteByUserIdAndId(Long userId, Long id) {return;}
 }

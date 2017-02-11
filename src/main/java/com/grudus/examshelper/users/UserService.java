@@ -17,7 +17,8 @@ public class UserService {
     }
 
     public Optional<User> findById(Long id) {
-        return Optional.ofNullable(userDao.findOne(id));
+//        return Optional.ofNullable(userDao.findOne(id));
+        return null;
     }
 
     public Optional<User> findByUsername(String username) {
@@ -27,14 +28,15 @@ public class UserService {
     public Optional<User> findByToken(String token) {return userDao.findByToken(token);}
 
     public void delete(User user) {
-        userDao.delete(user.getId());
+//        userDao.delete(user.getId());
     }
 
     public List<User> findAll() {
-        return userDao.findAll();
+//        return userDao.findAll();
+        return null;
     }
 
     public void update(User user) {
-        userDao.save(user);
+//        userDao.save(user);
     }
 }

@@ -1,47 +1,31 @@
 package com.grudus.examshelper.subjects;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.grudus.examshelper.exams.Exam;
 import com.grudus.examshelper.users.User;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "subjects")
 public class Subject {
 
-    @Column
-    @Id
-    @GeneratedValue
     private Long id;
 
-    @Column(name = "android_id")
     private Long androidId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 
-    @Column(name = "title")
     private String label;
 
-    @Column
     private String color;
 
-    @Column(name = "last_modified")
     private Date lastModified;
 
-    @Column(name = "has_grade")
     private Boolean hasGrade;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.REMOVE)
     private List<Exam> examList;
 
-    public Subject() {}
+    public Subject() {
+    }
 
 
     public Long getId() {

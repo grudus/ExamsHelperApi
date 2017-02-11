@@ -1,49 +1,33 @@
 package com.grudus.examshelper.users;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.grudus.examshelper.subjects.Subject;
 import com.grudus.examshelper.users.permissions.UserPermission;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "users")
 public class User {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "password", length = 128)
-    @JsonIgnore
     private String password;
 
-    @Column(name = "username", length = 32)
     private String username;
 
-    @Column(name = "register_date")
     private Date registerDate;
 
-    @Column(name = "last_modified")
     private Date lastModified;
 
-    @Column(name = "token")
     private String token;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<UserPermission> permissionList;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    @JsonIgnore
     private List<Subject> subjectList;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String username, String password, String email) {
         this.username = username;
