@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.time.LocalDateTime.now;
+import static java.util.Collections.emptyList;
+
 public class User {
 
     private Long id;
@@ -20,6 +23,7 @@ public class User {
     private List<Role> roles;
     private UserState state;
 
+    @Deprecated
     public User() {
     }
 
@@ -27,6 +31,10 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.state = UserState.ENABLED;
+        this.registerDate = now();
+        this.lastModified = now();
+        this.roles = emptyList();
     }
 
     public List<GrantedAuthority> generateAuthorities() {

@@ -4,6 +4,7 @@ package com.grudus.examshelper.users;
 import com.grudus.examshelper.tables.Roles;
 import com.grudus.examshelper.tables.UserRoles;
 import com.grudus.examshelper.tables.Users;
+import com.grudus.examshelper.tables.records.UsersRecord;
 import com.grudus.examshelper.users.roles.Role;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.time.LocalDateTime.now;
 
 @Repository
 public class UserDao {
@@ -69,17 +72,32 @@ public class UserDao {
                 .set(U.USERNAME, user.getUsername())
                 .set(U.PASSWORD, user.getPassword())
                 .set(U.EMAIL, user.getEmail())
-                .set(U.REGISTER_DATE, user.getRegisterDate())
-                .set(U.LAST_MODIFIED, user.getLastModified())
+                .set(U.LAST_MODIFIED, now())
                 .set(U.TOKEN, user.getToken())
                 .set(U.STATE, user.getState().toString())
                 .where(U.ID.eq(user.getId()))
                 .execute();
     }
 
+    void save(User user) {
+        UsersRecord record = dsl.insertInto(U)
+                .set(U.USERNAME, user.getUsername())
+                .set(U.PASSWORD, user.getPassword())
+                .set(U.EMAIL, user.getEmail())
+                .set(U.REGISTER_DATE, user.getRegisterDate())
+                .set(U.LAST_MODIFIED, user.getLastModified())
+                .set(U.TOKEN, user.getToken())
+                .set(U.STATE, user.getState().toString())
+                .returning(U.ID)
+                .fetchOne();
+
+        user.setId(record.getValue(U.ID));
+    }
+
     void addToken(Long id, String token) {
         dsl.update(U)
                 .set(U.TOKEN, token)
+                .set(U.LAST_MODIFIED, now())
                 .where(U.ID.eq(id))
                 .execute();
     }
