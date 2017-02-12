@@ -4,6 +4,8 @@ package com.grudus.examshelper.users.auth;
 import com.grudus.examshelper.emails.EmailSender;
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -24,6 +26,8 @@ import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
     private final AddUserRequestValidator validator;
     private final UserService userService;
     private final EmailSender emailSender;
@@ -43,6 +47,7 @@ public class AuthController {
     @PostMapping(value = "/register")
     public void addUserRequest(@Valid @RequestBody AddUserRequest userRequest, BindingResult result, HttpServletResponse response, HttpServletRequest request) throws IOException, MessagingException {
         if (result.hasErrors()) {
+            logger.error("Request {} is not proper, because {}", userRequest, getMessage(result));
             response.sendError(SC_BAD_REQUEST, getMessage(result));
             return;
         }
@@ -54,17 +59,20 @@ public class AuthController {
     public void confirmUserRegistration(@PathVariable("token") String token, HttpServletResponse response) throws IOException, MessagingException {
         Optional<User> user = userService.findWaitingByToken(token);
         if (!user.isPresent()) {
+            logger.error("Cannot find user with token {}", token);
             response.sendError(400, "Cannot find user with token " + token);
             return;
         }
 
         userService.enableUser(user.get());
+        logger.info("Enabled user {}", user.get().getUsername());
     }
 
     private void handleInvitation(AddUserRequest request, String url) throws MessagingException {
         String token = UUID.randomUUID().toString();
         emailSender.sendConfirmationRegister(request.getUsername(), request.getEmail(), token, url);
         userService.saveAddUserRequest(request, token);
+        logger.info("Sent invitation to the {}", request);
     }
 
     private String getMessage(BindingResult result) {

@@ -137,6 +137,7 @@ public class UserDao {
     public void updateState(Long id, UserState state) {
         dsl.update(U)
                 .set(U.STATE, state.toString())
+                .set(U.TOKEN, (String)null)
                 .set(U.LAST_MODIFIED, now())
                 .where(U.ID.eq(id))
                 .execute();
