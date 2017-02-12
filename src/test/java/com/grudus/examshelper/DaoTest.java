@@ -1,6 +1,5 @@
 package com.grudus.examshelper;
 
-import com.grudus.examshelper.users.roles.RoleName;
 import org.jooq.DSLContext;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -36,10 +35,4 @@ public class DaoTest {
         dsl.insertInto(ROLES, ROLES.NAME).values(USER.toString()).values(ADMIN.toString()).execute();
     }
 
-    protected void addRole(String username, RoleName role) {
-        Long userId = dsl.select(USERS.ID).from(USERS).where(USERS.USERNAME.eq(username)).fetchOne(USERS.ID);
-        Long roleId = dsl.select(ROLES.ID).from(ROLES).where(ROLES.NAME.eq(role.toString())).fetchOne(ROLES.ID);
-
-        dsl.insertInto(USER_ROLES, USER_ROLES.USER_ID, USER_ROLES.ROLE_ID).values(userId, roleId).execute();
-    }
 }

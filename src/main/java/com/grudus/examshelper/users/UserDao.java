@@ -6,6 +6,8 @@ import com.grudus.examshelper.tables.UserRoles;
 import com.grudus.examshelper.tables.Users;
 import com.grudus.examshelper.tables.records.UsersRecord;
 import com.grudus.examshelper.users.roles.Role;
+import com.grudus.examshelper.users.roles.RoleName;
+import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -47,7 +49,7 @@ public class UserDao {
                 .fetchOptionalInto(User.class);
     }
 
-    void fetchUserPermissions(User u) {
+    void fetchUserRoles(User u) {
         List<Role> roles = dsl.select(R.ID, R.NAME)
                 .from(R).innerJoin(UR).onKey()
                 .where(UR.USER_ID.eq(u.getId()))
@@ -100,5 +102,14 @@ public class UserDao {
                 .set(U.LAST_MODIFIED, now())
                 .where(U.ID.eq(id))
                 .execute();
+    }
+
+    void addRoles(User user, List<RoleName> roleNames) {
+        List<Role> roles = dsl.selectFrom(R).where(R.NAME.in(roleNames)).fetchInto(Role.class);
+
+        BatchBindStep batch = dsl.batch(dsl.insertInto(UR, UR.USER_ID, UR.ROLE_ID).values((Long) null, null));
+        roles.forEach(role -> batch.bind(user.getId(), role.getId()));
+
+        batch.execute();
     }
 }

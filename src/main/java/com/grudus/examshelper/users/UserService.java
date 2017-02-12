@@ -26,13 +26,13 @@ public class UserService {
 
     public Optional<User> findByUsernameWithRoles(String username) {
         Optional<User> user = userDao.findByUsername(username);
-        user.ifPresent(userDao::fetchUserPermissions);
+        user.ifPresent(userDao::fetchUserRoles);
         return user;
     }
 
     public Optional<User> findByToken(String token) {
         Optional<User> user = userDao.findByToken(token);
-        user.ifPresent(userDao::fetchUserPermissions);
+        user.ifPresent(userDao::fetchUserRoles);
         return user;
     }
 
