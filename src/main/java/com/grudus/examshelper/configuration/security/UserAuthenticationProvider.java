@@ -24,7 +24,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        final String username = authentication.getName();
+        String username = (String) authentication.getPrincipal();
         Object credentials = authentication.getCredentials();
 
         if (username == null || credentials == null)
@@ -36,7 +36,6 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
 
         if (!passwordEncoder.matches(password, user.getPassword()))
             throw new UsernameNotFoundException("Bad username or password");
-
 
         return new AuthenticatedUser(user);
     }

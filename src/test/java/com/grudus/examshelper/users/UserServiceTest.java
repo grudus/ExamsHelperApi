@@ -1,5 +1,6 @@
 package com.grudus.examshelper.users;
 
+import com.grudus.examshelper.users.auth.AddUserRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,8 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static com.grudus.examshelper.Utils.randAlph;
-import static com.grudus.examshelper.Utils.randomUser;
+import static com.grudus.examshelper.Utils.*;
 import static com.grudus.examshelper.users.UserState.ENABLED;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -55,5 +55,19 @@ public class UserServiceTest {
 
         verify(userDao).findEnabledByUsername(username);
         verify(userDao).fetchUserRoles(user);
+    }
+
+    @Test
+    public void shouldEncodePasswordWhenSaveNewUser() {
+        String hash = randAlph(100);
+        String token = randAlph(32);
+        AddUserRequest request = new AddUserRequest(randAlph(10), randAlph(10), randomEmail());
+
+        when(passwordEncoder.encode(anyString())).thenReturn(hash);
+
+        userService.saveAddUserRequest(request, token);
+
+        verify(userDao).saveAddUserRequest(request.getUsername(), hash, request.getEmail(), token);
+
     }
 }
