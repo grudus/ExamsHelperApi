@@ -1,6 +1,6 @@
 package com.grudus.examshelper.subjects;
 
-import com.grudus.examshelper.configuration.authenticated.AuthenticatedUser;
+import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import com.grudus.examshelper.exceptions.SubjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

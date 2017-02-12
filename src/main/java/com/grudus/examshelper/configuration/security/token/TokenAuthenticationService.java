@@ -1,6 +1,6 @@
-package com.grudus.examshelper.configuration.authenticated.token;
+package com.grudus.examshelper.configuration.security.token;
 
-import com.grudus.examshelper.configuration.authenticated.AuthenticatedUser;
+import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class TokenAuthenticationService {
         if (token == null)
             return null;
 
-        User user = userService.findByToken(token).orElse(null);
+        User user = userService.findEnabledByToken(token).orElse(null);
 
         return user == null ? null : new AuthenticatedUser(user);
     }

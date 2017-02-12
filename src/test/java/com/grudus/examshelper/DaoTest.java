@@ -2,6 +2,7 @@ package com.grudus.examshelper;
 
 import org.jooq.DSLContext;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -17,6 +18,7 @@ import static com.grudus.examshelper.users.roles.RoleName.USER;
 @WebAppConfiguration
 @ContextConfiguration(classes = TestContext.class)
 @Transactional
+@Ignore
 public class DaoTest {
 
     @Autowired

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.grudus.examshelper.users.UserState.ENABLED;
+import static com.grudus.examshelper.users.UserState.WAITING;
 import static java.time.LocalDateTime.now;
 
 @Repository
@@ -31,15 +33,21 @@ public class UserDao {
         this.dsl = dsl;
     }
 
-    Optional<User> findByUsername(String username) {
+    public Optional<User> findByEmail(String email) {
         return dsl.selectFrom(U)
-                .where(U.USERNAME.eq(username))
+                .where(U.EMAIL.eq(email))
                 .fetchOptionalInto(User.class);
     }
 
-    Optional<User> findByToken(String token) {
+    Optional<User> findEnabledByUsername(String username) {
         return dsl.selectFrom(U)
-                .where(U.TOKEN.eq(token))
+                .where(U.USERNAME.eq(username).and(U.STATE.eq(ENABLED.toString())))
+                .fetchOptionalInto(User.class);
+    }
+
+    Optional<User> findByTokenWithState(String token, UserState state) {
+        return dsl.selectFrom(U)
+                .where(U.TOKEN.eq(token).and(U.STATE.eq(state.toString())))
                 .fetchOptionalInto(User.class);
     }
 
@@ -104,6 +112,7 @@ public class UserDao {
                 .execute();
     }
 
+
     void addRoles(User user, List<RoleName> roleNames) {
         List<Role> roles = dsl.selectFrom(R).where(R.NAME.in(roleNames)).fetchInto(Role.class);
 
@@ -111,5 +120,17 @@ public class UserDao {
         roles.forEach(role -> batch.bind(user.getId(), role.getId()));
 
         batch.execute();
+    }
+
+    public void saveAddUserRequest(String username, String password, String email, String token) {
+        dsl.insertInto(U)
+                .set(U.USERNAME, username)
+                .set(U.PASSWORD, password)
+                .set(U.EMAIL, email)
+                .set(U.REGISTER_DATE, now())
+                .set(U.LAST_MODIFIED, now())
+                .set(U.TOKEN, token)
+                .set(U.STATE, WAITING.toString())
+                .execute();
     }
 }

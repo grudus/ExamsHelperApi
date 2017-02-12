@@ -2,9 +2,11 @@ package com.grudus.examshelper;
 
 
 import com.grudus.examshelper.users.User;
+import org.junit.Ignore;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
+@Ignore
 public class Utils {
     public static String randAlph(int length) {
         return randomAlphabetic(length);

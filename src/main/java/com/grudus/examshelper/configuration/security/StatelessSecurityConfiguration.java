@@ -1,9 +1,9 @@
-package com.grudus.examshelper.configuration.authenticated;
+package com.grudus.examshelper.configuration.security;
 
-import com.grudus.examshelper.configuration.authenticated.filters.CorsFilter;
-import com.grudus.examshelper.configuration.authenticated.filters.StatelessAuthenticationFilter;
-import com.grudus.examshelper.configuration.authenticated.filters.StatelessLoginFilter;
-import com.grudus.examshelper.configuration.authenticated.token.TokenAuthenticationService;
+import com.grudus.examshelper.configuration.security.filters.CorsFilter;
+import com.grudus.examshelper.configuration.security.filters.StatelessAuthenticationFilter;
+import com.grudus.examshelper.configuration.security.filters.StatelessLoginFilter;
+import com.grudus.examshelper.configuration.security.token.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

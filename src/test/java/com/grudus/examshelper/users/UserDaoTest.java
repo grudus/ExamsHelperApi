@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static com.grudus.examshelper.Utils.*;
+import static com.grudus.examshelper.users.UserState.ENABLED;
+import static com.grudus.examshelper.users.UserState.WAITING;
 import static com.grudus.examshelper.users.roles.RoleName.ADMIN;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
 import static java.time.LocalDateTime.now;
@@ -23,46 +25,61 @@ public class UserDaoTest extends DaoTest {
 
     @Autowired
     private UserDao userDao;
-    
+
     @Before
     public void init() {
         addRoles();
         user = randomUser();
         userDao.save(user);
     }
-    
+
 
     @Test
     public void shouldSaveUser() {
         assertNotNull(user.getId());
-        assertTrue(userDao.findByUsername(user.getUsername()).isPresent());
+        assertTrue(userDao.findEnabledByUsername(user.getUsername()).isPresent());
     }
-    
+
+    @Test
+    public void shouldAddWaitingUser() {
+        String username = randAlph(10), password = randAlph(10), email = randomEmail(), token = randAlph(32);
+        userDao.saveAddUserRequest(username, password, email, token);
+
+        assertThat(userDao.findAll(), hasSize(2));
+        assertThat(userDao.findAll(), hasItem(allOf(
+                hasProperty("username", is(username)),
+                hasProperty("password", is(password)),
+                hasProperty("email", is(email)),
+                hasProperty("state", is(WAITING))
+                ))
+        );
+    }
+
     @Test
     public void shouldFetchRoles() {
         userDao.addRoles(user, asList(USER, ADMIN));
-        
+
         assertTrue(user.getRoles().isEmpty());
-        
+
         userDao.fetchUserRoles(user);
 
         assertEquals(2, user.getRoles().size());
         assertThat(user.getRoles(), containsInAnyOrder(new Role(ADMIN), new Role(USER)));
     }
-    
+
     @Test
     public void shouldUpdateUser() {
         LocalDateTime before = now().minusSeconds(1);
-        
+
         user.setUsername(randAlph(12));
         user.setPassword(randAlph(12));
         user.setEmail(randomEmail());
         user.setToken(randAlph(12));
-        
+
         userDao.update(user);
-        
+
         User updated = userDao.findById(user.getId()).get();
-        
+
         assertEquals(user.getUsername(), updated.getUsername());
         assertEquals(user.getPassword(), updated.getPassword());
         assertEquals(user.getEmail(), updated.getEmail());
@@ -114,13 +131,29 @@ public class UserDaoTest extends DaoTest {
     }
 
     @Test
-    public void shouldFoundByUsername() {
-        Optional<User> maybeUser = userDao.findByUsername(user.getUsername());
+    public void shouldFoundByUsernameWhenEnabled() {
+        Optional<User> maybeUser = userDao.findEnabledByUsername(user.getUsername());
 
         assertTrue(maybeUser.isPresent());
 
         assertUsersEquality(user, maybeUser.get());
     }
+
+    @Test
+    public void shouldNotFoundByUsernameWhenWaiting() {
+        String username = randAlph(10), password = randAlph(10), email = randomEmail(), token = randAlph(32);
+        userDao.saveAddUserRequest(username, password, email, token);
+
+        assertFalse(userDao.findEnabledByUsername(username).isPresent());
+    }
+    @Test
+    public void shouldNotFoundByTokenWhenWaiting() {
+        String username = randAlph(10), password = randAlph(10), email = randomEmail(), token = randAlph(32);
+        userDao.saveAddUserRequest(username, password, email, token);
+
+        assertFalse(userDao.findByTokenWithState(username, ENABLED).isPresent());
+    }
+
 
     @Test
     public void shouldFoundById() {
@@ -136,7 +169,7 @@ public class UserDaoTest extends DaoTest {
         String token = randAlph(32);
         userDao.addToken(user.getId(), token);
 
-        Optional<User> maybeUser = userDao.findByToken(token);
+        Optional<User> maybeUser = userDao.findByTokenWithState(token, UserState.ENABLED);
 
         assertTrue(maybeUser.isPresent());
 

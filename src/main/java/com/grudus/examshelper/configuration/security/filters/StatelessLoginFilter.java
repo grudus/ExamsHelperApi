@@ -1,9 +1,9 @@
-package com.grudus.examshelper.configuration.authenticated.filters;
+package com.grudus.examshelper.configuration.security.filters;
 
 
-import com.grudus.examshelper.configuration.authenticated.AuthenticatedUser;
-import com.grudus.examshelper.configuration.authenticated.UserAuthenticationProvider;
-import com.grudus.examshelper.configuration.authenticated.token.TokenAuthenticationService;
+import com.grudus.examshelper.configuration.security.AuthenticatedUser;
+import com.grudus.examshelper.configuration.security.UserAuthenticationProvider;
+import com.grudus.examshelper.configuration.security.token.TokenAuthenticationService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

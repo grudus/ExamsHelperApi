@@ -1,4 +1,4 @@
-package com.grudus.examshelper.configuration.authenticated;
+package com.grudus.examshelper.configuration.security;
 
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.UserService;
@@ -28,7 +28,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
             throw new UsernameNotFoundException("Bad username or password");
 
         final String password = (credentials.toString().trim());
-        final User user = userService.findByUsernameWithRoles(username)
+        final User user = userService.findEnabledByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Cannot find user: " + username));
 
         if (!password.equals(user.getPassword()))

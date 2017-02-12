@@ -1,4 +1,4 @@
-package com.grudus.examshelper.configuration.authenticated;
+package com.grudus.examshelper.configuration.security;
 
 import com.grudus.examshelper.users.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

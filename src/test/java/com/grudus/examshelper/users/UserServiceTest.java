@@ -10,7 +10,9 @@ import java.util.Optional;
 
 import static com.grudus.examshelper.Utils.randAlph;
 import static com.grudus.examshelper.Utils.randomUser;
+import static com.grudus.examshelper.users.UserState.ENABLED;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,22 +35,22 @@ public class UserServiceTest {
     @Test
     public void shouldFetchRolesWhenFoundByToken() {
         String token = randAlph(32);
-        when(userDao.findByToken(anyString())).thenReturn(Optional.of(user));
+        when(userDao.findByTokenWithState(anyString(), eq(ENABLED))).thenReturn(Optional.of(user));
 
-        userService.findByToken(token);
+        userService.findEnabledByToken(token);
 
-        verify(userDao).findByToken(token);
+        verify(userDao).findByTokenWithState(token, ENABLED);
         verify(userDao).fetchUserRoles(user);
     }
 
     @Test
     public void shouldFetchRolesWhenFoundByUsernameWithRoles() {
         String username = randAlph(10);
-        when(userDao.findByUsername(anyString())).thenReturn(Optional.of(user));
+        when(userDao.findEnabledByUsername(anyString())).thenReturn(Optional.of(user));
 
-        userService.findByUsernameWithRoles(username);
+        userService.findEnabledByUsername(username);
 
-        verify(userDao).findByUsername(username);
+        verify(userDao).findEnabledByUsername(username);
         verify(userDao).fetchUserRoles(user);
     }
 }

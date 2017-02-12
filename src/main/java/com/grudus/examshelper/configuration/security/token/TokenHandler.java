@@ -1,4 +1,4 @@
-package com.grudus.examshelper.configuration.authenticated.token;
+package com.grudus.examshelper.configuration.security.token;
 
 
 import com.grudus.examshelper.users.User;

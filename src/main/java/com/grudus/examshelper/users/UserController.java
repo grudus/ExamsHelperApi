@@ -1,6 +1,6 @@
 package com.grudus.examshelper.users;
 
-import com.grudus.examshelper.configuration.authenticated.AuthenticatedUser;
+import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
