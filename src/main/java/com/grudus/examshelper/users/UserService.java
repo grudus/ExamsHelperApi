@@ -2,6 +2,7 @@ package com.grudus.examshelper.users;
 
 import com.grudus.examshelper.users.auth.AddUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +15,12 @@ import static com.grudus.examshelper.users.UserState.WAITING;
 public class UserService {
 
     private final UserDao userDao;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserDao userDao) {
+    public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Optional<User> findById(Long id) {
@@ -61,7 +64,7 @@ public class UserService {
     }
 
     public void saveAddUserRequest(AddUserRequest request, String token) {
-        userDao.saveAddUserRequest(request.getUsername(), request.getPassword(), request.getEmail(), token);
+        userDao.saveAddUserRequest(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getEmail(), token);
     }
 
     public Optional<User> findWaitingByToken(String token) {

@@ -15,8 +15,8 @@ public class EmailSender {
 
     private final EmailProperties emailProperties;
 
-    private Properties properties;
-    private Session session;
+    private final Properties properties;
+    private final Session session;
     private MimeMessage mimeMessage;
 
     @Autowired

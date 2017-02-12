@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -21,14 +22,16 @@ public class UserServiceTest {
 
     @Mock
     private UserDao userDao;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     private UserService userService;
-
     private User user;
 
     @Before
     public void init() {
-        userService = new UserService(userDao);
+        when(passwordEncoder.encode(anyString())).thenReturn("");
+        userService = new UserService(userDao, passwordEncoder);
         user = randomUser();
     }
 

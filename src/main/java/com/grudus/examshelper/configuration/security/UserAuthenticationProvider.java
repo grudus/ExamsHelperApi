@@ -7,16 +7,19 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserAuthenticationProvider implements AuthenticationProvider {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserAuthenticationProvider(UserService userService) {
+    public UserAuthenticationProvider(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         final User user = userService.findEnabledByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Cannot find user: " + username));
 
-        if (!password.equals(user.getPassword()))
+        if (!passwordEncoder.matches(password, user.getPassword()))
             throw new UsernameNotFoundException("Bad username or password");
 
 
