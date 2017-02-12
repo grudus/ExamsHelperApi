@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.grudus.examshelper.users.UserState.ENABLED;
+import static com.grudus.examshelper.users.UserState.WAITING;
 
 @Service
 public class UserService {
@@ -61,5 +62,13 @@ public class UserService {
 
     public void saveAddUserRequest(AddUserRequest request, String token) {
         userDao.saveAddUserRequest(request.getUsername(), request.getPassword(), request.getEmail(), token);
+    }
+
+    public Optional<User> findWaitingByToken(String token) {
+        return userDao.findByTokenWithState(token, WAITING);
+    }
+
+    public void enableUser(User user) {
+        userDao.updateState(user.getId(), ENABLED);
     }
 }

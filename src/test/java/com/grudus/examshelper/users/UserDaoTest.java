@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static com.grudus.examshelper.Utils.*;
-import static com.grudus.examshelper.users.UserState.ENABLED;
-import static com.grudus.examshelper.users.UserState.WAITING;
+import static com.grudus.examshelper.users.UserState.*;
 import static com.grudus.examshelper.users.roles.RoleName.ADMIN;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
 import static java.time.LocalDateTime.now;
@@ -174,6 +173,17 @@ public class UserDaoTest extends DaoTest {
         assertTrue(maybeUser.isPresent());
 
         assertUsersEquality(user, maybeUser.get());
+    }
+
+    @Test
+    public void shouldUpdateState() {
+        LocalDateTime now = LocalDateTime.now().minusSeconds(1);
+        userDao.updateState(user.getId(), DISABLED);
+
+        User newUser = userDao.findById(user.getId()).get();
+
+        assertEquals(DISABLED, newUser.getState());
+        assertTrue(newUser.getLastModified().isAfter(now));
     }
 
     @Test

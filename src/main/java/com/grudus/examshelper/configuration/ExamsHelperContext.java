@@ -1,6 +1,7 @@
 package com.grudus.examshelper.configuration;
 
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.jooq.DSLContext;
 import org.jooq.impl.DefaultDSLContext;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
@@ -25,6 +26,11 @@ public class ExamsHelperContext {
     @Bean
     public DSLContext dslContext(DataSource primaryDataSource) {
         return new DefaultDSLContext(primaryDataSource, MYSQL);
+    }
+
+    @Bean
+    public EmailValidator emailValidator() {
+        return EmailValidator.getInstance();
     }
 
 }

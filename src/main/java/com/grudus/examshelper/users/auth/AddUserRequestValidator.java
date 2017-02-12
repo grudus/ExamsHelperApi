@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import static org.springframework.validation.ValidationUtils.rejectIfEmpty;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Component
 public class AddUserRequestValidator implements Validator {
@@ -16,9 +16,9 @@ public class AddUserRequestValidator implements Validator {
     private final EmailValidator emailValidator;
 
     @Autowired
-    public AddUserRequestValidator(UserService userService) {
+    public AddUserRequestValidator(UserService userService, EmailValidator emailValidator) {
         this.userService = userService;
-        emailValidator = EmailValidator.getInstance();
+        this.emailValidator = emailValidator;
     }
 
     @Override
@@ -30,10 +30,13 @@ public class AddUserRequestValidator implements Validator {
     public void validate(Object o, Errors errors) {
         AddUserRequest request = (AddUserRequest) o;
 
-        rejectIfEmpty(errors, "username", "400");
-        rejectIfEmpty(errors, "password", "401");
+        if (isEmpty(request.getUsername()))
+            errors.reject("Username cannot be empty");
+        if (isEmpty(request.getPassword()))
+            errors.reject("Password cannot be empty");
 
         String email = request.getEmail();
+
         if (!emailValidator.isValid(email))
             errors.reject("Email is not valid");
 

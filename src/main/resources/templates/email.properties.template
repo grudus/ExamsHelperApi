@@ -1,0 +1,9 @@
+#add under /resources folder
+
+mail.host-name=smtp.gmail.com
+mail.port=587
+mail.user=
+mail.password=
+mail.message.subject=Confirm register
+mail.message.content=
+mail.message.content=Hello, %s. To confirm your registration click following link: %s/%s
