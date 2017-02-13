@@ -27,7 +27,6 @@ public class UserDaoTest extends DaoTest {
 
     @Before
     public void init() {
-        addRoles();
         user = randomUser();
         userDao.save(user);
     }

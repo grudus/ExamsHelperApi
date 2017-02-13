@@ -42,7 +42,8 @@ public class TestContext {
 
     @Bean
     public PlatformTransactionManager platformTransactionManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
+        DataSourceTransactionManager manager = new DataSourceTransactionManager(dataSource);
+        return manager;
     }
 
 }
