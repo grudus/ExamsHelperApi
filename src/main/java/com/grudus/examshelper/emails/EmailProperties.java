@@ -8,69 +8,32 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:email.properties")
 public class EmailProperties {
 
-    @Value("${mail.host-name}")
-    private String hostName;
+    final String hostName;
+    final int port;
+    final String username;
+    final String password;
+    final String message;
+    final String messageSubject;
+    final boolean startTtlsEnabled;
+    final boolean withAuth;
 
-    @Value("${mail.port}")
-    private int port;
+    public EmailProperties(
+            @Value("${mail.smtp.host}") String hostName,
+            @Value("${mail.smtp.port}") int port,
+            @Value("${mail.user}") String username,
+            @Value("${mail.password}") String password,
+            @Value("${mail.message.content}") String message,
+            @Value("${mail.message.subject}") String messageSubject,
+            @Value("${mail.smtp.auth}") boolean withAuth,
+            @Value("${mail.smtp.starttls.enable}") boolean startTtlsEnabled) {
 
-    @Value("${mail.user}")
-    private String username;
-
-    @Value("${mail.password}")
-    private String password;
-
-    @Value("${mail.message.content}")
-    private String message;
-
-    @Value("${mail.message.subject}")
-    private String messageSubject;
-
-    public String getHostName() {
-        return hostName;
-    }
-
-    public void setHostName(String hostName) {
         this.hostName = hostName;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
         this.port = port;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getMessageSubject() {
-        return messageSubject;
-    }
-
-    public void setMessageSubject(String messageSubject) {
         this.messageSubject = messageSubject;
+        this.startTtlsEnabled = startTtlsEnabled;
+        this.withAuth = withAuth;
     }
 }
