@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static com.grudus.examshelper.Tables.ROLES;
 import static com.grudus.examshelper.Utils.*;
 import static com.grudus.examshelper.users.UserState.*;
 import static com.grudus.examshelper.users.roles.RoleName.ADMIN;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
 import static java.time.LocalDateTime.now;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -29,8 +31,9 @@ public class UserDaoTest extends DaoTest {
     public void init() {
         user = randomUser();
         userDao.save(user);
-    }
 
+        dsl.insertInto(ROLES, ROLES.NAME).values(ADMIN.toString()).values(USER.toString()).execute();
+    }
 
     @Test
     public void shouldSaveUser() {
@@ -110,6 +113,17 @@ public class UserDaoTest extends DaoTest {
         userDao.addRoles(user, asList(USER, ADMIN));
 
         dbUser = userDao.findById(user.getId()).get();
+        userDao.fetchUserRoles(dbUser);
+        assertEquals(2, dbUser.getRoles().size());
+    }
+
+    @Test
+    public void shouldDoNothingWhenAddRoleSecondTime() {
+        userDao.addRoles(user, asList(USER, ADMIN));
+        userDao.addRoles(user, asList(USER, ADMIN));
+        userDao.addRoles(user, singletonList(USER));
+
+        User dbUser = userDao.findById(user.getId()).get();
         userDao.fetchUserRoles(dbUser);
         assertEquals(2, dbUser.getRoles().size());
     }
@@ -202,11 +216,10 @@ public class UserDaoTest extends DaoTest {
         assertEquals(4, userDao.findAll().size());
     }
 
+
     private void assertUsersEquality(User u1, User u2) {
         assertEquals(u1.getPassword(), u2.getPassword());
         assertEquals(u1.getEmail(), u2.getEmail());
-        assertEquals(u1.getLastModified().withNano(0), u2.getLastModified().withNano(0));
-        assertEquals(u1.getRegisterDate().withNano(0), u2.getRegisterDate().withNano(0));
         assertEquals(u1.getState(), u2.getState());
         assertEquals(u1.getUsername(), u2.getUsername());
     }

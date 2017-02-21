@@ -27,7 +27,7 @@ public class AdminController {
     public User getUserInfo(@RequestParam(value = "id", required = false) Long userId,
                             @RequestParam(value = "username", required = false) String username) {
 
-        return userId == null ? userService.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username))
+        return userId == null ? userService.findEnabledByUsername(username).orElseThrow(() -> new UserNotFoundException(username))
                 : userService.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 

@@ -31,7 +31,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
             throw new UsernameNotFoundException("Bad username or password");
 
         final String password = (credentials.toString().trim());
-        final User user = userService.findEnabledByUsername(username)
+        final User user = userService.findEnabledByUsernameAndFetchRoles(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Cannot find user: " + username));
 
         if (!passwordEncoder.matches(password, user.getPassword()))

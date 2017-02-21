@@ -116,13 +116,13 @@ public class UserDao {
     void addRoles(User user, List<RoleName> roleNames) {
         List<Role> roles = dsl.selectFrom(R).where(R.NAME.in(roleNames)).fetchInto(Role.class);
 
-        BatchBindStep batch = dsl.batch(dsl.insertInto(UR, UR.USER_ID, UR.ROLE_ID).values((Long) null, null));
+        BatchBindStep batch = dsl.batch(dsl.insertInto(UR, UR.USER_ID, UR.ROLE_ID).values((Long) null, null).onDuplicateKeyIgnore());
         roles.forEach(role -> batch.bind(user.getId(), role.getId()));
 
         batch.execute();
     }
 
-    public void saveAddUserRequest(String username, String password, String email, String token) {
+    void saveAddUserRequest(String username, String password, String email, String token) {
         dsl.insertInto(U)
                 .set(U.USERNAME, username)
                 .set(U.PASSWORD, password)
@@ -134,7 +134,7 @@ public class UserDao {
                 .execute();
     }
 
-    public void updateState(Long id, UserState state) {
+    void updateState(Long id, UserState state) {
         dsl.update(U)
                 .set(U.STATE, state.toString())
                 .set(U.TOKEN, (String)null)

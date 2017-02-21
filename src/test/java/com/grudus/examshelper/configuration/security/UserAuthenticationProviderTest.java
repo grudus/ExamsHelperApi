@@ -45,7 +45,7 @@ public class UserAuthenticationProviderTest {
     public void shouldAuthenticateProperly() {
         String hash = randAlph(100);
         User user = new User(USERNAME, hash, randomEmail());
-        when(userService.findEnabledByUsername(USERNAME)).thenReturn(Optional.of(user));
+        when(userService.findEnabledByUsernameAndFetchRoles(USERNAME)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(PASSWORD, hash)).thenReturn(true);
 
         AuthenticatedUser authUser = (AuthenticatedUser) userAuthenticationProvider.authenticate(authentication);
@@ -67,14 +67,14 @@ public class UserAuthenticationProviderTest {
 
     @Test(expected = UsernameNotFoundException.class)
     public void shouldThrowExceptionWhenUserIsNotInDb() {
-        when(userService.findEnabledByUsername(anyString())).thenReturn(Optional.empty());
+        when(userService.findEnabledByUsernameAndFetchRoles(anyString())).thenReturn(Optional.empty());
 
         userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD));
     }
 
     @Test(expected = UsernameNotFoundException.class)
     public void shouldThrowExceptionWhenPasswordsDoNotMatches() {
-        when(userService.findEnabledByUsername(anyString())).thenReturn(Optional.of(randomUser()));
+        when(userService.findEnabledByUsernameAndFetchRoles(anyString())).thenReturn(Optional.of(randomUser()));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
         userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD));

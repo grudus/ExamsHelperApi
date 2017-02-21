@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.grudus.examshelper.users.roles.RoleName.USER;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
 @RestController
@@ -64,7 +65,7 @@ public class AuthController {
             return;
         }
 
-        userService.enableUser(user.get());
+        userService.registerUser(user.get(), USER);
         logger.info("Enabled user {}", user.get().getUsername());
     }
 

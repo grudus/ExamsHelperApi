@@ -1,6 +1,7 @@
 package com.grudus.examshelper.users;
 
 import com.grudus.examshelper.users.auth.AddUserRequest;
+import com.grudus.examshelper.users.roles.RoleName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 import static com.grudus.examshelper.users.UserState.ENABLED;
 import static com.grudus.examshelper.users.UserState.WAITING;
+import static java.util.Collections.singletonList;
 
 @Service
 public class UserService {
@@ -27,11 +29,11 @@ public class UserService {
         return userDao.findById(id);
     }
 
-    public Optional<User> findByUsername(String username) {
+    public Optional<User> findEnabledByUsername(String username) {
         return userDao.findEnabledByUsername(username);
     }
 
-    public Optional<User> findEnabledByUsername(String username) {
+    public Optional<User> findEnabledByUsernameAndFetchRoles(String username) {
         Optional<User> user = userDao.findEnabledByUsername(username);
         user.ifPresent(userDao::fetchUserRoles);
         return user;
@@ -71,7 +73,8 @@ public class UserService {
         return userDao.findByTokenWithState(token, WAITING);
     }
 
-    public void enableUser(User user) {
+    public void registerUser(User user, RoleName role) {
         userDao.updateState(user.getId(), ENABLED);
+        userDao.addRoles(user, singletonList(role));
     }
 }

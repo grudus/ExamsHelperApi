@@ -43,7 +43,7 @@ public class AddUserRequestValidator implements Validator {
         else if (userService.findByEmail(email).isPresent())
             errors.reject("Email already exists");
 
-        if (userService.findByUsername(request.getUsername()).isPresent())
+        if (userService.findEnabledByUsername(request.getUsername()).isPresent())
             errors.reject("Username already exists");
 
     }
