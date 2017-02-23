@@ -7,8 +7,6 @@ import com.grudus.examshelper.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +19,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.grudus.examshelper.users.roles.RoleName.USER;
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -46,13 +43,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register")
-    public void addUserRequest(@Valid @RequestBody AddUserRequest userRequest, BindingResult result, HttpServletResponse response, HttpServletRequest request) throws IOException, MessagingException {
-        if (result.hasErrors()) {
-            logger.error("Request {} is not proper, because {}", userRequest, getMessage(result));
-            response.sendError(SC_BAD_REQUEST, getMessage(result));
-            return;
-        }
-
+    public void addUserRequest(@Valid @RequestBody AddUserRequest userRequest, HttpServletRequest request) throws MessagingException {
         handleInvitation(userRequest, request.getRequestURL().toString());
     }
 
@@ -75,12 +66,4 @@ public class AuthController {
         userService.saveAddUserRequest(request, token);
         logger.info("Sent invitation to the {}", request);
     }
-
-    private String getMessage(BindingResult result) {
-        return result.getAllErrors().stream().map(ObjectError::getCodes)
-                .findFirst().orElse(new String[]{"", "Unexpected error"})[1];
-
-    }
-
-
 }

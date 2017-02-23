@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import static org.springframework.util.ObjectUtils.isEmpty;
+import static com.grudus.examshelper.commons.keys.RestKeys.*;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
 public class AddUserRequestValidator implements Validator {
@@ -30,21 +31,22 @@ public class AddUserRequestValidator implements Validator {
     public void validate(Object o, Errors errors) {
         AddUserRequest request = (AddUserRequest) o;
 
-        if (isEmpty(request.getUsername()))
-            errors.reject("Username cannot be empty");
-        if (isEmpty(request.getPassword()))
-            errors.reject("Password cannot be empty");
+        if (isBlank(request.getUsername()))
+            errors.reject(EMPTY_USERNAME);
 
-        String email = request.getEmail();
+        else if (userService.findEnabledByUsername(request.getUsername()).isPresent())
+            errors.reject(USERNAME_EXISTS);
 
-        if (!emailValidator.isValid(email))
-            errors.reject("Email is not valid");
+        if (isBlank(request.getPassword()))
+            errors.reject(EMPTY_PASSWORD);
 
-        else if (userService.findByEmail(email).isPresent())
-            errors.reject("Email already exists");
+        if (isBlank(request.getEmail()))
+            errors.reject(EMPTY_EMAIL);
 
-        if (userService.findEnabledByUsername(request.getUsername()).isPresent())
-            errors.reject("Username already exists");
+        else if (!emailValidator.isValid(request.getEmail()))
+            errors.reject(INVALID_EMAIL);
 
+        else if (userService.findByEmail(request.getEmail()).isPresent())
+            errors.reject(EMAIL_EXISTS);
     }
 }
