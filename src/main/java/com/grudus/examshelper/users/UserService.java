@@ -5,6 +5,7 @@ import com.grudus.examshelper.users.roles.RoleName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import static com.grudus.examshelper.users.UserState.WAITING;
 import static java.util.Collections.singletonList;
 
 @Service
+@Transactional
 public class UserService {
 
     private final UserDao userDao;
