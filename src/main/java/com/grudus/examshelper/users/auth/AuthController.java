@@ -15,10 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 import static com.grudus.examshelper.users.roles.RoleName.USER;
+import static java.util.Collections.singletonMap;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -40,6 +42,11 @@ public class AuthController {
     @InitBinder("addUserRequest")
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(validator);
+    }
+
+    @GetMapping("/exists")
+    public Map<String, Boolean> exists(@RequestParam("email") String email) {
+        return singletonMap("exists", userService.findByEmail(email).isPresent());
     }
 
     @PostMapping(value = "/register")

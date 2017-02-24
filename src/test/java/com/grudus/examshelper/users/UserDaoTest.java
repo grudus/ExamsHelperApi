@@ -1,6 +1,6 @@
 package com.grudus.examshelper.users;
 
-import com.grudus.examshelper.DaoTest;
+import com.grudus.examshelper.SpringBasedTest;
 import com.grudus.examshelper.users.roles.Role;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-public class UserDaoTest extends DaoTest {
+public class UserDaoTest extends SpringBasedTest {
 
     private User user;
 

@@ -1,12 +1,18 @@
 package com.grudus.examshelper;
 
 import com.grudus.examshelper.configuration.ExamsHelperContext;
+import com.grudus.examshelper.emails.EmailSender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.sql.DataSource;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 
 @Configuration
 @Import(ExamsHelperContext.class)
@@ -26,5 +32,13 @@ public class TestContext {
                 .url(url)
                 .driverClassName(driver)
                 .build();
+    }
+
+    @Bean
+    @Primary
+    public EmailSender emailSender() throws MessagingException {
+        EmailSender sender = mock(EmailSender.class);
+        doNothing().when(sender).send(anyString(), anyString());
+        return sender;
     }
 }

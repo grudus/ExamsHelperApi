@@ -36,10 +36,10 @@ public class EmailSender {
         properties.put(AUTH_KEY, emailProperties.withAuth);
         properties.put(PORT_KEY, emailProperties.port);
         session = Session.getDefaultInstance(properties, new SMTPAuthenticator());
-        logger.debug("Created session for {}", properties);
+        logger.debug("Created session for {}", emailProperties.username);
     }
 
-    private void send(String message, String emailRecipient) throws MessagingException {
+    public void send(String message, String emailRecipient) throws MessagingException {
         mimeMessage = new MimeMessage(session);
         mimeMessage.setFrom(new InternetAddress(emailProperties.username));
         mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(emailRecipient));
