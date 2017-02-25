@@ -4,6 +4,8 @@ package com.grudus.examshelper.configuration.security.filters;
 import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import com.grudus.examshelper.configuration.security.UserAuthenticationProvider;
 import com.grudus.examshelper.configuration.security.token.TokenAuthenticationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter {
+
+    public static final Logger logger = LoggerFactory.getLogger(StatelessLoginFilter.class);
 
     private static final String DEFAULT_USERNAME_PARAMETER = "username";
     private static final String DEFAULT_PASSWORD_PARAMETER = "password";
@@ -60,12 +64,13 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 
         tokenAuthenticationService.addAuthentication(response, auth);
         SecurityContextHolder.getContext().setAuthentication(auth);
-
+        logger.info("User {} successfully logged", auth.getUser().getUsername());
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed)
             throws IOException, ServletException {
+        logger.warn("Cannot authenticate user", failed);
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, failed.getMessage());
     }
 }

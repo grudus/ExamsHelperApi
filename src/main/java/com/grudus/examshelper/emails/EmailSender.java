@@ -50,8 +50,8 @@ public class EmailSender {
         logger.info("Successfully sent message {} to the {}", message, emailRecipient);
     }
 
-    public void sendConfirmationRegister(String username, String recipient, String token, String url) throws MessagingException {
-        send(format(emailProperties.message, username, url, token), recipient);
+    public void sendConfirmationRegister(String username, String recipient, String url) throws MessagingException {
+        send(format(emailProperties.message, username, url), recipient);
     }
 
 

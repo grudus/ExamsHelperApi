@@ -7,12 +7,15 @@ import com.grudus.examshelper.emails.EmailSender;
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.UserService;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import static com.grudus.examshelper.Utils.*;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -23,7 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AuthControllerTest extends AbstractControllerTest {
 
-    public static final String REGISTER_URL = "/api/auth/register";
+    public static final String REDIRECT_URI = randAlph(10);
+    public static final String REGISTER_URL = "/api/auth/register?redirect_uri=" + REDIRECT_URI;
 
     @Autowired
     private EmailSender emailSender;
@@ -37,11 +41,14 @@ public class AuthControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldAddUserToDbAndSendEmail() throws Exception {
+    public void shouldAddUserToDbAndSendEmailWithRedirect() throws Exception {
         AddUserRequest request = randomAddUserRequest();
         performAddUserRequest(request);
 
-        verify(emailSender).sendConfirmationRegister(eq(request.getUsername()), eq(request.getEmail()), anyString(), anyString());
+        ArgumentCaptor<String> url = ArgumentCaptor.forClass(String.class);
+        verify(emailSender).sendConfirmationRegister(eq(request.getUsername()), eq(request.getEmail()), url.capture());
+
+        assertThat(url.getValue(), containsString("redirect_uri="+REDIRECT_URI));
         checkUserExistence(request.getEmail(), true);
     }
 
@@ -51,7 +58,7 @@ public class AuthControllerTest extends AbstractControllerTest {
         request.setPassword(null);
 
         performAddUserRequestAndAssertError(request, RestKeys.EMPTY_PASSWORD);
-        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString(), anyString());
+        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString());
     }
 
 
@@ -61,7 +68,7 @@ public class AuthControllerTest extends AbstractControllerTest {
         request.setEmail(null);
 
         performAddUserRequestAndAssertError(request, RestKeys.EMPTY_EMAIL);
-        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString(), anyString());
+        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString());
     }
 
 
@@ -71,7 +78,7 @@ public class AuthControllerTest extends AbstractControllerTest {
         request.setEmail("123455");
 
         performAddUserRequestAndAssertError(request, RestKeys.INVALID_EMAIL);
-        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString(), anyString());
+        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString());
     }
 
 
@@ -81,7 +88,7 @@ public class AuthControllerTest extends AbstractControllerTest {
         request.setUsername(null);
 
         performAddUserRequestAndAssertError(request, RestKeys.EMPTY_USERNAME);
-        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString(), anyString());
+        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString());
     }
 
 
@@ -92,7 +99,7 @@ public class AuthControllerTest extends AbstractControllerTest {
         reset(emailSender);
 
         performAddUserRequestAndAssertError(request, RestKeys.USERNAME_EXISTS);
-        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString(), anyString());
+        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -105,7 +112,7 @@ public class AuthControllerTest extends AbstractControllerTest {
         reset(emailSender);
 
         performAddUserRequestAndAssertError(request, RestKeys.USERNAME_EXISTS);
-        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString(), anyString());
+        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -116,7 +123,7 @@ public class AuthControllerTest extends AbstractControllerTest {
         reset(emailSender);
 
         performAddUserRequestAndAssertError(request, RestKeys.EMAIL_EXISTS);
-        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString(), anyString());
+        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString());
     }
 
     private void performAddUserRequest(AddUserRequest request) throws Exception {
@@ -140,18 +147,5 @@ public class AuthControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.exists", is(exists)));
     }
-//    @Test
-//    public void shouldReturnTrueWhenUserInDbAndCheckingExistence() throws Exception {
-//        User user = randomUser();
-//        addUserRequest(user);
-//    }
-//
-//    private void addUserRequest(User user) throws Exception {
-//        AddUserRequest request = new AddUserRequest(user.getUsername(), user.getPassword(), user.getEmail());
-//        mockMvc.perform(post("/api/auth/register")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(toJson(request)))
-//                .andExpect(status().isOk());
-//    }
 
 }
