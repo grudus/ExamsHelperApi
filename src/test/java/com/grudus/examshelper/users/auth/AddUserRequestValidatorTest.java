@@ -47,7 +47,7 @@ public class AddUserRequestValidatorTest {
         validator = new AddUserRequestValidator(userService, emailValidator);
 
         when(emailValidator.isValid(anyString())).thenReturn(true);
-        when(userService.findEnabledByUsername(anyString())).thenReturn(Optional.empty());
+        when(userService.findByUsername(anyString())).thenReturn(Optional.empty());
         when(userService.findByEmail(anyString())).thenReturn(Optional.empty());
     }
 
@@ -119,7 +119,7 @@ public class AddUserRequestValidatorTest {
 
     @Test
     public void shouldNotPassValidationWhenUsernameInDb() {
-        when(userService.findEnabledByUsername(anyString())).thenReturn(Optional.of(new User()));
+        when(userService.findByUsername(anyString())).thenReturn(Optional.of(new User()));
 
         validator.validate(validatedObject, errors);
 

@@ -31,12 +31,12 @@ public class UserService {
         return userDao.findById(id);
     }
 
-    public Optional<User> findEnabledByUsername(String username) {
-        return userDao.findEnabledByUsername(username);
+    public Optional<User> findByUsername(String username) {
+        return userDao.findByUsername(username);
     }
 
-    public Optional<User> findEnabledByUsernameAndFetchRoles(String username) {
-        Optional<User> user = userDao.findEnabledByUsername(username);
+    public Optional<User> findByUsernameAndFetchRoles(String username) {
+        Optional<User> user = userDao.findByUsername(username);
         user.ifPresent(userDao::fetchUserRoles);
         return user;
     }

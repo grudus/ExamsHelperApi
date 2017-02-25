@@ -4,17 +4,18 @@ package com.grudus.examshelper.users.auth;
 import com.grudus.examshelper.AbstractControllerTest;
 import com.grudus.examshelper.commons.keys.RestKeys;
 import com.grudus.examshelper.emails.EmailSender;
+import com.grudus.examshelper.users.User;
+import com.grudus.examshelper.users.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-import static com.grudus.examshelper.Utils.randomAddUserRequest;
-import static com.grudus.examshelper.Utils.randomEmail;
+import static com.grudus.examshelper.Utils.*;
+import static com.grudus.examshelper.users.roles.RoleName.USER;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -27,6 +28,9 @@ public class AuthControllerTest extends AbstractControllerTest {
     @Autowired
     private EmailSender emailSender;
 
+    @Autowired
+    private UserService userService;
+
     @Test
     public void shouldReturnFalseWhenCheckingUserExistence() throws Exception {
         checkUserExistence(randomEmail(), false);
@@ -35,10 +39,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     @Test
     public void shouldAddUserToDbAndSendEmail() throws Exception {
         AddUserRequest request = randomAddUserRequest();
-        mockMvc.perform(post(REGISTER_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)))
-                .andExpect(status().isOk());
+        performAddUserRequest(request);
 
         verify(emailSender).sendConfirmationRegister(eq(request.getUsername()), eq(request.getEmail()), anyString(), anyString());
         checkUserExistence(request.getEmail(), true);
@@ -81,6 +82,48 @@ public class AuthControllerTest extends AbstractControllerTest {
 
         performAddUserRequestAndAssertError(request, RestKeys.EMPTY_USERNAME);
         verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString(), anyString());
+    }
+
+
+    @Test
+    public void shouldNotSaveUserWhenUsernameAlreadyExists() throws Exception {
+        AddUserRequest request = randomAddUserRequest();
+        performAddUserRequest(request);
+        reset(emailSender);
+
+        performAddUserRequestAndAssertError(request, RestKeys.USERNAME_EXISTS);
+        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString(), anyString());
+    }
+
+    @Test
+    public void shouldNotSaveUserWhenUsernameInDb() throws Exception {
+        AddUserRequest request = randomAddUserRequest();
+        performAddUserRequest(request);
+        User user = randomUser();
+        user.setUsername(request.getUsername());
+        userService.registerUser(user, USER);
+        reset(emailSender);
+
+        performAddUserRequestAndAssertError(request, RestKeys.USERNAME_EXISTS);
+        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString(), anyString());
+    }
+
+    @Test
+    public void shouldNotSaveUserWhenEmailAlreadyExists() throws Exception {
+        AddUserRequest request = randomAddUserRequest();
+        performAddUserRequest(request);
+        request.setUsername(randAlph(33));
+        reset(emailSender);
+
+        performAddUserRequestAndAssertError(request, RestKeys.EMAIL_EXISTS);
+        verify(emailSender, never()).sendConfirmationRegister(anyString(), anyString(), anyString(), anyString());
+    }
+
+    private void performAddUserRequest(AddUserRequest request) throws Exception {
+        mockMvc.perform(post(REGISTER_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)))
+                .andExpect(status().isOk());
     }
 
 

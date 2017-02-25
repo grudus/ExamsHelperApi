@@ -34,7 +34,7 @@ public class AddUserRequestValidator implements Validator {
         if (isBlank(request.getUsername()))
             errors.reject(EMPTY_USERNAME);
 
-        else if (userService.findEnabledByUsername(request.getUsername()).isPresent())
+        else if (userService.findByUsername(request.getUsername()).isPresent())
             errors.reject(USERNAME_EXISTS);
 
         if (isBlank(request.getPassword()))

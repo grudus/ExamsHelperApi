@@ -39,7 +39,7 @@ public class UserServiceTest {
         when(passwordEncoder.encode(anyString())).thenReturn("");
         when(userDao.findById(anyLong())).thenReturn(Optional.of(user));
         when(userDao.findByEmail(anyString())).thenReturn(Optional.of(user));
-        when(userDao.findEnabledByUsername(anyString())).thenReturn(Optional.of(user));
+        when(userDao.findByUsername(anyString())).thenReturn(Optional.of(user));
         when(userDao.findByTokenWithState(anyString(), any(UserState.class))).thenReturn(Optional.of(user));
     }
 
@@ -53,9 +53,9 @@ public class UserServiceTest {
 
     @Test
     public void shouldFindEnabledByUsername() {
-        User u = userService.findEnabledByUsername(user.getUsername()).get();
+        User u = userService.findByUsername(user.getUsername()).get();
 
-        verify(userDao).findEnabledByUsername(eq(user.getUsername()));
+        verify(userDao).findByUsername(eq(user.getUsername()));
         assertEquals(user.getEmail(), u.getEmail());
     }
 
@@ -72,9 +72,9 @@ public class UserServiceTest {
     public void shouldFetchRolesWhenFoundByUsernameWithRoles() {
         String username = randAlph(10);
 
-        userService.findEnabledByUsernameAndFetchRoles(username);
+        userService.findByUsernameAndFetchRoles(username);
 
-        verify(userDao).findEnabledByUsername(username);
+        verify(userDao).findByUsername(username);
         verify(userDao).fetchUserRoles(user);
     }
 

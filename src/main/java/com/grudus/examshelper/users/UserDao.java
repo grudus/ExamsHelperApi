@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.grudus.examshelper.users.UserState.ENABLED;
 import static com.grudus.examshelper.users.UserState.WAITING;
 import static java.time.LocalDateTime.now;
 
@@ -39,9 +38,9 @@ public class UserDao {
                 .fetchOptionalInto(User.class);
     }
 
-    Optional<User> findEnabledByUsername(String username) {
+    Optional<User> findByUsername(String username) {
         return dsl.selectFrom(U)
-                .where(U.USERNAME.eq(username).and(U.STATE.eq(ENABLED.toString())))
+                .where(U.USERNAME.eq(username))
                 .fetchOptionalInto(User.class);
     }
 

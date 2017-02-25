@@ -38,7 +38,7 @@ public class UserDaoTest extends SpringBasedTest {
     @Test
     public void shouldSaveUser() {
         assertNotNull(user.getId());
-        assertTrue(userDao.findEnabledByUsername(user.getUsername()).isPresent());
+        assertTrue(userDao.findByUsername(user.getUsername()).isPresent());
     }
 
     @Test
@@ -143,8 +143,8 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFoundByUsernameWhenEnabled() {
-        Optional<User> maybeUser = userDao.findEnabledByUsername(user.getUsername());
+    public void shouldFindByUsernameWhenEnabled() {
+        Optional<User> maybeUser = userDao.findByUsername(user.getUsername());
 
         assertTrue(maybeUser.isPresent());
 
@@ -152,14 +152,14 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldNotFoundByUsernameWhenWaiting() {
+    public void shouldFindByUsernameWhenWaiting() {
         String username = randAlph(10), password = randAlph(10), email = randomEmail(), token = randAlph(32);
         userDao.saveAddUserRequest(username, password, email, token);
 
-        assertFalse(userDao.findEnabledByUsername(username).isPresent());
+        assertTrue(userDao.findByUsername(username).isPresent());
     }
     @Test
-    public void shouldNotFoundByTokenWhenWaiting() {
+    public void shouldNotFindByTokenWhenWaiting() {
         String username = randAlph(10), password = randAlph(10), email = randomEmail(), token = randAlph(32);
         userDao.saveAddUserRequest(username, password, email, token);
 
@@ -168,7 +168,7 @@ public class UserDaoTest extends SpringBasedTest {
 
 
     @Test
-    public void shouldFoundById() {
+    public void shouldFindById() {
         Optional<User> maybeUser = userDao.findById(user.getId());
 
         assertTrue(maybeUser.isPresent());
@@ -177,7 +177,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFoundByToken() {
+    public void shouldFindByToken() {
         String token = randAlph(32);
         userDao.addToken(user.getId(), token);
 
