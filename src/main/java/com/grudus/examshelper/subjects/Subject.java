@@ -1,23 +1,25 @@
 package com.grudus.examshelper.subjects;
 
-import com.grudus.examshelper.exams.Exam;
-import com.grudus.examshelper.users.User;
-
 import java.time.LocalDateTime;
-import java.util.List;
+
+import static java.time.LocalDateTime.now;
 
 public class Subject {
 
     private Long id;
     private Long androidId;
-    private User user;
+    private Long userId;
     private String label;
     private String color;
     private LocalDateTime lastModified;
-    private Boolean hasGrade;
-    private List<Exam> examList;
 
-    public Subject() {
+    public Subject() {}
+
+    public Subject(Long userId, String label, String color) {
+        this.userId = userId;
+        this.label = label;
+        this.color = color;
+        this.lastModified = now();
     }
 
 
@@ -37,12 +39,12 @@ public class Subject {
         this.androidId = androidId;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getLabel() {
@@ -67,21 +69,5 @@ public class Subject {
 
     public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
-    }
-
-    public Boolean getHasGrade() {
-        return hasGrade;
-    }
-
-    public void setHasGrade(Boolean hasGrade) {
-        this.hasGrade = hasGrade;
-    }
-
-    public List<Exam> getExamList() {
-        return examList;
-    }
-
-    public void setExamList(List<Exam> examList) {
-        this.examList = examList;
     }
 }

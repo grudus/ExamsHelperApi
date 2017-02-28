@@ -25,6 +25,13 @@ public class SubjectDao {
                 .where(S.USER_ID.eq(userId))
                 .fetchInto(Subject.class);
     }
+
+    Optional<Subject> findById(Long id) {
+        return dsl.selectFrom(S)
+                .where(S.ID.eq(id))
+                .fetchOptionalInto(Subject.class);
+    }
+
     Optional<Subject> findByUserIdAndAndroidId(Long userId, Long androidId) {
         return dsl.selectFrom(S)
                 .where(S.USER_ID.eq(userId).and(S.ANDROID_ID.eq(androidId)))
@@ -43,23 +50,10 @@ public class SubjectDao {
     }
 
     void save(Subject subject) {
-        dsl.insertInto(S)
-                .set(S.ANDROID_ID, subject.getAndroidId())
-                .set(S.USER_ID, subject.getUser().getId())
-                .set(S.LABEL, subject.getLabel())
-                .set(S.COLOR, subject.getColor())
-                .set(S.LAST_MODIFIED, subject.getLastModified())
-                .execute();
+        dsl.newRecord(S, subject).insert();
     }
 
     void update(Subject subject) {
-        dsl.update(S)
-                .set(S.ANDROID_ID, subject.getAndroidId())
-                .set(S.USER_ID, subject.getUser().getId())
-                .set(S.LABEL, subject.getLabel())
-                .set(S.COLOR, subject.getColor())
-                .set(S.LAST_MODIFIED, subject.getLastModified())
-                .where(S.ID.eq(subject.getId()))
-                .execute();
+        dsl.newRecord(S, subject).update();
     }
 }
