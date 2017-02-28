@@ -22,6 +22,9 @@ public class Subject {
         this.lastModified = now();
     }
 
+    public SubjectDto toDto() {
+        return new SubjectDto(userId, id, label, color);
+    }
 
     public Long getId() {
         return id;

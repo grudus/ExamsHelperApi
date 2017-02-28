@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @RestController
 @RequestMapping("/api/subjects")
 @PreAuthorize("hasAnyRole(ROLE_USER, ROLE_ADMIN)")
@@ -20,12 +22,21 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Subject> getSubjects(AuthenticatedUser currentUser) {
-        return subjectService.findByUser(currentUser.getUser().getId());
+    public List<SubjectDto> getSubjects(AuthenticatedUser currentUser) {
+        return subjectService.findByUser(currentUser.getUser().getId())
+                .stream()
+                .map(Subject::toDto)
+                .collect(toList());
+    }
+
+    @PostMapping
+    public void addSubject(@RequestBody SubjectDto subjectDto, AuthenticatedUser user) {
+        subjectDto.setUserId(user.getUser().getId());
+        subjectService.save(subjectDto.toSubject());
     }
 
     @PutMapping
-    public void updateSubject(@RequestBody Subject subject) {
-        subjectService.update(subject);
+    public void updateSubject(@RequestBody SubjectDto subject) {
+        subjectService.update(subject.toSubject());
     }
 }
