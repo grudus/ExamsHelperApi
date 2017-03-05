@@ -1,6 +1,7 @@
 package com.grudus.examshelper;
 
 import com.grudus.examshelper.configuration.security.AuthenticatedUser;
+import com.grudus.examshelper.exceptions.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -33,6 +34,12 @@ public class ErrorHandler {
     @ResponseStatus(NOT_FOUND)
     public void noSuchElementException(NoSuchElementException e) {
         logger.warn("Element not found", e);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(NOT_FOUND)
+    public void noFoundException(NotFoundException e) {
+        logger.warn("Element not found " + e.getMessage());
     }
 
     @ExceptionHandler(BindException.class)

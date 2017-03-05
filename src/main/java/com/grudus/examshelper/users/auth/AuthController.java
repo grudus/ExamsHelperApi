@@ -2,6 +2,7 @@ package com.grudus.examshelper.users.auth;
 
 
 import com.grudus.examshelper.emails.EmailSender;
+import com.grudus.examshelper.exceptions.TokenNotFoundException;
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.UserService;
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.grudus.examshelper.users.roles.RoleName.USER;
@@ -62,15 +62,12 @@ public class AuthController {
     public void confirmUserRegistration(@RequestParam("token") String token,
                                         @RequestParam("redirect_uri") String redirectUri,
                                         HttpServletResponse response) throws IOException, MessagingException {
-        Optional<User> user = userService.findWaitingByToken(token);
-        if (!user.isPresent()) {
-            logger.error("Cannot find user with token {}", token);
-            response.sendError(400, "Cannot find user with token " + token);
-            return;
-        }
 
-        userService.registerUser(user.get(), USER);
-        logger.info("Enabled user {}. Send redirect to {}", user.get().getUsername(), redirectUri);
+        User user = userService.findWaitingByToken(token)
+                .orElseThrow(() -> new TokenNotFoundException("Cannot find user with token " + token));
+
+        userService.registerUser(user, USER);
+        logger.info("Enabled user {}. Send redirect to {}", user.getUsername(), redirectUri);
         response.sendRedirect(redirectUri);
     }
 

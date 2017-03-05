@@ -1,6 +1,6 @@
 package com.grudus.examshelper.exceptions;
 
-public abstract class NotFoundException extends RuntimeException{
+public abstract class NotFoundException extends RuntimeException {
     public NotFoundException() {
     }
 
