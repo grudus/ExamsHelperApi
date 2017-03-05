@@ -5,14 +5,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.grudus.examshelper.Tables.SUBJECTS;
 import static com.grudus.examshelper.Tables.USERS;
-import static com.grudus.examshelper.Utils.randAlph;
-import static com.grudus.examshelper.Utils.randomSubject;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static com.grudus.examshelper.Utils.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.Assert.*;
 
 
 public class SubjectDaoTest extends SpringBasedTest {
@@ -35,7 +36,7 @@ public class SubjectDaoTest extends SpringBasedTest {
 
     @Test
     public void shouldSaveSubject() {
-        assertEquals(2, dsl.selectFrom(SUBJECTS).execute());
+        assertEquals(2, dsl.fetchCount(SUBJECTS));
     }
 
     @Test
@@ -43,32 +44,37 @@ public class SubjectDaoTest extends SpringBasedTest {
         List<Subject> subjectList = dao.findByUserId(userId);
 
         assertEquals(2, subjectList.size());
+        assertThat(subjectList, allOf(
+                hasItem(hasProperty("label", is(subject1.getLabel()))),
+                hasItem(hasProperty("label", is(subject2.getLabel())))));
     }
 
     @Test
     public void shouldFindById() {
-        List<Subject> subjectList = dao.findByUserId(userId);
-
-        Subject dbSubject = dao.findById(subjectList.get(0).getId()).get();
+        Subject dbSubject = dao.findById(subject2.getId()).get();
 
 
-        assertEquals(subjectList.get(0).getLabel(), dbSubject.getLabel());
+        assertEquals(subject2.getLabel(), dbSubject.getLabel());
+        assertEquals(subject2.getColor(), dbSubject.getColor());
+        assertEquals(subject2.getUserId(), dbSubject.getUserId());
     }
 
     @Test
     public void shouldUpdateSubject() {
-        // TODO: 01.03.17 find way to get id from save method
-        List<Subject> subjectList = dao.findByUserId(userId);
+        String previousLabel = subject2.getLabel();
+        String previousColor = subject2.getColor();
+        LocalDateTime previousLastModified = subject2.getLastModified();
 
-        Subject subject = subjectList.get(0);
-        String previousLabel = subject.getLabel();
+        subject2.setLabel(randAlph(33));
+        subject2.setColor(randomColor());
 
-        subject.setLabel(randAlph(44));
-        dao.update(subject);
-
-        Subject dbSubject = dao.findById(subject.getId()).get();
+        dao.update(subject2);
+        Subject dbSubject = dao.findById(subject2.getId()).get();
 
         assertNotEquals(previousLabel, dbSubject.getLabel());
+        assertNotEquals(previousColor, dbSubject.getColor());
+        assertFalse(previousLastModified.isBefore(dbSubject.getLastModified()));
+
     }
 
 }

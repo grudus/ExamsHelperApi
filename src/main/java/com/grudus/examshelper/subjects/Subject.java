@@ -23,7 +23,7 @@ public class Subject {
     }
 
     public SubjectDto toDto() {
-        return new SubjectDto(userId, id, label, color);
+        return new SubjectDto(id, label, color);
     }
 
     public Long getId() {

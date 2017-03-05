@@ -1,6 +1,7 @@
 package com.grudus.examshelper.subjects;
 
 import com.grudus.examshelper.tables.Subjects;
+import com.grudus.examshelper.tables.records.SubjectsRecord;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -8,10 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static java.time.LocalDateTime.now;
+
 @Repository
 public class SubjectDao {
 
-    public static final Subjects S = Subjects.SUBJECTS;
+    private static final Subjects S = Subjects.SUBJECTS;
 
     private final DSLContext dsl;
 
@@ -32,28 +35,14 @@ public class SubjectDao {
                 .fetchOptionalInto(Subject.class);
     }
 
-    Optional<Subject> findByUserIdAndAndroidId(Long userId, Long androidId) {
-        return dsl.selectFrom(S)
-                .where(S.USER_ID.eq(userId).and(S.ANDROID_ID.eq(androidId)))
-                .fetchOptionalInto(Subject.class);
-    }
-    void deleteByUserIdAndAndroidId(Long userId, Long androidId) {
-        dsl.deleteFrom(S)
-                .where(S.USER_ID.eq(userId).and(S.ANDROID_ID.eq(androidId)))
-                .execute();
-    }
-
-    void deleteByUser(Long userId) {
-        dsl.deleteFrom(S)
-                .where(S.USER_ID.eq(userId))
-                .execute();
-    }
-
     void save(Subject subject) {
-        dsl.newRecord(S, subject).insert();
+        SubjectsRecord record = dsl.newRecord(S, subject);
+        record.insert();
+        subject.setId(record.getId());
     }
 
     void update(Subject subject) {
+        subject.setLastModified(now());
         dsl.newRecord(S, subject).update();
     }
 }

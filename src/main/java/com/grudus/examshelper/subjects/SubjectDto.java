@@ -2,18 +2,9 @@ package com.grudus.examshelper.subjects;
 
 
 public class SubjectDto {
-    private Long userId;
     private Long id;
     private String label;
     private String color;
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
     public Long getId() {
         return id;
@@ -39,9 +30,7 @@ public class SubjectDto {
         this.color = color;
     }
 
-    public SubjectDto(Long userId, Long id, String label, String color) {
-
-        this.userId = userId;
+    public SubjectDto(Long id, String label, String color) {
         this.id = id;
         this.label = label;
         this.color = color;
@@ -50,7 +39,7 @@ public class SubjectDto {
     public SubjectDto() {
     }
 
-    public Subject toSubject() {
+    public Subject toSubject(Long userId) {
         Subject s = new Subject(userId, label, color);
         s.setId(id);
         return s;

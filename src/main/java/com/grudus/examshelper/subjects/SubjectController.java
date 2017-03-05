@@ -21,7 +21,7 @@ public class SubjectController {
         this.subjectService = subjectService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public List<SubjectDto> getSubjects(AuthenticatedUser currentUser) {
         return subjectService.findByUser(currentUser.getUser().getId())
                 .stream()
@@ -31,12 +31,11 @@ public class SubjectController {
 
     @PostMapping
     public void addSubject(@RequestBody SubjectDto subjectDto, AuthenticatedUser user) {
-        subjectDto.setUserId(user.getUser().getId());
-        subjectService.save(subjectDto.toSubject());
+        subjectService.save(subjectDto.toSubject(user.getUser().getId()));
     }
 
     @PutMapping
-    public void updateSubject(@RequestBody SubjectDto subject) {
-        subjectService.update(subject.toSubject());
+    public void updateSubject(@RequestBody SubjectDto subject,  AuthenticatedUser user) {
+        subjectService.update(subject.toSubject(user.getUser().getId()));
     }
 }
