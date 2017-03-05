@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/user")
-@PreAuthorize("hasAnyRole(ROLE_USER, ROLE_ADMIN)")
+@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 public class UserController {
 
     private final UserService userService;

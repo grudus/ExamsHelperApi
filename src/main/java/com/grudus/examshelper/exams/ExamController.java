@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/exams")
-@PreAuthorize("hasAnyRole(ROLE_USER, ROLE_ADMIN)")
+@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 public class ExamController {
 
     private final ExamService examService;

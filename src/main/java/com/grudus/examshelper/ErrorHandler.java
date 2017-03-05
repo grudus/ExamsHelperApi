@@ -1,7 +1,9 @@
 package com.grudus.examshelper;
 
+import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,6 +40,13 @@ public class ErrorHandler {
     public List<String> bindExceptionException(BindException e) {
         return toCodes(e);
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public void accessDenied(HttpServletResponse response, HttpServletRequest request, AuthenticatedUser user) throws IOException {
+        logger.warn("Access denied for user [{}] for resource {}", user.getUser().getUsername(), request.getRequestURI());
+        response.sendError(403);
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)

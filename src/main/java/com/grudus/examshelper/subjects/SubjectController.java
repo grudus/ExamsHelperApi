@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api/subjects")
-@PreAuthorize("hasAnyRole(ROLE_USER, ROLE_ADMIN)")
+@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 public class SubjectController {
 
     private final SubjectService subjectService;
