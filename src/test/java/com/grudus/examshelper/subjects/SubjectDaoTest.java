@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.grudus.examshelper.Tables.SUBJECTS;
-import static com.grudus.examshelper.Tables.USERS;
 import static com.grudus.examshelper.Utils.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasProperty;
@@ -26,7 +25,7 @@ public class SubjectDaoTest extends SpringBasedTest {
 
     @Before
     public void init() {
-        userId = dsl.insertInto(USERS, USERS.USERNAME).values(randAlph(15)).returning(USERS.ID).fetchOne().getId();
+        userId = addUserWithRoles().getId();
         subject1 = randomSubject(userId);
         subject2 = randomSubject(userId);
 
