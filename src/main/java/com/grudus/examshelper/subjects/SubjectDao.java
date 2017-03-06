@@ -45,4 +45,10 @@ public class SubjectDao {
         subject.setLastModified(now());
         dsl.newRecord(S, subject).update();
     }
+
+    public void delete(Long id) {
+        dsl.deleteFrom(S)
+                .where(S.ID.eq(id))
+                .execute();
+    }
 }

@@ -38,4 +38,9 @@ public class SubjectController {
     public void updateSubject(@RequestBody SubjectDto subject,  AuthenticatedUser user) {
         subjectService.update(subject.toSubject(user.getUser().getId()));
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteSubject(@PathVariable Long id) {
+        subjectService.delete(id);
+    }
 }

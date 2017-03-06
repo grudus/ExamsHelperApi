@@ -7,6 +7,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.grudus.examshelper.Utils.*;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
+import static java.lang.String.format;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -61,6 +62,32 @@ public class SubjectControllerTest extends AbstractControllerTest {
         assertSubjectsSize(1)
                 .andExpect(jsonPath("$[0].label", is(not(subject.getLabel()))))
                 .andExpect(jsonPath("$[0].color", is(not(subject.getColor()))));
+    }
+
+    @Test
+    public void shouldDeleteSubjectWhenIdInDb() throws Exception {
+        Subject subject = randomSubject(authentication.getUser().getId());
+        subject.setId(15L);
+        addSubject(subject);
+        addSubject(randomSubject(authentication.getUser().getId()));
+
+        performRequestWithAuth(delete(format("%s/%d", SUBJECT_BASIC_URL, subject.getId())))
+                .andExpect(status().isOk());
+
+        assertSubjectsSize(1)
+                .andExpect(jsonPath("$[0].label", is(not(subject.getLabel()))))
+                .andExpect(jsonPath("$[0].color", is(not(subject.getColor()))));
+    }
+
+    @Test
+    public void shouldDeleteNothingWhenIdNotInDb() throws Exception {
+        addSubject(randomSubject(authentication.getUser().getId()));
+        addSubject(randomSubject(authentication.getUser().getId()));
+
+        performRequestWithAuth(delete(format("%s/%d", SUBJECT_BASIC_URL, 666L)))
+                .andExpect(status().isOk());
+
+        assertSubjectsSize(2);
     }
 
 

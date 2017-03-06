@@ -27,4 +27,7 @@ public class SubjectService {
         return subjectDao.findByUserId(id);
     }
 
+    void delete(Long id) {
+        subjectDao.delete(id);
+    }
 }

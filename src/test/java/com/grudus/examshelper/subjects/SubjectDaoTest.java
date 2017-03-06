@@ -73,7 +73,25 @@ public class SubjectDaoTest extends SpringBasedTest {
         assertNotEquals(previousLabel, dbSubject.getLabel());
         assertNotEquals(previousColor, dbSubject.getColor());
         assertFalse(previousLastModified.isBefore(dbSubject.getLastModified()));
-
     }
+
+    @Test
+    public void shouldDeleteSubjectWhenValidId() {
+        dao.delete(subject2.getId());
+
+        assertEquals(1, dsl.fetchCount(SUBJECTS));
+        assertTrue(dao.findById(subject1.getId()).isPresent());
+    }
+
+
+    @Test
+    public void shouldDeleteNothingWhenIdNotInDb() {
+        dao.delete(-13L);
+
+        assertEquals(2, dsl.fetchCount(SUBJECTS));
+        assertTrue(dao.findById(subject1.getId()).isPresent());
+        assertTrue(dao.findById(subject2.getId()).isPresent());
+    }
+
 
 }

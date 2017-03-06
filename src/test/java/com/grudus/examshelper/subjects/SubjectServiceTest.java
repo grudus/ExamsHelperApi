@@ -57,4 +57,12 @@ public class SubjectServiceTest {
         assertThat(subjectList, hasItem(is(subject)));
     }
 
+    @Test
+    public void shouldDeleteSubjectById() {
+        Long id = 414L;
+        subjectService.delete(id);
+
+        verify(subjectDao).delete(eq(id));
+    }
+
 }
