@@ -1,21 +1,28 @@
 package com.grudus.examshelper.exams;
 
-import com.grudus.examshelper.subjects.Subject;
-
 import java.time.LocalDateTime;
-import java.util.Date;
+
+import static java.time.LocalDateTime.now;
 
 public class Exam {
 
     private long id;
     private Long androidId;
-    private String examInfo;
-    private Date date;
+    private String info;
+    private LocalDateTime date;
     private Double grade;
     private LocalDateTime lastModified;
-    private Subject subject;
+    private Long subjectId;
 
     public Exam() {
+    }
+
+    public Exam(String info, LocalDateTime date, Double grade, Long subjectId) {
+        this.info = info;
+        this.date = date;
+        this.grade = grade;
+        this.subjectId = subjectId;
+        this.lastModified = now();
     }
 
     public long getId() {
@@ -34,19 +41,19 @@ public class Exam {
         this.androidId = androidId;
     }
 
-    public String getExamInfo() {
-        return examInfo;
+    public String getInfo() {
+        return info;
     }
 
-    public void setExamInfo(String examInfo) {
-        this.examInfo = examInfo;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -66,11 +73,11 @@ public class Exam {
         this.lastModified = lastModified;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public Long getSubjectId() {
+        return subjectId;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
+    public void setSubjectId(Long subjectId) {
+        this.subjectId = subjectId;
     }
 }
