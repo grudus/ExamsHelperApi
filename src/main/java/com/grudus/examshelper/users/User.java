@@ -23,7 +23,6 @@ public class User {
     private List<Role> roles;
     private UserState state;
 
-    @Deprecated
     public User() {
     }
 
@@ -35,6 +34,10 @@ public class User {
         this.registerDate = now();
         this.lastModified = now();
         this.roles = emptyList();
+    }
+
+    public UserDto toDto() {
+        return new UserDto(id, email, username, registerDate);
     }
 
     public List<GrantedAuthority> generateAuthorities() {

@@ -1,12 +1,13 @@
 #@IgnoreInspection BashAddShebang
 db="mysql -u $1 -p$2 ExamsHelper"
+encoded_test123=\$2a\$12\$8GqAT8puP14z6XH6t8i.reJhrlSgoVLJRpwHrjR7XBahffJkzsyZW
 
 cat "../sql/init.sql" | $db
 echo "Created schema"
 
 echo "Insert users"
 echo "INSERT INTO users(username, password, email) VALUES
-('kuba', 'kubakuba', 'kuba@kuba.com'), ('jgruda', 'tecd st123', 'jgruda@crazy.com'), ('admin', 'admin', 'admin@admin.com');" | $db
+('kuba', '$encoded_test123', 'kuba@kuba.com'), ('jgruda', '$encoded_test123', 'jgruda@crazy.com'), ('admin', '$encoded_test123', 'admin@admin.com');" | $db
 
 echo "Add permissions"
 echo "INSERT INTO user_roles(user_id, role_id) VALUES (1, 2), (1, 1), (2, 2), (3, 1);" | $db

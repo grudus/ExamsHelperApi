@@ -62,7 +62,7 @@ public class SubjectDaoTest extends SpringBasedTest {
     public void shouldUpdateSubject() {
         String previousLabel = subject2.getLabel();
         String previousColor = subject2.getColor();
-        LocalDateTime previousLastModified = subject2.getLastModified();
+        LocalDateTime previousLastModified = subject2.getLastModified().minusSeconds(1);
 
         subject2.setLabel(randAlph(33));
         subject2.setColor(randomColor());
@@ -72,7 +72,7 @@ public class SubjectDaoTest extends SpringBasedTest {
 
         assertNotEquals(previousLabel, dbSubject.getLabel());
         assertNotEquals(previousColor, dbSubject.getColor());
-        assertFalse(previousLastModified.isBefore(dbSubject.getLastModified()));
+        assertTrue(previousLastModified.isBefore(dbSubject.getLastModified()));
     }
 
     @Test

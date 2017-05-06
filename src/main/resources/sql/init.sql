@@ -1,4 +1,4 @@
-USE ExamsHelper;
+USE examshelper_test;
 DROP TABLE IF EXISTS exams, subjects, user_roles, roles, users;
 
 CREATE TABLE IF NOT EXISTS users (

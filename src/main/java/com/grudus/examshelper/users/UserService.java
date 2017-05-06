@@ -67,6 +67,10 @@ public class UserService {
         return userDao.findByEmail(email);
     }
 
+    public Optional<User> findByEmailOrUsername(String email, String username) {
+        return email != null ? findByEmail(email) : findByUsername(username);
+    }
+
     public void saveAddUserRequest(AddUserRequest request, String token) {
         userDao.saveAddUserRequest(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getEmail(), token);
     }

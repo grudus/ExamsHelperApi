@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import static com.grudus.examshelper.Utils.*;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
@@ -28,6 +29,7 @@ public class AuthControllerTest extends AbstractControllerTest {
 
     public static final String REDIRECT_URI = randAlph(10);
     public static final String REGISTER_URL = "/api/auth/register?redirect_uri=" + REDIRECT_URI;
+    public static final String EXISTENCE_URL = "/api/user/exists?";
 
     @Autowired
     private EmailSender emailSender;
@@ -143,7 +145,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     }
 
     public void checkUserExistence(String email, boolean exists) throws Exception {
-        mockMvc.perform(get("/api/auth/exists").param("email", email))
+        mockMvc.perform(get(EXISTENCE_URL).param("email", email))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.exists", is(exists)));
     }

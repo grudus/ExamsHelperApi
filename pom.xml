@@ -101,7 +101,7 @@
 							<name>org.jooq.util.mysql.MySQLDatabase</name>
 							<includes>.*</includes>
 							<outputSchemaToDefault>true</outputSchemaToDefault>
-							<inputSchema>ExamsHelper</inputSchema>
+							<inputSchema>examshelper</inputSchema>
 							<customTypes>
 								<customType>
 									<name>LocalDateTime</name>

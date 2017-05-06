@@ -47,11 +47,6 @@ public class AuthController {
         binder.setValidator(validator);
     }
 
-    @GetMapping("/exists")
-    public Map<String, Boolean> exists(@RequestParam("email") String email) {
-        return singletonMap("exists", userService.findByEmail(email).isPresent());
-    }
-
     @PostMapping(value = "/register")
     public void addUserRequest(@Valid @RequestBody AddUserRequest userRequest,
                                @RequestParam("redirect_uri") String redirectUri) throws MessagingException {

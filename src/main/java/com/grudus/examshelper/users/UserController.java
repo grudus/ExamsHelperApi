@@ -3,9 +3,11 @@ package com.grudus.examshelper.users;
 import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
+import static java.util.Collections.singletonMap;
 
 @RestController
 @RequestMapping("/api/user")
@@ -19,18 +21,19 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public User getUserInfo(AuthenticatedUser currentUser) {
-        return currentUser.getUser();
+
+    @GetMapping
+    public UserDto getUserInfo(AuthenticatedUser currentUser) {
+        return currentUser.getUser().toDto();
     }
 
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    @DeleteMapping
     public void deleteUser(AuthenticatedUser currentUser) {
         userService.delete(currentUser.getUser());
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     public void updateUser(AuthenticatedUser currentUser) {
         userService.update(currentUser.getUser());
     }
