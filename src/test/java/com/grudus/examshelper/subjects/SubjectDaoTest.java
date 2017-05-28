@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 import static com.grudus.examshelper.Tables.SUBJECTS;
 import static com.grudus.examshelper.Utils.*;
@@ -50,7 +52,7 @@ public class SubjectDaoTest extends SpringBasedTest {
 
     @Test
     public void shouldFindById() {
-        Subject dbSubject = dao.findById(subject2.getId()).get();
+        Subject dbSubject = dao.findById(subject2.getId()).orElseThrow(IllegalStateException::new);
 
 
         assertEquals(subject2.getLabel(), dbSubject.getLabel());
@@ -68,7 +70,7 @@ public class SubjectDaoTest extends SpringBasedTest {
         subject2.setColor(randomColor());
 
         dao.update(subject2);
-        Subject dbSubject = dao.findById(subject2.getId()).get();
+        Subject dbSubject = dao.findById(subject2.getId()).orElseThrow(IllegalStateException::new);
 
         assertNotEquals(previousLabel, dbSubject.getLabel());
         assertNotEquals(previousColor, dbSubject.getColor());
@@ -91,6 +93,38 @@ public class SubjectDaoTest extends SpringBasedTest {
         assertEquals(2, dsl.fetchCount(SUBJECTS));
         assertTrue(dao.findById(subject1.getId()).isPresent());
         assertTrue(dao.findById(subject2.getId()).isPresent());
+    }
+
+    @Test
+    public void shouldFindByLabel() {
+        Optional<SubjectDto> s = dao.findByUserIdAndLabel(userId, subject1.getLabel());
+
+        assertTrue(s.isPresent());
+        assertEquals(subject1.getLabel(), s.get().getLabel());
+        assertEquals(subject1.getColor(), s.get().getColor());
+    }
+
+    @Test
+    public void shouldReturnEmptyWhenFindNonExistingSubjectByLabel() {
+        Optional<SubjectDto> s = dao.findByUserIdAndLabel(userId, randAlph(11));
+
+        assertFalse(s.isPresent());
+    }
+
+    @Test
+    public void shouldReturnEmptyWhenFindByAnotherUserAndLabel() {
+        Long id2 = addUserWithRoles().getId();
+
+        Optional<SubjectDto> s = dao.findByUserIdAndLabel(id2, subject1.getLabel());
+
+        assertFalse(s.isPresent());
+    }
+
+    @Test
+    public void shouldReturnEmptyWhenFindByNonExistingUserAndLabel() {
+        Optional<SubjectDto> s = dao.findByUserIdAndLabel(new Random().nextLong(), subject1.getLabel());
+
+        assertFalse(s.isPresent());
     }
 
 

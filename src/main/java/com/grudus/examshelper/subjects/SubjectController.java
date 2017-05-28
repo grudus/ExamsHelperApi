@@ -1,6 +1,7 @@
 package com.grudus.examshelper.subjects;
 
 import com.grudus.examshelper.configuration.security.AuthenticatedUser;
+import com.grudus.examshelper.exceptions.SubjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,12 @@ public class SubjectController {
                 .stream()
                 .map(Subject::toDto)
                 .collect(toList());
+    }
+
+    @GetMapping("/{label}")
+    public SubjectDto findByLabel(@PathVariable String label, AuthenticatedUser user) {
+        return subjectService.findByLabel(user.getUser().getId(), label)
+                .orElseThrow(SubjectNotFoundException::new);
     }
 
     @PostMapping

@@ -12,4 +12,6 @@ public class RestKeys {
     public static final String EMAIL_EXISTS = "EMAIL.EXISTS";
     public static final String USERNAME_EXISTS = "USERNAME.EXISTS";
 
+    public static final String TOO_SHORT_PASSWORD = "PASSWORD.TOO_SHORT";
+
 }

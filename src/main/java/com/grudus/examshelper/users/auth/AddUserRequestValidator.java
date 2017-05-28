@@ -13,6 +13,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Component
 public class AddUserRequestValidator implements Validator {
 
+    private static final int MIN_PASSWORD = 6;
+
     private final UserService userService;
     private final EmailValidator emailValidator;
 
@@ -39,6 +41,9 @@ public class AddUserRequestValidator implements Validator {
 
         if (isBlank(request.getPassword()))
             errors.reject(EMPTY_PASSWORD);
+
+        else if (request.getPassword().length() < MIN_PASSWORD)
+            errors.reject(TOO_SHORT_PASSWORD);
 
         if (isBlank(request.getEmail()))
             errors.reject(EMPTY_EMAIL);

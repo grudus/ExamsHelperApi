@@ -8,4 +8,4 @@ mail.smtp.port=587
 mail.user=
 mail.password=
 mail.message.subject=Confirm register
-mail.message.content=Hello, %s. To confirm your registration click following link: %s/%s
+mail.message.content=Hello, %s. To confirm your registration click following link: %s

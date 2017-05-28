@@ -97,6 +97,17 @@ public class AddUserRequestValidatorTest {
         assertThat(codes(), hasItem(EMPTY_PASSWORD));
     }
 
+
+    @Test
+    public void shouldNotPassValidationWhenPasswordTooShort() {
+        validatedObject.setPassword(randAlph(5));
+
+        validator.validate(validatedObject, errors);
+
+        assertEquals(1, errors.getErrorCount());
+        assertThat(codes(), hasItem(TOO_SHORT_PASSWORD));
+    }
+
     @Test
     public void shouldNotPassValidationWhenEmailInvalid() {
         when(emailValidator.isValid(anyString())).thenReturn(false);

@@ -51,4 +51,10 @@ public class SubjectDao {
                 .where(S.ID.eq(id))
                 .execute();
     }
+
+    Optional<SubjectDto> findByUserIdAndLabel(Long userId, String label) {
+        return dsl.selectFrom(S)
+                .where(S.LABEL.eq(label).and(S.USER_ID.eq(userId)))
+                .fetchOptionalInto(SubjectDto.class);
+    }
 }

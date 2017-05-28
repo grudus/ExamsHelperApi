@@ -24,6 +24,24 @@ public class SubjectControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void shouldFindByLabel() throws Exception {
+        Subject subject = randomSubject(authentication.getUser().getId());
+        addSubject(subject);
+
+        performRequestWithAuth(get(format("%s/%s", SUBJECT_BASIC_URL, subject.getLabel())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.label", is(subject.getLabel())))
+                .andExpect(jsonPath("$.color", is(subject.getColor())));
+    }
+
+
+    @Test
+    public void shouldNotFindByLabel() throws Exception {
+        performRequestWithAuth(get(format("%s/%s", SUBJECT_BASIC_URL, randAlph(11))))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void shouldAddSubject() throws Exception {
         Subject subject = randomSubject(authentication.getUser().getId());
 
@@ -91,8 +109,8 @@ public class SubjectControllerTest extends AbstractControllerTest {
     }
 
 
-    private ResultActions addSubject(Subject subject) throws Exception {
-        return performRequestWithAuth(post(SUBJECT_BASIC_URL)
+    private void addSubject(Subject subject) throws Exception {
+        performRequestWithAuth(post(SUBJECT_BASIC_URL)
                 .contentType(APPLICATION_JSON)
                 .content(toJson(subject)))
                 .andExpect(status().isOk());

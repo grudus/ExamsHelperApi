@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubjectService {
@@ -29,5 +30,9 @@ public class SubjectService {
 
     void delete(Long id) {
         subjectDao.delete(id);
+    }
+
+    Optional<SubjectDto> findByLabel(Long userId, String label) {
+        return subjectDao.findByUserIdAndLabel(userId, label);
     }
 }
