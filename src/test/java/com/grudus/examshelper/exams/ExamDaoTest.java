@@ -3,22 +3,21 @@ package com.grudus.examshelper.exams;
 import com.grudus.examshelper.SpringBasedTest;
 import com.grudus.examshelper.subjects.Subject;
 import com.grudus.examshelper.subjects.SubjectDao;
-import com.grudus.examshelper.tables.records.SubjectsRecord;
 import com.grudus.examshelper.users.User;
+import org.jooq.exception.DataAccessException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Random;
 
 import static com.grudus.examshelper.Tables.EXAMS;
-import static com.grudus.examshelper.Tables.SUBJECTS;
 import static com.grudus.examshelper.Utils.randomExam;
 import static com.grudus.examshelper.Utils.randomSubject;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class ExamDaoTest extends SpringBasedTest {
 
@@ -55,6 +54,23 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
+    public void shouldReturnNewlyCreatedId() {
+        Long id = dao.save(randomExam(subject.getId()));
+
+        assertNotNull(id);
+    }
+
+    @Test(expected = DataAccessException.class)
+    public void shouldNotBeAbleToSaveWithoutSubjectId() {
+        dao.save(randomExam(null));
+    }
+
+    @Test(expected = DataAccessException.class)
+    public void shouldNotBeAbleToSaveWithoutValidSubjectId() {
+        dao.save(randomExam(new Random().nextLong()));
+    }
+
+    @Test
     public void shouldFindAllAsExamDtoByUserId() {
         List<ExamDto> exams = dao.findAllAsExamDtoByUserId(user.getId());
 
@@ -68,12 +84,26 @@ public class ExamDaoTest extends SpringBasedTest {
         assertEquals(subject.getColor(), exam.getSubject().getColor());
     }
 
+    @Test
+    public void shouldReturnEmptyListWhenFindByNotExistingUser() {
+        List<ExamDto> exams = dao.findAllAsExamDtoByUserId(new Random().nextLong());
+
+        assertTrue(exams.isEmpty());
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenUserDoNotHaveAnyExams() {
+        Long id = addUserWithRoles().getId();
+        List<ExamDto> exams = dao.findAllAsExamDtoByUserId(id);
+
+        assertTrue(exams.isEmpty());
+    }
+
 
     private Subject addSubject(Long userId) {
         Subject subject = randomSubject(userId);
-        SubjectsRecord record = dsl.newRecord(SUBJECTS, subject);
-        record.insert();
-        subject.setId(record.getId());
+        Long id = subjectDao.save(subject);
+        subject.setId(id);
         return subject;
     }
 

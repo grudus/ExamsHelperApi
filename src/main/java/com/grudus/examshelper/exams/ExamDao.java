@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class ExamDao {
+class ExamDao {
 
     private static final Exams E = Exams.EXAMS;
     private static final Subjects S = Subjects.SUBJECTS;
@@ -18,21 +18,22 @@ public class ExamDao {
     private final DSLContext dsl;
 
     @Autowired
-    public ExamDao(DSLContext dsl) {
+    ExamDao(DSLContext dsl) {
         this.dsl = dsl;
     }
 
     List<ExamDto> findAllAsExamDtoByUserId(Long userId) {
-        return dsl.select(E.ID, E.INFO, E.DATE, E.GRADE, S.ID, S.LABEL.as("subject.label"), S.COLOR.as("subject.color"))
+        return dsl.select(E.ID, E.INFO, E.DATE, E.GRADE,
+                S.ID.as("subject.id"), S.LABEL.as("subject.label"), S.COLOR.as("subject.color"))
                 .from(E).innerJoin(S).onKey()
                 .where(S.USER_ID.eq(userId))
                 .fetchInto(ExamDto.class);
     }
 
-    void save(Exam exam) {
+    Long save(Exam exam) {
         ExamsRecord record = dsl.newRecord(E, exam);
         record.insert();
-        exam.setId(record.getId());
+        return record.getId();
     }
 
 }

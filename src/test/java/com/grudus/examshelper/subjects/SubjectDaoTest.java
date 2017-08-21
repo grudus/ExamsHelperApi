@@ -1,6 +1,7 @@
 package com.grudus.examshelper.subjects;
 
 import com.grudus.examshelper.SpringBasedTest;
+import org.jooq.exception.DataAccessException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,7 @@ import java.util.Random;
 
 import static com.grudus.examshelper.Tables.SUBJECTS;
 import static com.grudus.examshelper.Utils.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.hasProperty;
+import static com.grudus.examshelper.utils.ListAssertionUtils.assertContainsProperties;
 import static org.junit.Assert.*;
 
 
@@ -31,8 +31,10 @@ public class SubjectDaoTest extends SpringBasedTest {
         subject1 = randomSubject(userId);
         subject2 = randomSubject(userId);
 
-        dao.save(subject1);
-        dao.save(subject2);
+        Long id1 = dao.save(subject1);
+        Long id2 = dao.save(subject2);
+        subject1.setId(id1);
+        subject2.setId(id2);
     }
 
     @Test
@@ -41,23 +43,68 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
+    public void shouldReturnNewlyCreatedId() {
+        Long id = dao.save(randomSubject(userId));
+
+        assertNotNull(id);
+        assertTrue(dao.findById(id).isPresent());
+    }
+
+    @Test(expected = DataAccessException.class)
+    public void shouldNotBeAbleToSaveWhenUserDoNotExists() {
+        dao.save(randomSubject(new Random().nextLong()));
+    }
+
+    @Test(expected = DataAccessException.class)
+    public void shouldNotBeAbleToSaveWithoutLabel() {
+        Subject subject = randomSubject(userId);
+        subject.setLabel(null);
+
+        dao.save(subject);
+    }
+
+    @Test(expected = DataAccessException.class)
+    public void shouldNotBeAbleToSaveWhenLabelExistsForUser() {
+        Subject subject = randomSubject(subject1.getUserId());
+        subject.setLabel(subject1.getLabel());
+
+        dao.save(subject);
+    }
+
+    @Test
+    public void shouldBeAbleToSaveWhenLabelExistsForAnotherUser() {
+        Long userId = addUserWithRoles().getId();
+        Subject subject = randomSubject(userId);
+        subject.setLabel(subject2.getLabel());
+
+        dao.save(subject);
+    }
+
+    @Test
     public void shouldFindAllByUserId() {
         List<Subject> subjectList = dao.findByUserId(userId);
 
         assertEquals(2, subjectList.size());
-        assertThat(subjectList, allOf(
-                hasItem(hasProperty("label", is(subject1.getLabel()))),
-                hasItem(hasProperty("label", is(subject2.getLabel())))));
+        assertContainsProperties(subjectList, Subject::getLabel, subject1.getLabel(), subject2.getLabel());
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenFindByNotExistingUserId() {
+        assertTrue(dao.findByUserId(new Random().nextLong()).isEmpty());
     }
 
     @Test
     public void shouldFindById() {
-        Subject dbSubject = dao.findById(subject2.getId()).orElseThrow(IllegalStateException::new);
-
+        Subject dbSubject = dao.findById(subject2.getId()).get();
 
         assertEquals(subject2.getLabel(), dbSubject.getLabel());
         assertEquals(subject2.getColor(), dbSubject.getColor());
         assertEquals(subject2.getUserId(), dbSubject.getUserId());
+    }
+
+    @Test
+    public void shouldNotFindById() {
+        assertFalse(dao.findById(new Random().nextLong()).isPresent());
     }
 
     @Test
@@ -70,11 +117,21 @@ public class SubjectDaoTest extends SpringBasedTest {
         subject2.setColor(randomColor());
 
         dao.update(subject2);
-        Subject dbSubject = dao.findById(subject2.getId()).orElseThrow(IllegalStateException::new);
+        Subject dbSubject = dao.findById(subject2.getId()).get();
 
         assertNotEquals(previousLabel, dbSubject.getLabel());
         assertNotEquals(previousColor, dbSubject.getColor());
         assertTrue(previousLastModified.isBefore(dbSubject.getLastModified()));
+    }
+
+    @Test
+    public void shouldBeAbleToUpdateWithoutChanges() {
+        dao.update(subject1);
+
+        Subject dbSubject = dao.findById(subject1.getId()).get();
+
+        assertEquals(subject1.getLabel(), dbSubject.getLabel());
+        assertEquals(subject1.getColor(), dbSubject.getColor());
     }
 
     @Test

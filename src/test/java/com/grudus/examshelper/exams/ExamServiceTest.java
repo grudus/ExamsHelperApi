@@ -1,0 +1,71 @@
+package com.grudus.examshelper.exams;
+
+import com.grudus.examshelper.users.User;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import static com.grudus.examshelper.Utils.randAlph;
+import static java.time.LocalDateTime.now;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
+public class ExamServiceTest {
+
+    @Mock
+    private ExamDao dao;
+
+    @InjectMocks
+    private ExamService service;
+
+    @Test
+    public void shouldFindAllExamsPerDay() throws Exception {
+        LocalDateTime now = now();
+        List<ExamDto> exams = asList(randomAtDate(now), randomAtDate(now), randomAtDate(now),
+                randomAtDate(now.plusDays(6)), randomAtDate(now.plusDays(6)),
+                randomAtDate(now.plusDays(11)));
+
+        when(dao.findAllAsExamDtoByUserId(anyLong())).thenReturn(exams);
+
+        Map<LocalDate, List<ExamDto>> examsPerDay = service.findAllExamsPerDay(new User());
+
+        assertEquals(3, examsPerDay.size());
+
+        assertEquals(3, examsPerDay.get(now.toLocalDate()).size());
+        assertEquals(2, examsPerDay.get(now.plusDays(6).toLocalDate()).size());
+        assertEquals(1, examsPerDay.get(now.plusDays(11).toLocalDate()).size());
+    }
+
+    @Test
+    public void shouldMapToExamAndSave() throws Exception {
+        CreateExamRequest request = new CreateExamRequest(randAlph(11), new Random().nextLong(), now());
+
+        ArgumentCaptor<Exam> capturedExam = ArgumentCaptor.forClass(Exam.class);
+        service.save(request);
+
+        verify(dao).save(capturedExam.capture());
+
+        Exam exam = capturedExam.getValue();
+        assertEquals(request.getSubjectId(), exam.getSubjectId());
+        assertEquals(request.getDate(), exam.getDate());
+        assertEquals(request.getInfo(), exam.getInfo());
+    }
+
+    private ExamDto randomAtDate(LocalDateTime dateTime) {
+        return new ExamDto(randAlph(11), dateTime, -1D, null);
+    }
+
+}

@@ -35,10 +35,10 @@ public class SubjectDao {
                 .fetchOptionalInto(Subject.class);
     }
 
-    void save(Subject subject) {
+    public long save(Subject subject) {
         SubjectsRecord record = dsl.newRecord(S, subject);
         record.insert();
-        subject.setId(record.getId());
+        return record.getId();
     }
 
     void update(Subject subject) {
@@ -46,7 +46,7 @@ public class SubjectDao {
         dsl.newRecord(S, subject).update();
     }
 
-    public void delete(Long id) {
+    void delete(Long id) {
         dsl.deleteFrom(S)
                 .where(S.ID.eq(id))
                 .execute();
