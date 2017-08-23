@@ -16,8 +16,8 @@ public class SubjectService {
         this.subjectDao = subjectDao;
     }
 
-    void save(Subject subject) {
-        subjectDao.save(subject);
+    public Long save(Subject subject) {
+        return subjectDao.save(subject);
     }
 
     void update(Subject subject) {
@@ -26,6 +26,10 @@ public class SubjectService {
 
     List<Subject> findByUser(Long id) {
         return subjectDao.findByUserId(id);
+    }
+
+    public boolean exists(Long id) {
+        return subjectDao.exists(id);
     }
 
     void delete(Long id) {

@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Random;
 
 import static com.grudus.examshelper.Tables.EXAMS;
-import static com.grudus.examshelper.Utils.randomExam;
-import static com.grudus.examshelper.Utils.randomSubject;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
+import static com.grudus.examshelper.utils.Utils.randomExam;
+import static com.grudus.examshelper.utils.Utils.randomSubject;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
 

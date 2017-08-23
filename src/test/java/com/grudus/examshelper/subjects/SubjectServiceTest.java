@@ -8,7 +8,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
 
-import static com.grudus.examshelper.Utils.randomSubject;
+import static com.grudus.examshelper.utils.Utils.randomSubject;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;

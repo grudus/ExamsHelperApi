@@ -14,4 +14,7 @@ public class RestKeys {
 
     public static final String TOO_SHORT_PASSWORD = "PASSWORD.TOO_SHORT";
 
+    public static final String INVALID_SUBJECT = "SUBJECT.INVALID";
+    public static final String EMPTY_DATE = "DATE.EMPTY";
+
 }

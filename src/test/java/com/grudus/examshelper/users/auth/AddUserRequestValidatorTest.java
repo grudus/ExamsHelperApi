@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.grudus.examshelper.Utils.randAlph;
-import static com.grudus.examshelper.Utils.randomEmail;
 import static com.grudus.examshelper.commons.keys.RestKeys.*;
+import static com.grudus.examshelper.utils.Utils.randAlph;
+import static com.grudus.examshelper.utils.Utils.randomEmail;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertEquals;

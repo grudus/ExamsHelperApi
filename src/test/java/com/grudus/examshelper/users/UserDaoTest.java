@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static com.grudus.examshelper.Tables.ROLES;
-import static com.grudus.examshelper.Utils.*;
 import static com.grudus.examshelper.users.UserState.*;
 import static com.grudus.examshelper.users.roles.RoleName.ADMIN;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
+import static com.grudus.examshelper.utils.Utils.*;
 import static java.time.LocalDateTime.now;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;

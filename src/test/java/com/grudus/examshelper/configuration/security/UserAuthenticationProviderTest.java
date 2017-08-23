@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static com.grudus.examshelper.Utils.*;
+import static com.grudus.examshelper.utils.Utils.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
@@ -26,8 +26,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UserAuthenticationProviderTest {
 
-    public static final String USERNAME = randAlph(20);
-    public static final String PASSWORD = randAlph(20);
+    private static final String USERNAME = randAlph(20);
+    private static final String PASSWORD = randAlph(20);
 
     @Mock
     private UserService userService;

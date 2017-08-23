@@ -5,12 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.grudus.examshelper.Utils.*;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
+import static com.grudus.examshelper.utils.Utils.*;
 import static java.lang.String.format;
 import static org.hamcrest.Matchers.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,7 +26,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
         Subject subject = randomSubject(authentication.getUser().getId());
         addSubject(subject);
 
-        performRequestWithAuth(get(format("%s/%s", SUBJECT_BASIC_URL, subject.getLabel())))
+        get(format("%s/%s", SUBJECT_BASIC_URL, subject.getLabel()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.label", is(subject.getLabel())))
                 .andExpect(jsonPath("$.color", is(subject.getColor())));
@@ -37,7 +35,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
 
     @Test
     public void shouldNotFindByLabel() throws Exception {
-        performRequestWithAuth(get(format("%s/%s", SUBJECT_BASIC_URL, randAlph(11))))
+        get(format("%s/%s", SUBJECT_BASIC_URL, randAlph(11)))
                 .andExpect(status().isNotFound());
     }
 
@@ -72,9 +70,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
 
         addSubject(subject);
 
-        performRequestWithAuth(put(SUBJECT_BASIC_URL)
-                .contentType(APPLICATION_JSON)
-                .content(toJson(new SubjectDto(subject.getId(), randAlph(11), randomColor()))))
+        put(SUBJECT_BASIC_URL, new SubjectDto(subject.getId(), randAlph(11), randomColor()))
                 .andExpect(status().isOk());
 
         assertSubjectsSize(1)
@@ -89,7 +85,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
         addSubject(subject);
         addSubject(randomSubject(authentication.getUser().getId()));
 
-        performRequestWithAuth(delete(format("%s/%d", SUBJECT_BASIC_URL, subject.getId())))
+        delete(format("%s/%d", SUBJECT_BASIC_URL, subject.getId()))
                 .andExpect(status().isOk());
 
         assertSubjectsSize(1)
@@ -102,7 +98,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
         addSubject(randomSubject(authentication.getUser().getId()));
         addSubject(randomSubject(authentication.getUser().getId()));
 
-        performRequestWithAuth(delete(format("%s/%d", SUBJECT_BASIC_URL, 666L)))
+        delete(format("%s/%d", SUBJECT_BASIC_URL, 666L))
                 .andExpect(status().isOk());
 
         assertSubjectsSize(2);
@@ -110,14 +106,12 @@ public class SubjectControllerTest extends AbstractControllerTest {
 
 
     private void addSubject(Subject subject) throws Exception {
-        performRequestWithAuth(post(SUBJECT_BASIC_URL)
-                .contentType(APPLICATION_JSON)
-                .content(toJson(subject)))
-                .andExpect(status().isOk());
+        post(SUBJECT_BASIC_URL, subject)
+                .andExpect(status().isCreated());
     }
 
     private ResultActions assertSubjectsSize(int size) throws Exception {
-        return performRequestWithAuth(get(SUBJECT_BASIC_URL))
+        return get(SUBJECT_BASIC_URL)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(size)));
     }

@@ -1,23 +1,22 @@
-package com.grudus.examshelper;
+package com.grudus.examshelper.utils;
 
 
 import com.grudus.examshelper.exams.Exam;
 import com.grudus.examshelper.subjects.Subject;
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.auth.AddUserRequest;
-import org.junit.Ignore;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Random;
-import java.util.stream.Collectors;
 
+import static java.lang.Integer.toHexString;
 import static java.time.LocalDateTime.now;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
-@Ignore
 public class Utils {
     private static final Random RANDOM = new Random();
 
@@ -38,19 +37,19 @@ public class Utils {
     }
 
     public static String randomColor() {
-        return '#' + range(0, 6).mapToObj(i -> Integer.toHexString(RANDOM.nextInt(16)))
-                .collect(Collectors.joining(""));
+        return '#' + range(0, 6).mapToObj(i -> toHexString(RANDOM.nextInt(16)))
+                .collect(joining(""));
     }
 
     public static Subject randomSubject(Long userId) {
         return new Subject(userId, randAlph(12), randomColor());
     }
 
-    public static long randomBetween(long a, long b) {
+    private static long randomBetween(long a, long b) {
         return a + (long) (Math.random() * (b - a));
     }
 
-    public static LocalDateTime randomDate(LocalDateTime from, LocalDateTime to) {
+    private static LocalDateTime randomDate(LocalDateTime from, LocalDateTime to) {
         LocalDate dateFrom = from.toLocalDate(), dateTo = to.toLocalDate();
         LocalTime timeFrom = from.toLocalTime(), timeTo = to.toLocalTime();
 

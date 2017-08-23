@@ -57,4 +57,8 @@ public class SubjectDao {
                 .where(S.LABEL.eq(label).and(S.USER_ID.eq(userId)))
                 .fetchOptionalInto(SubjectDto.class);
     }
+
+    boolean exists(Long id) {
+        return dsl.fetchExists(S, S.ID.eq(id));
+    }
 }

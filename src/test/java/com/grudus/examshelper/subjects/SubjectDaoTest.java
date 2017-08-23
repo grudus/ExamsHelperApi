@@ -12,8 +12,8 @@ import java.util.Optional;
 import java.util.Random;
 
 import static com.grudus.examshelper.Tables.SUBJECTS;
-import static com.grudus.examshelper.Utils.*;
 import static com.grudus.examshelper.utils.ListAssertionUtils.assertContainsProperties;
+import static com.grudus.examshelper.utils.Utils.*;
 import static org.junit.Assert.*;
 
 
@@ -78,6 +78,22 @@ public class SubjectDaoTest extends SpringBasedTest {
         subject.setLabel(subject2.getLabel());
 
         dao.save(subject);
+    }
+
+    @Test
+    public void shouldDetectExistence() {
+        Long id = dao.save(randomSubject(userId));
+
+        Boolean exists = dao.exists(id);
+
+        assertTrue(exists);
+    }
+
+    @Test
+    public void shouldDetectNotExists() {
+        Boolean exists = dao.exists(new Random().nextLong());
+
+        assertFalse(exists);
     }
 
     @Test

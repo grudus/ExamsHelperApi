@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-import static com.grudus.examshelper.Utils.randAlph;
-import static com.grudus.examshelper.Utils.randomUser;
 import static com.grudus.examshelper.configuration.security.token.TokenAuthenticationService.AUTH_HEADER_NAME;
+import static com.grudus.examshelper.utils.Utils.randAlph;
+import static com.grudus.examshelper.utils.Utils.randomUser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyLong;

@@ -8,15 +8,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
-import static com.grudus.examshelper.Utils.randAlph;
+import static com.grudus.examshelper.utils.Utils.randAlph;
 import static java.time.LocalDateTime.now;
 import static java.util.Arrays.asList;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -40,13 +40,15 @@ public class ExamServiceTest {
 
         when(dao.findAllAsExamDtoByUserId(anyLong())).thenReturn(exams);
 
-        Map<LocalDate, List<ExamDto>> examsPerDay = service.findAllExamsPerDay(new User());
+        List<ExamsPerDay> examsPerDay = service.findAllExamsPerDay(new User())
+                .stream().sorted(comparing(ExamsPerDay::getDate))
+                .collect(toList());
 
         assertEquals(3, examsPerDay.size());
 
-        assertEquals(3, examsPerDay.get(now.toLocalDate()).size());
-        assertEquals(2, examsPerDay.get(now.plusDays(6).toLocalDate()).size());
-        assertEquals(1, examsPerDay.get(now.plusDays(11).toLocalDate()).size());
+        assertEquals(3, examsPerDay.get(0).getExams().size());
+        assertEquals(2, examsPerDay.get(1).getExams().size());
+        assertEquals(1, examsPerDay.get(2).getExams().size());
     }
 
     @Test

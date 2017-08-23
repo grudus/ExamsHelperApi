@@ -11,9 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 
-import static com.grudus.examshelper.Utils.*;
 import static com.grudus.examshelper.users.UserState.ENABLED;
 import static com.grudus.examshelper.users.roles.RoleName.ADMIN;
+import static com.grudus.examshelper.utils.Utils.*;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.*;

@@ -22,9 +22,9 @@ import java.util.List;
 
 import static com.grudus.examshelper.Tables.ROLES;
 import static com.grudus.examshelper.Tables.USER_ROLES;
-import static com.grudus.examshelper.Utils.randAlph;
-import static com.grudus.examshelper.Utils.randomUser;
 import static com.grudus.examshelper.tables.Users.USERS;
+import static com.grudus.examshelper.utils.Utils.randAlph;
+import static com.grudus.examshelper.utils.Utils.randomUser;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 import static org.mockito.Matchers.anyString;
