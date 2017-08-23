@@ -1,1 +1,4 @@
 language: java
+before_script:
+  - mysql -uroot -proot "CREATE DATABASE examshelper_test"
+  - cd ./src/main/resources/sql && mysql -uroot -proot "source 'init.sql'"
