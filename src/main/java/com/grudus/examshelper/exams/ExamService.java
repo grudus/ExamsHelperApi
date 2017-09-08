@@ -5,9 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -26,9 +27,16 @@ class ExamService {
     }
 
     List<ExamsPerDay> findAllExamsPerDay(User user) {
-        return findAllExamsAsDtoByUser(user)
-                .stream()
-                .collect(Collectors.groupingBy(exam -> exam.getDate().toLocalDate()))
+        return findAllExamsPerDay(user, null);
+    }
+
+    List<ExamsPerDay> findAllExamsPerDay(User user, LocalDateTime dateFrom) {
+        List<ExamDto> exams = dateFrom == null
+                ? findAllExamsAsDtoByUser(user)
+                : findAllExamsByUserFromDate(user, dateFrom);
+
+        return exams.stream()
+                .collect(groupingBy(exam -> exam.getDate().toLocalDate()))
                 .entrySet().stream()
                 .map(entry -> new ExamsPerDay(entry.getKey(), entry.getValue()))
                 .collect(toList());
@@ -36,5 +44,9 @@ class ExamService {
 
     Long save(CreateExamRequest createExamRequest) {
         return examDao.save(createExamRequest.toExam());
+    }
+
+    private List<ExamDto> findAllExamsByUserFromDate(User user, LocalDateTime dateFrom) {
+        return examDao.findAllByUserFromDate(user.getId(), dateFrom);
     }
 }

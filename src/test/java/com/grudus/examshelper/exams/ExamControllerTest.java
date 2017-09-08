@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Random;
 
 import static com.grudus.examshelper.users.roles.RoleName.USER;
+import static com.grudus.examshelper.utils.RequestParam.param;
 import static com.grudus.examshelper.utils.SubjectUtils.randomSubjectDto;
 import static com.grudus.examshelper.utils.Utils.randAlph;
 import static java.time.LocalDateTime.now;
@@ -116,6 +117,17 @@ public class ExamControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.[2].exams", hasSize(4)))
                 .andExpect(jsonPath("$.[1].exams", hasSize(3)))
                 .andExpect(jsonPath("$.[0].exams", hasSize(3)));
+    }
+
+    @Test
+    public void shouldGetAllExamsPerDayFromDate() throws Exception {
+        Long[] ids = {subjectId, addSubject()};
+        range(0, 10).mapToObj(i -> new CreateExamRequest(randAlph(11), ids[i % 2], now().plusDays(i)))
+                .forEach(this::addExam);
+        get(BASE_URL + "/day", param("dateFrom", now().plusDays(5).minusHours(1).toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*", hasSize(5)));
+
     }
 
 

@@ -3,13 +3,16 @@ package com.grudus.examshelper.exams;
 import com.grudus.examshelper.commons.IdResponse;
 import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -38,8 +41,9 @@ public class ExamController {
     }
 
     @GetMapping("/day")
-    public List<ExamsPerDay> getAllExamsPerDay(AuthenticatedUser user) {
-        return examService.findAllExamsPerDay(user.getUser());
+    public List<ExamsPerDay> getAllExamsPerDay(AuthenticatedUser user,
+                                               @DateTimeFormat(iso = DATE_TIME) @RequestParam(required = false) LocalDateTime dateFrom) {
+        return examService.findAllExamsPerDay(user.getUser(), dateFrom);
     }
 
 

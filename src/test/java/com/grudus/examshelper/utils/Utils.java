@@ -1,7 +1,6 @@
 package com.grudus.examshelper.utils;
 
 
-import com.grudus.examshelper.exams.Exam;
 import com.grudus.examshelper.subjects.Subject;
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.auth.AddUserRequest;
@@ -12,7 +11,6 @@ import java.time.LocalTime;
 import java.util.Random;
 
 import static java.lang.Integer.toHexString;
-import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
@@ -49,7 +47,7 @@ public class Utils {
         return a + (long) (Math.random() * (b - a));
     }
 
-    private static LocalDateTime randomDate(LocalDateTime from, LocalDateTime to) {
+    static LocalDateTime randomDate(LocalDateTime from, LocalDateTime to) {
         LocalDate dateFrom = from.toLocalDate(), dateTo = to.toLocalDate();
         LocalTime timeFrom = from.toLocalTime(), timeTo = to.toLocalTime();
 
@@ -58,7 +56,4 @@ public class Utils {
         return LocalDateTime.of(randomDate, randomTime);
     }
 
-    public static Exam randomExam(Long subjectId) {
-        return new Exam(randAlph(12), randomDate(now(), now().plusYears(1)), (Math.random() * 6), subjectId);
-    }
 }

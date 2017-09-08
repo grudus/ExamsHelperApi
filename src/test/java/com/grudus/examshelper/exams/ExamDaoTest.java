@@ -9,12 +9,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
 import static com.grudus.examshelper.Tables.EXAMS;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
-import static com.grudus.examshelper.utils.Utils.randomExam;
+import static com.grudus.examshelper.utils.ExamUtils.randomExam;
 import static com.grudus.examshelper.utils.Utils.randomSubject;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
@@ -95,6 +96,29 @@ public class ExamDaoTest extends SpringBasedTest {
     public void shouldReturnEmptyListWhenUserDoNotHaveAnyExams() {
         Long id = addUserWithRoles().getId();
         List<ExamDto> exams = dao.findAllAsExamDtoByUserId(id);
+
+        assertTrue(exams.isEmpty());
+    }
+
+    @Test
+    public void shouldFindAllFromDate() {
+        LocalDateTime bound = LocalDateTime.now().plusYears(11);
+        dao.save(randomExam(subject.getId(), bound.plusDays(33)));
+        dao.save(randomExam(subject.getId(), bound.plusDays(22)));
+        dao.save(randomExam(subject.getId(), bound.minusDays(1)));
+
+        List<ExamDto> exams = dao.findAllByUserFromDate(user.getId(), bound);
+
+        assertEquals(2, exams.size());
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenNoExamsAfterDate() {
+        LocalDateTime bound = LocalDateTime.now().plusYears(11);
+        dao.save(randomExam(subject.getId(), bound.minusDays(2)));
+        dao.save(randomExam(subject.getId(), bound.minusDays(1)));
+
+        List<ExamDto> exams = dao.findAllByUserFromDate(user.getId(), bound);
 
         assertTrue(exams.isEmpty());
     }

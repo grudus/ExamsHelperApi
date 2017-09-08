@@ -18,6 +18,7 @@ import static java.util.Arrays.asList;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,6 +50,25 @@ public class ExamServiceTest {
         assertEquals(3, examsPerDay.get(0).getExams().size());
         assertEquals(2, examsPerDay.get(1).getExams().size());
         assertEquals(1, examsPerDay.get(2).getExams().size());
+    }
+
+    @Test
+    public void shouldFindAllPerDayFromDate() {
+        LocalDateTime now = now();
+        List<ExamDto> exams = asList(
+                randomAtDate(now.plusDays(6)), randomAtDate(now.plusDays(6)),
+                randomAtDate(now.plusDays(11)));
+
+        when(dao.findAllByUserFromDate(anyLong(), any())).thenReturn(exams);
+
+        List<ExamsPerDay> examsPerDay = service.findAllExamsPerDay(new User(), now)
+                .stream().sorted(comparing(ExamsPerDay::getDate))
+                .collect(toList());
+
+        assertEquals(2, examsPerDay.size());
+        assertEquals(2, examsPerDay.get(0).getExams().size());
+        assertEquals(1, examsPerDay.get(1).getExams().size());
+
     }
 
     @Test

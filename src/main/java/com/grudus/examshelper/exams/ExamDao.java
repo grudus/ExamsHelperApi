@@ -4,9 +4,12 @@ import com.grudus.examshelper.tables.Exams;
 import com.grudus.examshelper.tables.Subjects;
 import com.grudus.examshelper.tables.records.ExamsRecord;
 import org.jooq.DSLContext;
+import org.jooq.Record7;
+import org.jooq.SelectJoinStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -23,9 +26,7 @@ class ExamDao {
     }
 
     List<ExamDto> findAllAsExamDtoByUserId(Long userId) {
-        return dsl.select(E.ID, E.INFO, E.DATE, E.GRADE,
-                S.ID.as("subject.id"), S.LABEL.as("subject.label"), S.COLOR.as("subject.color"))
-                .from(E).innerJoin(S).onKey()
+        return selectExamsAsDto()
                 .where(S.USER_ID.eq(userId))
                 .fetchInto(ExamDto.class);
     }
@@ -34,6 +35,18 @@ class ExamDao {
         ExamsRecord record = dsl.newRecord(E, exam);
         record.insert();
         return record.getId();
+    }
+
+    List<ExamDto> findAllByUserFromDate(Long id, LocalDateTime dateFrom) {
+        return selectExamsAsDto()
+                .where(S.USER_ID.eq(id).and(E.DATE.greaterOrEqual(dateFrom)))
+                .fetchInto(ExamDto.class);
+    }
+
+    private SelectJoinStep<Record7<Long, String, LocalDateTime, Double, Long, String, String>> selectExamsAsDto() {
+        return dsl.select(E.ID, E.INFO, E.DATE, E.GRADE,
+                S.ID.as("subject.id"), S.LABEL.as("subject.label"), S.COLOR.as("subject.color"))
+                .from(E).innerJoin(S).onKey();
     }
 
 }
