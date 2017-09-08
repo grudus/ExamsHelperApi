@@ -14,8 +14,7 @@ import static com.grudus.examshelper.utils.SubjectUtils.randomSubjectDto;
 import static com.grudus.examshelper.utils.Utils.randAlph;
 import static java.time.LocalDateTime.now;
 import static java.util.stream.IntStream.range;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -127,7 +126,27 @@ public class ExamControllerTest extends AbstractControllerTest {
         get(BASE_URL + "/day", param("dateFrom", now().plusDays(5).minusHours(1).toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", hasSize(5)));
+    }
 
+    @Test
+    public void shouldCountExamsWithoutGrade() throws Exception {
+        addExam(new CreateExamRequest(randAlph(11), subjectId, now().plusDays(4)));
+        addExam(new CreateExamRequest(randAlph(11), subjectId, now().minusDays(4)));
+        addExam(new CreateExamRequest(randAlph(11), addSubject(), now().minusDays(1)));
+
+        get(BASE_URL + "/without-grade")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count", is(2)));
+    }
+
+    @Test
+    public void shouldCountNoExamsWithoutGrade() throws Exception {
+        addExam(new CreateExamRequest(randAlph(11), subjectId, now().plusDays(4)));
+        addExam(new CreateExamRequest(randAlph(11), subjectId, now().plusDays(4)));
+
+        get(BASE_URL + "/without-grade")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count", is(0)));
     }
 
 

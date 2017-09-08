@@ -16,6 +16,7 @@ import java.util.Random;
 import static com.grudus.examshelper.Tables.EXAMS;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
 import static com.grudus.examshelper.utils.ExamUtils.randomExam;
+import static com.grudus.examshelper.utils.ExamUtils.randomPastExam;
 import static com.grudus.examshelper.utils.Utils.randomSubject;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
@@ -121,6 +122,28 @@ public class ExamDaoTest extends SpringBasedTest {
         List<ExamDto> exams = dao.findAllByUserFromDate(user.getId(), bound);
 
         assertTrue(exams.isEmpty());
+    }
+
+    @Test
+    public void shouldCountNotGradedExams() {
+        dao.save(randomPastExam(subject.getId(), null));
+        dao.save(randomPastExam(addSubject(user.getId()).getId(), -1D));
+        dao.save(randomPastExam(subject.getId(), 0D));
+        dao.save(randomPastExam(subject.getId(), 5D));
+        dao.save(randomExam(subject.getId(), -12D));
+
+        int notGradedCount = dao.countNotGradedFromPast(subject.getUserId());
+
+        assertEquals(3, notGradedCount);
+    }
+
+    public void shouldCountNoExamsWithoutGrade() {
+        dao.save(randomExam(subject.getId(), -1D));
+        dao.save(randomPastExam(subject.getId(), 5D));
+
+        int notGradedCount = dao.countNotGradedFromPast(subject.getUserId());
+
+        assertEquals(0, notGradedCount);
     }
 
 

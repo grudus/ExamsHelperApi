@@ -46,6 +46,10 @@ public class ExamController {
         return examService.findAllExamsPerDay(user.getUser(), dateFrom);
     }
 
+    @GetMapping("/without-grade")
+    public NotGradedExamsCount getNumberOfNotGradedExams(AuthenticatedUser user) {
+        return new NotGradedExamsCount(examService.countNotGraded(user.getUser()));
+    }
 
     @InitBinder("createExamRequest")
     public void initValidator(WebDataBinder binder) {

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.time.LocalDateTime.now;
+
 @Repository
 class ExamDao {
 
@@ -43,10 +45,16 @@ class ExamDao {
                 .fetchInto(ExamDto.class);
     }
 
+    Integer countNotGradedFromPast(Long userId) {
+        return dsl.fetchCount(E.join(S).onKey(),
+                S.USER_ID.eq(userId)
+                        .and(E.DATE.lessThan(now()))
+                        .and(E.GRADE.isNull().or(E.GRADE.le(0D))));
+    }
+
     private SelectJoinStep<Record7<Long, String, LocalDateTime, Double, Long, String, String>> selectExamsAsDto() {
         return dsl.select(E.ID, E.INFO, E.DATE, E.GRADE,
                 S.ID.as("subject.id"), S.LABEL.as("subject.label"), S.COLOR.as("subject.color"))
                 .from(E).innerJoin(S).onKey();
     }
-
 }

@@ -46,6 +46,10 @@ class ExamService {
         return examDao.save(createExamRequest.toExam());
     }
 
+    Integer countNotGraded(User user) {
+        return examDao.countNotGradedFromPast(user.getId());
+    }
+
     private List<ExamDto> findAllExamsByUserFromDate(User user, LocalDateTime dateFrom) {
         return examDao.findAllByUserFromDate(user.getId(), dateFrom);
     }
