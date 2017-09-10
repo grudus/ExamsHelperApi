@@ -55,13 +55,6 @@ public class SubjectDaoTest extends SpringBasedTest {
         dao.save(randomSubject(new Random().nextLong()));
     }
 
-    @Test(expected = DataAccessException.class)
-    public void shouldNotBeAbleToSaveWithoutLabel() {
-        Subject subject = randomSubject(userId);
-        subject.setLabel(null);
-
-        dao.save(subject);
-    }
 
     @Test(expected = DataAccessException.class)
     public void shouldNotBeAbleToSaveWhenLabelExistsForUser() {
@@ -198,6 +191,29 @@ public class SubjectDaoTest extends SpringBasedTest {
         Optional<SubjectDto> s = dao.findByUserIdAndLabel(new Random().nextLong(), subject1.getLabel());
 
         assertFalse(s.isPresent());
+    }
+
+    @Test
+    public void shouldDetectLabelExistence() {
+        boolean exists = dao.labelExists(subject1.getLabel(), subject1.getUserId());
+
+        assertTrue(exists);
+    }
+
+    @Test
+    public void shouldNotDetectExistenceWhenLabelExistsForAnotherUser() {
+        Long userId = addUserWithRoles().getId();
+
+        boolean exists = dao.labelExists(subject1.getLabel(), userId);
+
+        assertFalse(exists);
+    }
+
+    @Test
+    public void shouldNotDetectExistenceWhenLabelNotExists() {
+        boolean exists = dao.labelExists(randAlph(11), subject1.getUserId());
+
+        assertFalse(exists);
     }
 
 

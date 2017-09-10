@@ -32,6 +32,10 @@ public class SubjectService {
         return subjectDao.exists(id);
     }
 
+    boolean labelExists(String label, Long userId) {
+        return subjectDao.labelExists(label, userId);
+    }
+
     void delete(Long id) {
         subjectDao.delete(id);
     }

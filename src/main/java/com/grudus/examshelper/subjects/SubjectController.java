@@ -5,8 +5,10 @@ import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import com.grudus.examshelper.exceptions.SubjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -18,10 +20,12 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class SubjectController {
 
     private final SubjectService subjectService;
+    private final CreateSubjectRequestValidator validator;
 
     @Autowired
-    public SubjectController(SubjectService subjectService) {
+    public SubjectController(SubjectService subjectService, CreateSubjectRequestValidator validator) {
         this.subjectService = subjectService;
+        this.validator = validator;
     }
 
     @GetMapping
@@ -40,7 +44,7 @@ public class SubjectController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public IdResponse addSubject(@RequestBody SubjectDto subjectDto, AuthenticatedUser user) {
+    public IdResponse addSubject(@RequestBody @Valid SubjectDto subjectDto, AuthenticatedUser user) {
         Long id = subjectService.save(subjectDto.toSubject(user.getUser().getId()));
         return new IdResponse(id);
     }
@@ -53,5 +57,11 @@ public class SubjectController {
     @DeleteMapping("/{id}")
     public void deleteSubject(@PathVariable Long id) {
         subjectService.delete(id);
+    }
+
+
+    @InitBinder("subjectDto")
+    public void initValidator(WebDataBinder binder) {
+        binder.addValidators(validator);
     }
 }

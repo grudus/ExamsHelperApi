@@ -17,4 +17,7 @@ public class RestKeys {
     public static final String INVALID_SUBJECT = "SUBJECT.INVALID";
     public static final String EMPTY_DATE = "DATE.EMPTY";
 
+    public static final String INVALID_LABEL = "LABEL.INVALID";
+    public static final String LABEL_EXISTS = "LABEL.EXISTS";
+    public static final String INVALID_COLOR = "COLOR.INVALID";
 }

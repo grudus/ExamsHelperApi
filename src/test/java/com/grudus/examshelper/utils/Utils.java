@@ -22,6 +22,10 @@ public class Utils {
         return randomAlphabetic(length);
     }
 
+    public static Long randomId() {
+        return RANDOM.nextLong();
+    }
+
     public static String randomEmail() {
         return randAlph(12) + "@" + randAlph(12) + ".com";
     }

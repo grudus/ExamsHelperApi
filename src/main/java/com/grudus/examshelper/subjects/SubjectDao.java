@@ -61,4 +61,8 @@ public class SubjectDao {
     boolean exists(Long id) {
         return dsl.fetchExists(S, S.ID.eq(id));
     }
+
+    boolean labelExists(String label, Long userId) {
+        return dsl.fetchExists(S, S.LABEL.eq(label).and(S.USER_ID.eq(userId)));
+    }
 }
