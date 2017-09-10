@@ -23,7 +23,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
 
     @Test
     public void shouldFindByLabel() throws Exception {
-        Subject subject = randomSubject(authentication.getUser().getId());
+        Subject subject = randomSubject(authentication.getUserId());
         addSubject(subject);
 
         get(format("%s/%s", SUBJECT_BASIC_URL, subject.getLabel()))
@@ -41,7 +41,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
 
     @Test
     public void shouldAddSubject() throws Exception {
-        Subject subject = randomSubject(authentication.getUser().getId());
+        Subject subject = randomSubject(authentication.getUserId());
 
         addSubject(subject);
 
@@ -51,7 +51,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
 
     @Test
     public void shouldFindAllSubjects() throws Exception {
-        Long userId = authentication.getUser().getId();
+        Long userId = authentication.getUserId();
         Subject subject1 = randomSubject(userId), subject2 = randomSubject(userId);
 
         addSubject(subject1);
@@ -64,7 +64,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
 
     @Test
     public void shouldUpdateSubject() throws Exception {
-        Long userId = authentication.getUser().getId();
+        Long userId = authentication.getUserId();
         Subject subject = randomSubject(userId);
         subject.setId(11L);
 
@@ -80,10 +80,10 @@ public class SubjectControllerTest extends AbstractControllerTest {
 
     @Test
     public void shouldDeleteSubjectWhenIdInDb() throws Exception {
-        Subject subject = randomSubject(authentication.getUser().getId());
+        Subject subject = randomSubject(authentication.getUserId());
         subject.setId(15L);
         addSubject(subject);
-        addSubject(randomSubject(authentication.getUser().getId()));
+        addSubject(randomSubject(authentication.getUserId()));
 
         delete(format("%s/%d", SUBJECT_BASIC_URL, subject.getId()))
                 .andExpect(status().isOk());
@@ -95,8 +95,8 @@ public class SubjectControllerTest extends AbstractControllerTest {
 
     @Test
     public void shouldDeleteNothingWhenIdNotInDb() throws Exception {
-        addSubject(randomSubject(authentication.getUser().getId()));
-        addSubject(randomSubject(authentication.getUser().getId()));
+        addSubject(randomSubject(authentication.getUserId()));
+        addSubject(randomSubject(authentication.getUserId()));
 
         delete(format("%s/%d", SUBJECT_BASIC_URL, 666L))
                 .andExpect(status().isOk());

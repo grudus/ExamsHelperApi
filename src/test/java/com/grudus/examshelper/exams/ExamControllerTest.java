@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ExamControllerTest extends AbstractControllerTest {
 
-    private static final String BASE_URL = "/api/exams";
+    static final String BASE_URL = "/api/exams";
 
     @Autowired
     private SubjectController subjectController;

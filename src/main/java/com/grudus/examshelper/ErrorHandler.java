@@ -1,6 +1,7 @@
 package com.grudus.examshelper;
 
 import com.grudus.examshelper.configuration.security.AuthenticatedUser;
+import com.grudus.examshelper.exceptions.IllegalActionException;
 import com.grudus.examshelper.exceptions.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +22,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 @ResponseBody
@@ -46,6 +46,12 @@ public class ErrorHandler {
     @ResponseStatus(BAD_REQUEST)
     public List<String> bindExceptionException(BindException e) {
         return toCodes(e);
+    }
+
+    @ExceptionHandler(IllegalActionException.class)
+    @ResponseStatus(FORBIDDEN)
+    public void illegalActionException(IllegalActionException e) {
+        logger.warn(e.getMessage(), e);
     }
 
     @ExceptionHandler(AccessDeniedException.class)

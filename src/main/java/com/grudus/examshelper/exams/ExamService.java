@@ -26,7 +26,7 @@ class ExamService {
     }
 
     List<ExamDto> findAllExamsAsDtoByUser(User user) {
-        return examDao.findAllAsExamDtoByUserId(user.getId());
+        return examDao.findAllAsExams(user.getId());
     }
 
     List<ExamsPerDay> findAllExamsPerDay(User user) {
@@ -54,6 +54,10 @@ class ExamService {
     }
 
     private List<ExamDto> findAllExamsByUserFromDate(User user, LocalDateTime dateFrom) {
-        return examDao.findAllByUserFromDate(user.getId(), dateFrom);
+        return examDao.findAllFromDate(user.getId(), dateFrom);
+    }
+
+    List<ExamDto> findWithoutGradeForSubject(Long subjectId) {
+        return examDao.findWithoutGradeForSubject(subjectId);
     }
 }

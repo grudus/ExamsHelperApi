@@ -30,7 +30,7 @@ public class SubjectController {
 
     @GetMapping
     public List<SubjectDto> getSubjects(AuthenticatedUser currentUser) {
-        return subjectService.findByUser(currentUser.getUser().getId())
+        return subjectService.findByUser(currentUser.getUserId())
                 .stream()
                 .map(Subject::toDto)
                 .collect(toList());
@@ -38,20 +38,20 @@ public class SubjectController {
 
     @GetMapping("/{label}")
     public SubjectDto findByLabel(@PathVariable String label, AuthenticatedUser user) {
-        return subjectService.findByLabel(user.getUser().getId(), label)
+        return subjectService.findByLabel(user.getUserId(), label)
                 .orElseThrow(SubjectNotFoundException::new);
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
     public IdResponse addSubject(@RequestBody @Valid SubjectDto subjectDto, AuthenticatedUser user) {
-        Long id = subjectService.save(subjectDto.toSubject(user.getUser().getId()));
+        Long id = subjectService.save(subjectDto.toSubject(user.getUserId()));
         return new IdResponse(id);
     }
 
     @PutMapping
     public void updateSubject(@RequestBody SubjectDto subject,  AuthenticatedUser user) {
-        subjectService.update(subject.toSubject(user.getUser().getId()));
+        subjectService.update(subject.toSubject(user.getUserId()));
     }
 
     @DeleteMapping("/{id}")

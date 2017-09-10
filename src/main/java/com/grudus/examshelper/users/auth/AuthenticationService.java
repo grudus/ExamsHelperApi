@@ -17,7 +17,7 @@ public class AuthenticationService {
     public long getCurrentLoggedUserId() {
         Authentication authentication = getAuthentication();
         if (authentication instanceof AuthenticatedUser)
-            return ((AuthenticatedUser) authentication).getUser().getId();
+            return ((AuthenticatedUser) authentication).getUserId();
 
         throw new CannotFindUserException("Cannot obtain current user id");
     }

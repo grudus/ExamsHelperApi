@@ -43,7 +43,7 @@ public class ExamServiceTest {
                 randomAtDate(now.plusDays(6)), randomAtDate(now.plusDays(6)),
                 randomAtDate(now.plusDays(11)));
 
-        when(dao.findAllAsExamDtoByUserId(anyLong())).thenReturn(exams);
+        when(dao.findAllAsExams(anyLong())).thenReturn(exams);
 
         List<ExamsPerDay> examsPerDay = service.findAllExamsPerDay(new User())
                 .stream().sorted(comparing(ExamsPerDay::getDate))
@@ -63,7 +63,7 @@ public class ExamServiceTest {
                 randomAtDate(now.plusDays(6)), randomAtDate(now.plusDays(6)),
                 randomAtDate(now.plusDays(11)));
 
-        when(dao.findAllByUserFromDate(anyLong(), any())).thenReturn(exams);
+        when(dao.findAllFromDate(anyLong(), any())).thenReturn(exams);
 
         List<ExamsPerDay> examsPerDay = service.findAllExamsPerDay(new User(), now)
                 .stream().sorted(comparing(ExamsPerDay::getDate))

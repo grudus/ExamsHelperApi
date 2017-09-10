@@ -17,4 +17,8 @@ public class AuthenticatedUser extends UsernamePasswordAuthenticationToken {
     public User getUser() {
         return user;
     }
+
+    public Long getUserId() {
+        return getUser().getId();
+    }
 }
