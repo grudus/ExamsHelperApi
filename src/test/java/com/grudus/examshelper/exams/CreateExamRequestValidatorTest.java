@@ -1,6 +1,7 @@
 package com.grudus.examshelper.exams;
 
 import com.grudus.examshelper.commons.keys.RestKeys;
+import com.grudus.examshelper.exams.domain.CreateExamRequest;
 import com.grudus.examshelper.subjects.SubjectService;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,5 +1,7 @@
 package com.grudus.examshelper.exams;
 
+import com.grudus.examshelper.exams.domain.Exam;
+import com.grudus.examshelper.exams.domain.ExamDto;
 import com.grudus.examshelper.tables.Exams;
 import com.grudus.examshelper.tables.Subjects;
 import com.grudus.examshelper.tables.records.ExamsRecord;

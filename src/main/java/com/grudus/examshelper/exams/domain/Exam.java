@@ -1,4 +1,4 @@
-package com.grudus.examshelper.exams;
+package com.grudus.examshelper.exams.domain;
 
 import java.time.LocalDateTime;
 

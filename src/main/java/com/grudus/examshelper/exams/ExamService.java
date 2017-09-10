@@ -1,5 +1,8 @@
 package com.grudus.examshelper.exams;
 
+import com.grudus.examshelper.exams.domain.CreateExamRequest;
+import com.grudus.examshelper.exams.domain.ExamDto;
+import com.grudus.examshelper.exams.domain.ExamsPerDay;
 import com.grudus.examshelper.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

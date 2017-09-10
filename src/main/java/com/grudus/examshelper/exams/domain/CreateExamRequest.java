@@ -1,4 +1,4 @@
-package com.grudus.examshelper.exams;
+package com.grudus.examshelper.exams.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -36,7 +36,7 @@ public class CreateExamRequest {
         return date;
     }
     
-    Exam toExam() {
+    public Exam toExam() {
         return new Exam(info, date, null, subjectId);
     }
 }

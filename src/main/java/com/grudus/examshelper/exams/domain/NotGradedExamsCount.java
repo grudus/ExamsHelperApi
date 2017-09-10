@@ -1,4 +1,4 @@
-package com.grudus.examshelper.exams;
+package com.grudus.examshelper.exams.domain;
 
 public class NotGradedExamsCount {
     private final Integer count;

@@ -1,6 +1,6 @@
 package com.grudus.examshelper.utils;
 
-import com.grudus.examshelper.exams.Exam;
+import com.grudus.examshelper.exams.domain.Exam;
 
 import java.time.LocalDateTime;
 

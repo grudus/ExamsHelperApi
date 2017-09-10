@@ -1,6 +1,8 @@
 package com.grudus.examshelper.exams;
 
 import com.grudus.examshelper.SpringBasedTest;
+import com.grudus.examshelper.exams.domain.Exam;
+import com.grudus.examshelper.exams.domain.ExamDto;
 import com.grudus.examshelper.subjects.Subject;
 import com.grudus.examshelper.subjects.SubjectDao;
 import com.grudus.examshelper.users.User;

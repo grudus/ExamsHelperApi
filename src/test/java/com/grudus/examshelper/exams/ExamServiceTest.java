@@ -1,5 +1,9 @@
 package com.grudus.examshelper.exams;
 
+import com.grudus.examshelper.exams.domain.CreateExamRequest;
+import com.grudus.examshelper.exams.domain.Exam;
+import com.grudus.examshelper.exams.domain.ExamDto;
+import com.grudus.examshelper.exams.domain.ExamsPerDay;
 import com.grudus.examshelper.users.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
