@@ -7,6 +7,11 @@ public class IdResponse {
         this.id = id;
     }
 
+    @Deprecated //for jackson only
+    public IdResponse() {
+        this(null);
+    }
+
     public Long getId() {
         return id;
     }

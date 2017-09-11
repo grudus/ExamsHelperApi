@@ -19,6 +19,7 @@ import static com.grudus.examshelper.Tables.EXAMS;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
 import static com.grudus.examshelper.utils.ExamUtils.randomExam;
 import static com.grudus.examshelper.utils.ExamUtils.randomPastExam;
+import static com.grudus.examshelper.utils.Utils.randomId;
 import static com.grudus.examshelper.utils.Utils.randomSubject;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
@@ -199,6 +200,41 @@ public class ExamDaoTest extends SpringBasedTest {
         assertEquals(1, exams.size());
         assertNotNull(exams.get(0).getSubject().getLabel());
         assertNotNull(exams.get(0).getSubject().getColor());
+    }
+
+    @Test
+    public void shouldDetectUserOwnership() {
+        Long newUserId = addUserWithRoles().getId();
+        Exam exam1 = randomExam(subject.getId());
+        Exam exam2 = randomExam(addSubject(newUserId).getId());
+
+        Long exam1Id = dao.save(exam1);
+        dao.save(randomExam(subject.getId()));
+        Long exam2Id = dao.save(exam2);
+
+        assertFalse(dao.belongsToUser(newUserId, exam1Id));
+        assertTrue(dao.belongsToUser(newUserId, exam2Id));
+    }
+
+    @Test
+    public void shouldUpdateGrade() {
+        Long examId = dao.save(randomExam(subject.getId(), (Double)null));
+        Double grade = 4.0;
+
+        dao.updateGrade(examId, grade);
+
+        ExamDto exam = dao.findAllAsExams(user.getId()).stream().filter(e -> e.getId().equals(examId)).findFirst().get();
+
+        assertEquals(grade, exam.getGrade(), 0.01);
+    }
+
+    @Test
+    public void shouldNotUpdateGradeWhenExamDoesNotExists() {
+        Double crazyGrade = 21.37;
+        dao.updateGrade(randomId(), crazyGrade);
+
+        dao.findAllAsExams(user.getId())
+                .forEach(exam -> assertNotEquals(crazyGrade, exam.getGrade(), 0.01));
     }
 
     private Subject addSubject(Long userId) {

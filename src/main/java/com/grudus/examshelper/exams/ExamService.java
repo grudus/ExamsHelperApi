@@ -60,4 +60,12 @@ class ExamService {
     List<ExamDto> findWithoutGradeForSubject(Long subjectId) {
         return examDao.findWithoutGradeForSubject(subjectId);
     }
+
+    boolean belongsToUser(Long userId, Long examId) {
+        return examDao.belongsToUser(userId, examId);
+    }
+
+    void updateGrade(Long examId, Double grade) {
+        examDao.updateGrade(examId, grade);
+    }
 }

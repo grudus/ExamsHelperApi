@@ -69,6 +69,20 @@ class ExamDao {
                 .from(E).innerJoin(S).onKey();
     }
 
+    boolean belongsToUser(Long userId, Long examId) {
+        return dsl.fetchExists(E.join(S).onKey(), S.USER_ID.eq(userId).and(E.ID.eq(examId)));
+    }
+
+    void updateGrade(Long examId, Double grade) {
+        dsl.update(E)
+                .set(E.LAST_MODIFIED, now())
+                .set(E.GRADE, grade)
+                .where(E.ID.eq(examId))
+                .execute();
+    }
+
+
+
     private Condition withoutGradeCondition() {
         return E.GRADE.isNull().or(E.GRADE.le(0D));
     }

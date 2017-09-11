@@ -6,6 +6,7 @@ import com.grudus.examshelper.exams.domain.CreateExamRequest;
 import com.grudus.examshelper.exams.domain.ExamDto;
 import com.grudus.examshelper.exams.domain.ExamsPerDay;
 import com.grudus.examshelper.exams.domain.NotGradedExamsCount;
+import com.grudus.examshelper.exceptions.IllegalActionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,8 +56,20 @@ public class ExamController {
         return new NotGradedExamsCount(examService.countNotGraded(user.getUser()));
     }
 
+    @PutMapping("/{examId}")
+    public void addGrade(AuthenticatedUser user, @PathVariable("examId") Long examId,
+                         @RequestParam(value = "grade", required = false) Double grade) {
+        assertExamBelongsToUser(user.getUserId(), examId);
+        examService.updateGrade(examId, grade);
+    }
+
     @InitBinder("createExamRequest")
     public void initValidator(WebDataBinder binder) {
         binder.addValidators(validator);
+    }
+
+    private void assertExamBelongsToUser(Long userId, Long examId) {
+        if (!examService.belongsToUser(userId, examId))
+            throw new IllegalActionException("User {%d} tries to steal someone else's exam {%d}!", userId, examId);
     }
 }

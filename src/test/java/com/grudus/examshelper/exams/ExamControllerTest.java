@@ -1,6 +1,8 @@
 package com.grudus.examshelper.exams;
 
 import com.grudus.examshelper.AbstractControllerTest;
+import com.grudus.examshelper.commons.IdResponse;
+import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import com.grudus.examshelper.exams.domain.CreateExamRequest;
 import com.grudus.examshelper.subjects.SubjectController;
 import org.junit.Before;
@@ -150,17 +152,59 @@ public class ExamControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.count", is(0)));
     }
 
+    @Test
+    public void shouldUpdateGrade() throws Exception {
+        Long examId = addExam(new CreateExamRequest(randAlph(11), subjectId, now()));
+        Double grade = 66D;
 
-    private void addExam(CreateExamRequest createExamRequest) {
+        putWithParams(BASE_URL + "/" + examId, param("grade", grade.toString()))
+                .andExpect(status().isOk());
+
+        get(BASE_URL)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].grade").value(grade));
+    }
+
+    @Test
+    public void shouldUpdateGradeToNull() throws Exception {
+        Long examId = addExam(new CreateExamRequest(randAlph(11), subjectId, now()));
+        Double grade = 66D;
+
+        putWithParams(BASE_URL + "/" + examId, param("grade", grade.toString()))
+                .andExpect(status().isOk());
+        putWithParams(BASE_URL + "/" + examId)
+                .andExpect(status().isOk());
+
+        get(BASE_URL)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].grade", nullValue()));
+    }
+
+    @Test
+    public void shouldNotBeAbleToUpdateSomeoneElseExam() throws Exception {
+        Long subjectId = addSubject(new AuthenticatedUser(addUserWithRoles()));
+        Long examId = addExam(new CreateExamRequest(randAlph(11), subjectId, now()));
+
+        putWithParams(BASE_URL + "/" + examId, param("grade", "33.0"))
+                .andExpect(status().isForbidden());
+    }
+
+
+    private long addExam(CreateExamRequest createExamRequest) {
         try {
-            post(BASE_URL, createExamRequest);
+            return post(BASE_URL, createExamRequest, IdResponse.class).getId();
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     private Long addSubject() {
-        return subjectController.addSubject(randomSubjectDto(), authentication)
+        return addSubject(authentication);
+    }
+
+    private Long addSubject(AuthenticatedUser authenticatedUser) {
+        return subjectController.addSubject(randomSubjectDto(), authenticatedUser)
                 .getId();
     }
 

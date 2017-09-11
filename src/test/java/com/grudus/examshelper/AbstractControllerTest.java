@@ -56,6 +56,10 @@ public abstract class AbstractControllerTest extends SpringBasedTest {
         setupContext();
     }
 
+    protected ResultActions putWithParams(String url, RequestParam... params) throws Exception {
+        return performRequestWithAuth(bindParams(MockMvcRequestBuilders.put(url), params));
+    }
+
     protected ResultActions put(String url, Object requestBody) throws Exception {
         return performRequestWithAuth(MockMvcRequestBuilders.put(url)
                 .contentType(APPLICATION_JSON)
@@ -68,15 +72,24 @@ public abstract class AbstractControllerTest extends SpringBasedTest {
                 .content(toJson(requestBody)));
     }
 
+    protected <T> T post(String url, Object requestBody, Class<T> aClass) throws Exception {
+        String json = performRequestWithAuth(MockMvcRequestBuilders.post(url)
+                .contentType(APPLICATION_JSON)
+                .content(toJson(requestBody)))
+                .andReturn().getResponse().getContentAsString();
+        return objectMapper.readValue(json, aClass);
+    }
+
+
     protected final ResultActions get(String url, RequestParam... params) throws Exception {
-        MockHttpServletRequestBuilder get = bindParams(url, params);
+        MockHttpServletRequestBuilder get = bindParams(MockMvcRequestBuilders.get(url), params);
         return performRequestWithAuth(get);
     }
 
-    private MockHttpServletRequestBuilder bindParams(String url, RequestParam[] params) {
-        MockHttpServletRequestBuilder get = MockMvcRequestBuilders.get(url);
-        Stream.of(params).forEach(pair -> get.param(pair.getFirst(), pair.getSecond()));
-        return get;
+    private MockHttpServletRequestBuilder bindParams(MockHttpServletRequestBuilder request, RequestParam[] params) {
+        return Stream.of(params).reduce(request,
+                (req, param) -> req.param(param.getFirst(), param.getSecond()),
+                (p, q) -> null);
     }
 
     protected ResultActions delete(String url) throws Exception {
