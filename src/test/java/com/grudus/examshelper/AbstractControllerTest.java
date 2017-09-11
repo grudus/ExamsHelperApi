@@ -51,7 +51,6 @@ public abstract class AbstractControllerTest extends SpringBasedTest {
     }
 
     protected void login(RoleName... roles) {
-        addRoles();
         authentication = new AuthenticatedUser(addUserWithRoles(roles));
         setupContext();
     }

@@ -5,7 +5,6 @@ import com.grudus.examshelper.tables.records.UsersRecord;
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.roles.Role;
 import com.grudus.examshelper.users.roles.RoleName;
-import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -49,11 +48,6 @@ public abstract class SpringBasedTest {
         doNothing().when(emailSender).send(anyString(), anyString());
     }
 
-    protected void addRoles() {
-        BatchBindStep batch = dsl.batch(dsl.insertInto(ROLES, ROLES.NAME).values((String) null));
-        stream(RoleName.values()).forEach(batch::bind);
-        batch.execute();
-    }
 
     protected User addUserWithRoles(RoleName... roles) {
         User currentUser = randomUser();

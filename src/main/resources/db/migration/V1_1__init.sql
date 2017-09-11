@@ -1,6 +1,3 @@
-USE examshelper_test;
-DROP TABLE IF EXISTS exams, subjects, user_roles, roles, users;
-
 CREATE TABLE IF NOT EXISTS users (
   id            BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
   username      VARCHAR(32) NOT NULL,

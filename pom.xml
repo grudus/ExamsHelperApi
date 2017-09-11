@@ -68,7 +68,14 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>4.2.0</version>
+		</dependency>
 	</dependencies>
+
 
 	<build>
 		<plugins>
@@ -77,6 +84,28 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>4.2.0</version>
+				<configuration>
+					<cleanDisabled>true</cleanDisabled>
+					<driver>com.mysql.jdbc.Driver</driver>
+					<url>${db.url}</url>
+					<user>${db.username}</user>
+					<password>${db.password}</password>
+					<table>SCHEMA_VERSION</table>
+				</configuration>
+				<executions>
+					<execution>
+						<id>flyway database migration</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>migrate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
 			<plugin>
 				<groupId>org.jooq</groupId>

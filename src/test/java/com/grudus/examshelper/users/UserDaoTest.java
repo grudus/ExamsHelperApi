@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.grudus.examshelper.Tables.ROLES;
 import static com.grudus.examshelper.users.UserState.*;
 import static com.grudus.examshelper.users.roles.RoleName.ADMIN;
 import static com.grudus.examshelper.users.roles.RoleName.USER;
@@ -31,8 +30,6 @@ public class UserDaoTest extends SpringBasedTest {
     public void init() {
         user = randomUser();
         userDao.save(user);
-
-        dsl.insertInto(ROLES, ROLES.NAME).values(ADMIN.toString()).values(USER.toString()).execute();
     }
 
     @Test

@@ -40,7 +40,6 @@ public class ExamDaoTest extends SpringBasedTest {
 
     @Before
     public void init() {
-        addRoles();
         user = addUserWithRoles(USER);
         User user2 = addUserWithRoles(USER);
         subject = addSubject(user.getId());
