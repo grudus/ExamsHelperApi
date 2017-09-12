@@ -49,8 +49,6 @@ git clone https://github.com/grudus/ExamsHelperApi.git
 
 - Copy file `ExamsHelperApi/src/main/resources/templates/application.properties.template` into  `ExamsHelperApi/src/main/resources/application.properties`, e.g.
 
-- Replace values in `ExamsHelperApi/src/test/resources/test.properties` with your own db data
-
 ````properties
 token.secret=some secret token
 url.base=http://localhost:8080
@@ -60,6 +58,8 @@ spring.datasource.username=root
 spring.datasource.password=root
 spring.datasource.url=jdbc:mysql://localhost:3306/examshelper
 ````
+
+- Replace values in `ExamsHelperApi/src/test/resources/test.properties` with your own db data
 
 4) Go to downloaded directory and install maven project
 ````cd ExamsHelperApi && mvn clean install````
