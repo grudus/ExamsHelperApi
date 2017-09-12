@@ -1,10 +1,10 @@
 package com.grudus.examshelper;
 
 import com.grudus.examshelper.configuration.ExamsHelperContext;
+import com.grudus.examshelper.emails.EmailProperties;
 import com.grudus.examshelper.emails.EmailSender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.*;
 
 import javax.mail.MessagingException;
@@ -40,5 +40,11 @@ public class TestContext {
         EmailSender sender = mock(EmailSender.class);
         doNothing().when(sender).send(anyString(), anyString());
         return sender;
+    }
+
+    @Bean
+    @Primary
+    public EmailProperties emailProperties() {
+        return new EmailProperties(null, 0, null, null, null, null, false, false);
     }
 }

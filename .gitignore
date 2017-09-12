@@ -6,7 +6,7 @@
 *.ipr
 *.log
 
-*.properties
+src/main/**/*.properties
 /mvnw.cmd
 /mvnw
 .mvn/
