@@ -1,6 +1,7 @@
 package com.grudus.examshelper.utils;
 
 import com.grudus.examshelper.exams.domain.Exam;
+import com.grudus.examshelper.exams.domain.ExamDto;
 
 import java.time.LocalDateTime;
 
@@ -30,6 +31,13 @@ public class ExamUtils {
         return new Exam(info, date, grade, subjectId);
     }
 
+    public static ExamDto randomExamDto(LocalDateTime date, Double grade, Long subjectId) {
+        return new ExamDto(randAlph(11), date, grade, SubjectUtils.randomSubjectDto(subjectId));
+    }
+
+    public static ExamDto randomExamDto(LocalDateTime date, Double grade) {
+        return randomExamDto(date, grade, null);
+    }
 
     private static LocalDateTime randomExamDate() {
         return randomDate(now(), now().plusYears(1));

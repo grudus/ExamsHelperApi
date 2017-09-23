@@ -16,16 +16,16 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
-class ExamService {
+public class ExamService {
 
     private final ExamDao examDao;
 
     @Autowired
-    ExamService(ExamDao examDao) {
+    public ExamService(ExamDao examDao) {
         this.examDao = examDao;
     }
 
-    List<ExamDto> findAllExamsAsDtoByUser(User user) {
+    public List<ExamDto> findAllExamsAsDtoByUser(User user) {
         return examDao.findAllAsExams(user.getId());
     }
 

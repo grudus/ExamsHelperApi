@@ -1,5 +1,5 @@
 #@IgnoreInspection BashAddShebang
-db="mysql -u $1 -p$2 ExamsHelper"
+db="mysql -u $1 -p$2 examshelper"
 encoded_test123=\$2a\$12\$8GqAT8puP14z6XH6t8i.reJhrlSgoVLJRpwHrjR7XBahffJkzsyZW
 
 cat "../sql/init.sql" | $db

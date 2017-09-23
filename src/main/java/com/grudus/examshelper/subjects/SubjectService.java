@@ -20,7 +20,7 @@ public class SubjectService {
         return subjectDao.save(subject);
     }
 
-    public boolean belongsToUser(Long userId, Long subjectId) {
+    boolean belongsToUser(Long userId, Long subjectId) {
         return subjectDao.belongsToUser(userId, subjectId);
     }
 

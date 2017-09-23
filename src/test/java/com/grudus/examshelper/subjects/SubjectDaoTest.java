@@ -216,5 +216,20 @@ public class SubjectDaoTest extends SpringBasedTest {
         assertFalse(exists);
     }
 
+    @Test
+    public void shouldDetectIfSubjectBelongsToUser() {
+        boolean belongsToUser = dao.belongsToUser(userId, subject1.getId());
+
+        assertTrue(belongsToUser);
+    }
+
+
+
+    @Test
+    public void shouldDetectIfSubjectDoesNotBelongToUser() {
+        boolean belongsToUser = dao.belongsToUser(addUserWithRoles().getId(), subject1.getId());
+
+        assertFalse(belongsToUser);
+    }
 
 }

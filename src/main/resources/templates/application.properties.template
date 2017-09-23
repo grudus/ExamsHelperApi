@@ -1,6 +1,7 @@
 #add under /resources folder
 token.secret=
 url.base=http://localhost:8080
+flyway.enabled=false
 
 spring.datasource.driver-class-name=com.mysql.jdbc.Driver
 spring.datasource.username=

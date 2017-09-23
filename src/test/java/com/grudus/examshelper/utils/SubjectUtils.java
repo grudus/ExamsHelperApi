@@ -8,6 +8,10 @@ import static com.grudus.examshelper.utils.Utils.randomColor;
 public class SubjectUtils {
 
     public static SubjectDto randomSubjectDto() {
-        return new SubjectDto(null, randAlph(11), randomColor());
+        return randomSubjectDto(null);
+    }
+
+    public static SubjectDto randomSubjectDto(Long id) {
+        return new SubjectDto(id, randAlph(11), randomColor());
     }
 }

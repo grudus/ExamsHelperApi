@@ -2,8 +2,7 @@ package com.grudus.examshelper.exams;
 
 import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import com.grudus.examshelper.exams.domain.ExamDto;
-import com.grudus.examshelper.exceptions.IllegalActionException;
-import com.grudus.examshelper.subjects.SubjectService;
+import com.grudus.examshelper.subjects.SubjectSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,22 +16,17 @@ import java.util.List;
 public class SubjectExamsController {
 
     private final ExamService examService;
-    private final SubjectService subjectService;
+    private final SubjectSecurityService subjectSecurityService;
 
     @Autowired
-    public SubjectExamsController(ExamService examService, SubjectService subjectService) {
+    public SubjectExamsController(ExamService examService, SubjectSecurityService subjectSecurityService) {
         this.examService = examService;
-        this.subjectService = subjectService;
+        this.subjectSecurityService = subjectSecurityService;
     }
 
     @GetMapping("/without-grade")
     public List<ExamDto> getExamsWithoutGrade(AuthenticatedUser user, @PathVariable("subjectId") Long subjectId) {
-        assertSubjectBelongsToUser(user.getUserId(), subjectId);
+        subjectSecurityService.assertSubjectBelongsToUser(user.getUserId(), subjectId);
         return examService.findWithoutGradeForSubject(subjectId);
-    }
-
-    private void assertSubjectBelongsToUser(Long userId, Long subjectId) {
-        if (!subjectService.belongsToUser(userId, subjectId))
-            throw new IllegalActionException("User {%d} tries to steal someone else's subject {%d}!", userId, subjectId);
     }
 }

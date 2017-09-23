@@ -1,5 +1,6 @@
 package com.grudus.examshelper.exams.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.grudus.examshelper.commons.JsonLocalDateTimeDeserializer;
@@ -7,6 +8,9 @@ import com.grudus.examshelper.commons.JsonLocalDateTimeSerializer;
 import com.grudus.examshelper.subjects.SubjectDto;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 public class ExamDto {
     private Long id;
@@ -66,5 +70,18 @@ public class ExamDto {
 
     public void setSubject(SubjectDto subject) {
         this.subject = subject;
+    }
+
+    @JsonIgnore
+    public Optional<Long> getSubjectId() {
+        return ofNullable(subject).map(SubjectDto::getId);
+    }
+
+    @JsonIgnore
+    public boolean hasGrade() {
+        return ofNullable(grade)
+                .map(grade -> grade > 0.0)
+                .orElse(false);
+
     }
 }

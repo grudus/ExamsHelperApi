@@ -63,12 +63,6 @@ class ExamDao {
                 .fetchInto(ExamDto.class);
     }
 
-    private SelectJoinStep<Record7<Long, String, LocalDateTime, Double, Long, String, String>> selectExamsAsDto() {
-        return dsl.select(E.ID, E.INFO, E.DATE, E.GRADE,
-                S.ID.as("subject.id"), S.LABEL.as("subject.label"), S.COLOR.as("subject.color"))
-                .from(E).innerJoin(S).onKey();
-    }
-
     boolean belongsToUser(Long userId, Long examId) {
         return dsl.fetchExists(E.join(S).onKey(), S.USER_ID.eq(userId).and(E.ID.eq(examId)));
     }
@@ -81,9 +75,14 @@ class ExamDao {
                 .execute();
     }
 
-
-
     private Condition withoutGradeCondition() {
         return E.GRADE.isNull().or(E.GRADE.le(0D));
     }
+
+    private SelectJoinStep<Record7<Long, String, LocalDateTime, Double, Long, String, String>> selectExamsAsDto() {
+        return dsl.select(E.ID, E.INFO, E.DATE, E.GRADE,
+                S.ID.as("subject.id"), S.LABEL.as("subject.label"), S.COLOR.as("subject.color"))
+                .from(E).innerJoin(S).onKey();
+    }
+
 }
