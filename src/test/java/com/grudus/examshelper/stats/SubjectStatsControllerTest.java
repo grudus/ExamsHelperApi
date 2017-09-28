@@ -5,8 +5,8 @@ import com.grudus.examshelper.exams.ExamController;
 import com.grudus.examshelper.exams.domain.CreateExamRequest;
 import com.grudus.examshelper.subjects.SubjectController;
 import com.grudus.examshelper.users.roles.RoleName;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -34,7 +34,7 @@ public class SubjectStatsControllerTest extends AbstractControllerTest {
     private final LocalDateTime NOW = now();
     private Long subjectId;
 
-    @Before
+    @BeforeEach
     public void init() {
         login(USER);
         subjectId = addSubject();

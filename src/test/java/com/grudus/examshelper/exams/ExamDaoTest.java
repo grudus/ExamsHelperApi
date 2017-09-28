@@ -7,8 +7,8 @@ import com.grudus.examshelper.subjects.Subject;
 import com.grudus.examshelper.subjects.SubjectDao;
 import com.grudus.examshelper.users.User;
 import org.jooq.exception.DataAccessException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -21,8 +21,9 @@ import static com.grudus.examshelper.utils.ExamUtils.randomExam;
 import static com.grudus.examshelper.utils.ExamUtils.randomPastExam;
 import static com.grudus.examshelper.utils.Utils.randomId;
 import static com.grudus.examshelper.utils.Utils.randomSubject;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ExamDaoTest extends SpringBasedTest {
 
@@ -38,7 +39,7 @@ public class ExamDaoTest extends SpringBasedTest {
     @Autowired
     private SubjectDao subjectDao;
 
-    @Before
+    @BeforeEach
     public void init() {
         user = addUserWithRoles(USER);
         User user2 = addUserWithRoles(USER);
@@ -64,14 +65,16 @@ public class ExamDaoTest extends SpringBasedTest {
         assertNotNull(id);
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test
     public void shouldNotBeAbleToSaveWithoutSubjectId() {
-        dao.save(randomExam(null));
+        assertThrows(DataAccessException.class, () ->
+                dao.save(randomExam(null)));
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test
     public void shouldNotBeAbleToSaveWithoutValidSubjectId() {
-        dao.save(randomExam(new Random().nextLong()));
+        assertThrows(DataAccessException.class, () ->
+                dao.save(randomExam(new Random().nextLong())));
     }
 
     @Test
@@ -190,8 +193,8 @@ public class ExamDaoTest extends SpringBasedTest {
 
     @Test
     public void shouldFindWithoutGradeOnlyFromPast() {
-        dao.save(randomExam(subject.getId(), (Double)null));
-        dao.save(randomExam(subject.getId(), (Double)null));
+        dao.save(randomExam(subject.getId(), (Double) null));
+        dao.save(randomExam(subject.getId(), (Double) null));
         dao.save(randomPastExam(subject.getId(), null));
 
         List<ExamDto> exams = dao.findWithoutGradeForSubject(subject.getId());
@@ -217,7 +220,7 @@ public class ExamDaoTest extends SpringBasedTest {
 
     @Test
     public void shouldUpdateGrade() {
-        Long examId = dao.save(randomExam(subject.getId(), (Double)null));
+        Long examId = dao.save(randomExam(subject.getId(), (Double) null));
         Double grade = 4.0;
 
         dao.updateGrade(examId, grade);
@@ -233,7 +236,7 @@ public class ExamDaoTest extends SpringBasedTest {
         dao.updateGrade(randomId(), crazyGrade);
 
         dao.findAllAsExams(user.getId())
-                .forEach(exam -> assertNotEquals(crazyGrade, exam.getGrade(), 0.01));
+                .forEach(exam -> assertNotEquals(crazyGrade, exam.getGrade()));
     }
 
     private Subject addSubject(Long userId) {

@@ -1,13 +1,13 @@
 package com.grudus.examshelper.users.auth;
 
+import com.grudus.examshelper.MockitoExtension;
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.UserService;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 import static com.grudus.examshelper.commons.keys.RestKeys.*;
 import static com.grudus.examshelper.utils.Utils.randAlph;
 import static com.grudus.examshelper.utils.Utils.randomEmail;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AddUserRequestValidatorTest {
 
     @Mock
@@ -40,7 +40,7 @@ public class AddUserRequestValidatorTest {
     private AddUserRequest validatedObject;
     private Errors errors;
 
-    @Before
+    @BeforeEach
     public void init() {
         validatedObject = new AddUserRequest(randAlph(10), randAlph(10), randomEmail());
         errors = new BeanPropertyBindingResult(validatedObject, "addUserRequest");

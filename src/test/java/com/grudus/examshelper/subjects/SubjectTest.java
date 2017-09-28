@@ -1,11 +1,12 @@
 package com.grudus.examshelper.subjects;
 
 import com.grudus.examshelper.exceptions.InvalidColorException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.grudus.examshelper.utils.Utils.randAlph;
 import static com.grudus.examshelper.utils.Utils.randomColor;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SubjectTest {
 
@@ -23,18 +24,19 @@ public class SubjectTest {
         Subject.assertColor(validColor);
     }
 
-    @Test(expected = InvalidColorException.class)
+    @Test
     public void shouldThrowExceptionWhenColorWithoutHashTag() {
         String invalidColor = "123456";
 
-        Subject.assertColor(invalidColor);
+        assertThrows(InvalidColorException.class, () ->
+                Subject.assertColor(invalidColor));
     }
 
-    @Test(expected = InvalidColorException.class)
+    @Test
     public void shouldThrowExceptionWhenShortenColorWithoutHashTag() {
         String invalidColor = "5ca";
 
-        Subject.assertColor(invalidColor);
+        assertThrows(InvalidColorException.class, () -> Subject.assertColor(invalidColor));
     }
 
     @Test
@@ -52,18 +54,20 @@ public class SubjectTest {
         assertEquals(invalidColors.length, numberOfInvalidColors);
     }
 
-    @Test(expected = InvalidColorException.class)
+    @Test
     public void shouldThrowExceptionWhenInvalidCharacters() {
         String invalidColor = "#a1eqyz";
 
-        Subject.assertColor(invalidColor);
+        assertThrows(InvalidColorException.class, () ->
+                Subject.assertColor(invalidColor));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotCreateInstanceWhenLabelTooShort() {
         String label = randAlph(Subject.MAX_LABEL_LENGTH + 1);
 
-        new Subject(5L, label, randomColor());
+        assertThrows(IllegalArgumentException.class, () ->
+                new Subject(5L, label, randomColor()));
     }
 
 }

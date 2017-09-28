@@ -1,14 +1,14 @@
 package com.grudus.examshelper.configuration.security;
 
 
+import com.grudus.examshelper.MockitoExtension;
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.UserService;
 import com.grudus.examshelper.users.UserState;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,11 +19,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static com.grudus.examshelper.utils.Utils.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserAuthenticationProviderTest {
 
     private static final String USERNAME = randAlph(20);
@@ -38,7 +39,7 @@ public class UserAuthenticationProviderTest {
     private UserAuthenticationProvider userAuthenticationProvider;
     private Authentication authentication;
 
-    @Before
+    @BeforeEach
     public void init() {
         userAuthenticationProvider = new UserAuthenticationProvider(userService, passwordEncoder);
         authentication = new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD);
@@ -58,38 +59,44 @@ public class UserAuthenticationProviderTest {
         assertEquals(user.getEmail(), authUser.getUser().getEmail());
     }
 
-    @Test(expected = BadCredentialsException.class)
+    @Test
     public void shouldThrowExceptionWhenUsernameIsNull() {
-        userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(null, randAlph(13)));
+        assertThrows(BadCredentialsException.class, () ->
+                userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(null, randAlph(13)))
+        );
     }
 
-    @Test(expected = BadCredentialsException.class)
+    @Test
     public void shouldThrowExceptionWhenPasswordIsNull() {
-        userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(randAlph(13), null));
+        assertThrows(BadCredentialsException.class, () ->
+                userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(randAlph(13), null)));
     }
 
-    @Test(expected = UsernameNotFoundException.class)
+    @Test
     public void shouldThrowExceptionWhenUserIsNotInDb() {
         when(userService.findByUsernameAndFetchRoles(anyString())).thenReturn(Optional.empty());
 
-        userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD));
+        assertThrows(UsernameNotFoundException.class, () ->
+                userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD)));
     }
 
-    @Test(expected = BadCredentialsException.class)
+    @Test
     public void shouldThrowExceptionWhenPasswordsDoNotMatches() {
         when(userService.findByUsernameAndFetchRoles(anyString())).thenReturn(Optional.of(randomUser()));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
-        userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD));
+        assertThrows(BadCredentialsException.class, () ->
+                userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD)));
     }
 
-    @Test(expected = DisabledException.class)
+    @Test
     public void shouldThrowExceptionWhenUserIsNotEnabled() {
         User user = randomUser();
         when(userService.findByUsernameAndFetchRoles(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         user.setState(UserState.WAITING);
 
-        userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD));
+        assertThrows(DisabledException.class, () ->
+                userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD)));
     }
 }

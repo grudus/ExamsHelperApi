@@ -1,17 +1,18 @@
 package com.grudus.examshelper.subjects;
 
+import com.grudus.examshelper.MockitoExtension;
 import com.grudus.examshelper.exceptions.IllegalActionException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import static com.grudus.examshelper.utils.Utils.randomId;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SubjectSecurityServiceTest {
 
     @Mock
@@ -20,11 +21,12 @@ public class SubjectSecurityServiceTest {
     @InjectMocks
     private SubjectSecurityService subjectSecurityService;
 
-    @Test(expected = IllegalActionException.class)
+    @Test
     public void shouldThrowExceptionWhenSubjectDoNotBelongsToUser() throws Exception {
-        when (subjectService.belongsToUser(anyLong(), anyLong())).thenReturn(false);
+        when(subjectService.belongsToUser(anyLong(), anyLong())).thenReturn(false);
 
-        subjectSecurityService.assertSubjectBelongsToUser(randomId(), randomId());
+        assertThrows(IllegalActionException.class, () ->
+                subjectSecurityService.assertSubjectBelongsToUser(randomId(), randomId()));
     }
 
 }

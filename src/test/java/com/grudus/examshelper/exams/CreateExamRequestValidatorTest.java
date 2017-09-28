@@ -1,14 +1,14 @@
 package com.grudus.examshelper.exams;
 
+import com.grudus.examshelper.MockitoExtension;
 import com.grudus.examshelper.commons.keys.RestKeys;
 import com.grudus.examshelper.exams.domain.CreateExamRequest;
 import com.grudus.examshelper.subjects.SubjectService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
@@ -17,11 +17,11 @@ import java.util.Random;
 import static com.grudus.examshelper.utils.Utils.randAlph;
 import static com.grudus.examshelper.utils.ValidatorUtils.assertErrorKeys;
 import static java.time.LocalDateTime.now;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CreateExamRequestValidatorTest {
 
     @Mock
@@ -33,7 +33,7 @@ public class CreateExamRequestValidatorTest {
     private CreateExamRequest request;
     private Errors errors;
 
-    @Before
+    @BeforeEach
     public void init() {
         errors = new BeanPropertyBindingResult(request, "createExamRequest");
         when(subjectService.exists(anyLong())).thenReturn(true);

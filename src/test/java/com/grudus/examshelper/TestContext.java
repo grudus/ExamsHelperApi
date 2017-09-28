@@ -4,7 +4,7 @@ import com.grudus.examshelper.configuration.ExamsHelperContext;
 import com.grudus.examshelper.emails.EmailProperties;
 import com.grudus.examshelper.emails.EmailSender;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.*;
 
 import javax.mail.MessagingException;

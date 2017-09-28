@@ -5,8 +5,8 @@ import com.grudus.examshelper.commons.IdResponse;
 import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import com.grudus.examshelper.exams.domain.CreateExamRequest;
 import com.grudus.examshelper.subjects.SubjectController;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Random;
@@ -31,7 +31,7 @@ public class ExamControllerTest extends AbstractControllerTest {
 
     private Long subjectId;
 
-    @Before
+    @BeforeEach
     public void init() {
         login(USER);
         subjectId = addSubject();

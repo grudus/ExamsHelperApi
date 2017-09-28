@@ -2,8 +2,8 @@ package com.grudus.examshelper.users;
 
 import com.grudus.examshelper.SpringBasedTest;
 import com.grudus.examshelper.users.roles.Role;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -16,8 +16,9 @@ import static com.grudus.examshelper.utils.Utils.*;
 import static java.time.LocalDateTime.now;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserDaoTest extends SpringBasedTest {
 
@@ -26,7 +27,7 @@ public class UserDaoTest extends SpringBasedTest {
     @Autowired
     private UserDao userDao;
 
-    @Before
+    @BeforeEach
     public void init() {
         user = randomUser();
         userDao.save(user);

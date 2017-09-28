@@ -1,13 +1,13 @@
 package com.grudus.examshelper.stats;
 
+import com.grudus.examshelper.MockitoExtension;
 import com.grudus.examshelper.exams.ExamService;
 import com.grudus.examshelper.exams.domain.ExamDto;
 import com.grudus.examshelper.users.User;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,12 +15,12 @@ import java.util.List;
 import static com.grudus.examshelper.utils.ExamUtils.randomExamDto;
 import static com.grudus.examshelper.utils.Utils.randomUser;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class StatsServiceTest {
 
     private static final LocalDateTime NOW = LocalDateTime.now();

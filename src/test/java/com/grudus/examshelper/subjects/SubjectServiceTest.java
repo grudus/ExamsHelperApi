@@ -1,24 +1,24 @@
 package com.grudus.examshelper.subjects;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.grudus.examshelper.MockitoExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
 
 import static com.grudus.examshelper.utils.Utils.randomSubject;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SubjectServiceTest {
 
     @Mock
@@ -28,7 +28,7 @@ public class SubjectServiceTest {
 
     private Subject subject = randomSubject(-1L);
 
-    @Before
+    @BeforeEach
     public void init() {
         subjectService = new SubjectService(subjectDao);
     }

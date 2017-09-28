@@ -1,8 +1,8 @@
 package com.grudus.examshelper.subjects;
 
 import com.grudus.examshelper.AbstractControllerTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.grudus.examshelper.users.roles.RoleName.USER;
@@ -16,7 +16,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
 
     private static final String SUBJECT_BASIC_URL = "/api/subjects";
 
-    @Before
+    @BeforeEach
     public void addUser() {
         login(USER);
     }

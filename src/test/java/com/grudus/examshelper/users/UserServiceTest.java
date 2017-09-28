@@ -1,11 +1,11 @@
 package com.grudus.examshelper.users;
 
+import com.grudus.examshelper.MockitoExtension;
 import com.grudus.examshelper.users.auth.AddUserRequest;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
@@ -15,12 +15,12 @@ import static com.grudus.examshelper.users.UserState.ENABLED;
 import static com.grudus.examshelper.users.roles.RoleName.ADMIN;
 import static com.grudus.examshelper.utils.Utils.*;
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @Mock
@@ -31,7 +31,7 @@ public class UserServiceTest {
     private UserService userService;
     private User user;
 
-    @Before
+    @BeforeEach
     public void init() {
         user = randomUser();
         userService = new UserService(userDao, passwordEncoder);

@@ -7,8 +7,8 @@ import com.grudus.examshelper.configuration.security.filters.StatelessAuthentica
 import com.grudus.examshelper.configuration.security.token.TokenAuthenticationService;
 import com.grudus.examshelper.users.roles.RoleName;
 import com.grudus.examshelper.utils.RequestParam;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,14 +38,14 @@ public abstract class AbstractControllerTest extends SpringBasedTest {
     private MockMvc mockMvc;
     protected AuthenticatedUser authentication;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         mockMvc = webAppContextSetup(wac)
                 .addFilters(new StatelessAuthenticationFilter(tokenAuthenticationService))
                 .build();
     }
 
-    @After
+    @AfterEach
     public void cleanUp() {
         SecurityContextHolder.clearContext();
     }

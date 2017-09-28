@@ -2,8 +2,8 @@ package com.grudus.examshelper.subjects;
 
 import com.grudus.examshelper.SpringBasedTest;
 import org.jooq.exception.DataAccessException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import java.util.Random;
 import static com.grudus.examshelper.Tables.SUBJECTS;
 import static com.grudus.examshelper.utils.ListAssertionUtils.assertContainsProperties;
 import static com.grudus.examshelper.utils.Utils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class SubjectDaoTest extends SpringBasedTest {
@@ -25,7 +25,7 @@ public class SubjectDaoTest extends SpringBasedTest {
     @Autowired
     private SubjectDao dao;
 
-    @Before
+    @BeforeEach
     public void init() {
         userId = addUserWithRoles().getId();
         subject1 = randomSubject(userId);
@@ -50,18 +50,19 @@ public class SubjectDaoTest extends SpringBasedTest {
         assertTrue(dao.findById(id).isPresent());
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test
     public void shouldNotBeAbleToSaveWhenUserDoNotExists() {
-        dao.save(randomSubject(new Random().nextLong()));
+        assertThrows(DataAccessException.class, () ->
+                dao.save(randomSubject(new Random().nextLong())));
     }
 
 
-    @Test(expected = DataAccessException.class)
+    @Test
     public void shouldNotBeAbleToSaveWhenLabelExistsForUser() {
         Subject subject = randomSubject(subject1.getUserId());
         subject.setLabel(subject1.getLabel());
 
-        dao.save(subject);
+        assertThrows(DataAccessException.class, () -> dao.save(subject));
     }
 
     @Test
@@ -222,7 +223,6 @@ public class SubjectDaoTest extends SpringBasedTest {
 
         assertTrue(belongsToUser);
     }
-
 
 
     @Test

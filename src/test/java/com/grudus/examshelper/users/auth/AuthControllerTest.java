@@ -6,17 +6,17 @@ import com.grudus.examshelper.commons.keys.RestKeys;
 import com.grudus.examshelper.emails.EmailSender;
 import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.UserService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.grudus.examshelper.users.roles.RoleName.USER;
 import static com.grudus.examshelper.utils.RequestParam.param;
 import static com.grudus.examshelper.utils.Utils.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -35,7 +35,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     @Autowired
     private UserService userService;
 
-    @Before
+    @BeforeEach
     public void init() {
         login();
     }

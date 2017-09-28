@@ -6,13 +6,13 @@ import com.grudus.examshelper.users.User;
 import com.grudus.examshelper.users.roles.Role;
 import com.grudus.examshelper.users.roles.RoleName;
 import org.jooq.DSLContext;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +29,7 @@ import static java.util.stream.Collectors.toList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestContext.class)
 @WebAppConfiguration
 @Transactional
@@ -42,7 +42,7 @@ public abstract class SpringBasedTest {
     @Autowired
     private EmailSender emailSender;
 
-    @Before
+    @BeforeEach
     public void cleanMocks() throws MessagingException {
         Mockito.reset(emailSender);
         doNothing().when(emailSender).send(anyString(), anyString());

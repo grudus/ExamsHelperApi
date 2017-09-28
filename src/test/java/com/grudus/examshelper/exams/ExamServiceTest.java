@@ -1,16 +1,16 @@
 package com.grudus.examshelper.exams;
 
+import com.grudus.examshelper.MockitoExtension;
 import com.grudus.examshelper.exams.domain.CreateExamRequest;
 import com.grudus.examshelper.exams.domain.Exam;
 import com.grudus.examshelper.exams.domain.ExamDto;
 import com.grudus.examshelper.exams.domain.ExamsPerDay;
 import com.grudus.examshelper.users.User;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,13 +21,13 @@ import static java.time.LocalDateTime.now;
 import static java.util.Arrays.asList;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ExamServiceTest {
 
     @Mock
