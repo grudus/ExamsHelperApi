@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SubjectServiceTest {
+class SubjectServiceTest {
 
     @Mock
     private SubjectDao subjectDao;
@@ -29,26 +29,26 @@ public class SubjectServiceTest {
     private Subject subject = randomSubject(-1L);
 
     @BeforeEach
-    public void init() {
+    void init() {
         subjectService = new SubjectService(subjectDao);
     }
 
     @Test
-    public void shouldSaveSubject() {
+    void shouldSaveSubject() {
         subjectService.save(subject);
 
         verify(subjectDao).save(eq(subject));
     }
 
     @Test
-    public void shouldUpdateSubject() {
+    void shouldUpdateSubject() {
         subjectService.update(subject);
 
         verify(subjectDao).update(eq(subject));
     }
 
     @Test
-    public void shouldFindByUser() {
+    void shouldFindByUser() {
         when(subjectDao.findByUserId(anyLong())).thenReturn(singletonList(subject));
 
         List<Subject> subjectList = subjectService.findByUser(subject.getUserId());
@@ -58,7 +58,7 @@ public class SubjectServiceTest {
     }
 
     @Test
-    public void shouldDeleteSubjectById() {
+    void shouldDeleteSubjectById() {
         Long id = 414L;
         subjectService.delete(id);
 

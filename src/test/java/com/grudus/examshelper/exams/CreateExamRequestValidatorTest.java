@@ -22,7 +22,7 @@ import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CreateExamRequestValidatorTest {
+class CreateExamRequestValidatorTest {
 
     @Mock
     private SubjectService subjectService;
@@ -34,13 +34,13 @@ public class CreateExamRequestValidatorTest {
     private Errors errors;
 
     @BeforeEach
-    public void init() {
+    void init() {
         errors = new BeanPropertyBindingResult(request, "createExamRequest");
         when(subjectService.exists(anyLong())).thenReturn(true);
     }
 
     @Test
-    public void shouldPassValidation() {
+    void shouldPassValidation() {
         request = randomRequest();
         validator.validate(request, errors);
 
@@ -48,7 +48,7 @@ public class CreateExamRequestValidatorTest {
     }
 
     @Test
-    public void shouldPassValidationWhenNoInfo() {
+    void shouldPassValidationWhenNoInfo() {
         request = new CreateExamRequest(null, 1L, now());
 
         validator.validate(request, errors);
@@ -57,7 +57,7 @@ public class CreateExamRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPassWhenNoSubjectId() {
+    void shouldNotPassWhenNoSubjectId() {
         request = new CreateExamRequest(randAlph(11), null, now());
 
         validator.validate(request, errors);
@@ -66,7 +66,7 @@ public class CreateExamRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPassWhenSubjectDoNotExists() {
+    void shouldNotPassWhenSubjectDoNotExists() {
         when(subjectService.exists(anyLong())).thenReturn(false);
 
         request = new CreateExamRequest(randAlph(11), 3L, now());
@@ -77,7 +77,7 @@ public class CreateExamRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPassWhenNoDate() {
+    void shouldNotPassWhenNoDate() {
         request = new CreateExamRequest(randAlph(11), 1L, null);
 
         validator.validate(request, errors);

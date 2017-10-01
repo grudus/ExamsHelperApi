@@ -13,7 +13,7 @@ import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SubjectSecurityServiceTest {
+class SubjectSecurityServiceTest {
 
     @Mock
     private SubjectService subjectService;
@@ -22,7 +22,7 @@ public class SubjectSecurityServiceTest {
     private SubjectSecurityService subjectSecurityService;
 
     @Test
-    public void shouldThrowExceptionWhenSubjectDoNotBelongsToUser() throws Exception {
+    void shouldThrowExceptionWhenSubjectDoNotBelongsToUser() throws Exception {
         when(subjectService.belongsToUser(anyLong(), anyLong())).thenReturn(false);
 
         assertThrows(IllegalActionException.class, () ->

@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class SubjectExamsControllerTest extends AbstractControllerTest {
+class SubjectExamsControllerTest extends AbstractControllerTest {
     private static final String BASE_URL = "/api/subjects/%d/exams";
 
     @Autowired
@@ -27,14 +27,14 @@ public class SubjectExamsControllerTest extends AbstractControllerTest {
     private Long subjectId;
 
     @BeforeEach
-    public void init() {
+    void init() {
         login(USER);
         subjectId = addSubject();
         addSubject();
     }
 
     @Test
-    public void shouldFindExamsWithoutGradeForSubjectOnlyFromPast() throws Exception {
+    void shouldFindExamsWithoutGradeForSubjectOnlyFromPast() throws Exception {
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().minusDays(4)));
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().minusDays(12)));
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().plusDays(3)));
@@ -46,7 +46,7 @@ public class SubjectExamsControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldFindExamsWithoutGradeOnlyForGivenSubject() throws Exception {
+    void shouldFindExamsWithoutGradeOnlyForGivenSubject() throws Exception {
         addExam(new CreateExamRequest(randAlph(11), addSubject(), now().minusDays(4)));
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().minusDays(12)));
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().minusDays(3)));
@@ -58,7 +58,7 @@ public class SubjectExamsControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldReturn403WhenFindSomeoneElseExams() throws Exception {
+    void shouldReturn403WhenFindSomeoneElseExams() throws Exception {
         AuthenticatedUser user = new AuthenticatedUser(addUserWithRoles());
         Long otherId = addSubject(user);
 

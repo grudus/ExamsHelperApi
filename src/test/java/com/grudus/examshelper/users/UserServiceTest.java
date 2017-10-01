@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mock
     private UserDao userDao;
@@ -32,7 +32,7 @@ public class UserServiceTest {
     private User user;
 
     @BeforeEach
-    public void init() {
+    void init() {
         user = randomUser();
         userService = new UserService(userDao, passwordEncoder);
 
@@ -44,7 +44,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldFindById() {
+    void shouldFindById() {
         User u = userService.findById(1L).get();
 
         verify(userDao).findById(eq(1L));
@@ -52,7 +52,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldFindEnabledByUsername() {
+    void shouldFindEnabledByUsername() {
         User u = userService.findByUsername(user.getUsername()).get();
 
         verify(userDao).findByUsername(eq(user.getUsername()));
@@ -60,7 +60,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldFetchRolesWhenFoundByToken() {
+    void shouldFetchRolesWhenFoundByToken() {
         String token = randAlph(32);
         userService.findEnabledByToken(token);
 
@@ -69,7 +69,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldFetchRolesWhenFoundByUsernameWithRoles() {
+    void shouldFetchRolesWhenFoundByUsernameWithRoles() {
         String username = randAlph(10);
 
         userService.findByUsernameAndFetchRoles(username);
@@ -79,14 +79,14 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldDeleteUser() {
+    void shouldDeleteUser() {
         userService.delete(user);
 
         verify(userDao).delete(eq(user.getId()));
     }
 
     @Test
-    public void shouldFindAll() {
+    void shouldFindAll() {
         when(userDao.findAll()).thenReturn(singletonList(user));
 
         List<User> all = userService.findAll();
@@ -96,14 +96,14 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldUpdate() {
+    void shouldUpdate() {
         userService.update(user);
 
         verify(userDao).update(eq(user));
     }
 
     @Test
-    public void shouldAddToken() {
+    void shouldAddToken() {
         String token = randAlph(32);
 
         userService.addToken(user.getId(), token);
@@ -112,7 +112,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldFindByEmail() {
+    void shouldFindByEmail() {
         User u = userService.findByEmail(user.getEmail()).get();
 
         verify(userDao).findByEmail(eq(user.getEmail()));
@@ -120,7 +120,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldEncodePasswordWhenSaveNewUser() {
+    void shouldEncodePasswordWhenSaveNewUser() {
         String hash = randAlph(100);
         String token = randAlph(32);
         AddUserRequest request = new AddUserRequest(randAlph(10), randAlph(10), randomEmail());
@@ -133,7 +133,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldEnableUserWithRoleWhenRegisterUser() {
+    void shouldEnableUserWithRoleWhenRegisterUser() {
         userService.registerUser(user, ADMIN);
 
         verify(userDao).updateState(eq(user.getId()), eq(ENABLED));

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AuthControllerTest extends AbstractControllerTest {
+class AuthControllerTest extends AbstractControllerTest {
 
     private static final String REDIRECT_URI = randAlph(10);
     private static final String REGISTER_URL = "/api/auth/register?redirect_uri=" + REDIRECT_URI;
@@ -36,17 +36,17 @@ public class AuthControllerTest extends AbstractControllerTest {
     private UserService userService;
 
     @BeforeEach
-    public void init() {
+    void init() {
         login();
     }
 
     @Test
-    public void shouldReturnFalseWhenCheckingUserExistence() throws Exception {
+    void shouldReturnFalseWhenCheckingUserExistence() throws Exception {
         checkUserExistence(randomEmail(), false);
     }
 
     @Test
-    public void shouldAddUserToDbAndSendEmailWithRedirect() throws Exception {
+    void shouldAddUserToDbAndSendEmailWithRedirect() throws Exception {
         AddUserRequest request = randomAddUserRequest();
         performAddUserRequest(request);
 
@@ -58,7 +58,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldNotSaveUserDueToEmptyPassword() throws Exception {
+    void shouldNotSaveUserDueToEmptyPassword() throws Exception {
         AddUserRequest request = randomAddUserRequest();
         request.setPassword(null);
 
@@ -68,7 +68,7 @@ public class AuthControllerTest extends AbstractControllerTest {
 
 
     @Test
-    public void shouldNotSaveUserDueToEmptyEmail() throws Exception {
+    void shouldNotSaveUserDueToEmptyEmail() throws Exception {
         AddUserRequest request = randomAddUserRequest();
         request.setEmail(null);
 
@@ -78,7 +78,7 @@ public class AuthControllerTest extends AbstractControllerTest {
 
 
     @Test
-    public void shouldNotSaveUserDueToInvalidEmail() throws Exception {
+    void shouldNotSaveUserDueToInvalidEmail() throws Exception {
         AddUserRequest request = randomAddUserRequest();
         request.setEmail("123455");
 
@@ -88,7 +88,7 @@ public class AuthControllerTest extends AbstractControllerTest {
 
 
     @Test
-    public void shouldNotSaveUserDueToEmptyUsername() throws Exception {
+    void shouldNotSaveUserDueToEmptyUsername() throws Exception {
         AddUserRequest request = randomAddUserRequest();
         request.setUsername(null);
 
@@ -98,7 +98,7 @@ public class AuthControllerTest extends AbstractControllerTest {
 
 
     @Test
-    public void shouldNotSaveUserWhenUsernameAlreadyExists() throws Exception {
+    void shouldNotSaveUserWhenUsernameAlreadyExists() throws Exception {
         AddUserRequest request = randomAddUserRequest();
         performAddUserRequest(request);
         reset(emailSender);
@@ -108,7 +108,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldNotSaveUserWhenUsernameInDb() throws Exception {
+    void shouldNotSaveUserWhenUsernameInDb() throws Exception {
         AddUserRequest request = randomAddUserRequest();
         performAddUserRequest(request);
         User user = randomUser();
@@ -121,7 +121,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldNotSaveUserWhenEmailAlreadyExists() throws Exception {
+    void shouldNotSaveUserWhenEmailAlreadyExists() throws Exception {
         AddUserRequest request = randomAddUserRequest();
         performAddUserRequest(request);
         request.setUsername(randAlph(33));
@@ -137,13 +137,13 @@ public class AuthControllerTest extends AbstractControllerTest {
     }
 
 
-    public void performAddUserRequestAndAssertError(AddUserRequest request, String error) throws Exception {
+    void performAddUserRequestAndAssertError(AddUserRequest request, String error) throws Exception {
         post(REGISTER_URL, request)
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.[0]", is(error)));
     }
 
-    public void checkUserExistence(String email, boolean exists) throws Exception {
+    void checkUserExistence(String email, boolean exists) throws Exception {
         get(EXISTENCE_URL, param("email", email))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.exists", is(exists)));

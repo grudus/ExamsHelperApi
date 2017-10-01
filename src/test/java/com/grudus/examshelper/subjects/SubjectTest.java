@@ -8,24 +8,24 @@ import static com.grudus.examshelper.utils.Utils.randomColor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SubjectTest {
+class SubjectTest {
 
     @Test
-    public void shouldAssertValidColor() {
+    void shouldAssertValidColor() {
         String validColor = "#a1ff45";
 
         Subject.assertColor(validColor);
     }
 
     @Test
-    public void shouldAssertValidShortenColor() {
+    void shouldAssertValidShortenColor() {
         String validColor = "#a9c";
 
         Subject.assertColor(validColor);
     }
 
     @Test
-    public void shouldThrowExceptionWhenColorWithoutHashTag() {
+    void shouldThrowExceptionWhenColorWithoutHashTag() {
         String invalidColor = "123456";
 
         assertThrows(InvalidColorException.class, () ->
@@ -33,14 +33,14 @@ public class SubjectTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenShortenColorWithoutHashTag() {
+    void shouldThrowExceptionWhenShortenColorWithoutHashTag() {
         String invalidColor = "5ca";
 
         assertThrows(InvalidColorException.class, () -> Subject.assertColor(invalidColor));
     }
 
     @Test
-    public void shouldThrowExceptionWhenColorHasInvalidLength() {
+    void shouldThrowExceptionWhenColorHasInvalidLength() {
         String[] invalidColors = {"#a", "#aa", "#aaaa", "#aaaaa", "#aaaaaaa", "#aaaaaaaa"};
         int numberOfInvalidColors = 0;
 
@@ -55,7 +55,7 @@ public class SubjectTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenInvalidCharacters() {
+    void shouldThrowExceptionWhenInvalidCharacters() {
         String invalidColor = "#a1eqyz";
 
         assertThrows(InvalidColorException.class, () ->
@@ -63,7 +63,7 @@ public class SubjectTest {
     }
 
     @Test
-    public void shouldNotCreateInstanceWhenLabelTooShort() {
+    void shouldNotCreateInstanceWhenLabelTooShort() {
         String label = randAlph(Subject.MAX_LABEL_LENGTH + 1);
 
         assertThrows(IllegalArgumentException.class, () ->

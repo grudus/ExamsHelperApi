@@ -25,7 +25,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UserAuthenticationProviderTest {
+class UserAuthenticationProviderTest {
 
     private static final String USERNAME = randAlph(20);
     private static final String PASSWORD = randAlph(20);
@@ -40,13 +40,13 @@ public class UserAuthenticationProviderTest {
     private Authentication authentication;
 
     @BeforeEach
-    public void init() {
+    void init() {
         userAuthenticationProvider = new UserAuthenticationProvider(userService, passwordEncoder);
         authentication = new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD);
     }
 
     @Test
-    public void shouldAuthenticateProperly() {
+    void shouldAuthenticateProperly() {
         String hash = randAlph(100);
         User user = new User(USERNAME, hash, randomEmail());
         when(userService.findByUsernameAndFetchRoles(USERNAME)).thenReturn(Optional.of(user));
@@ -60,20 +60,20 @@ public class UserAuthenticationProviderTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenUsernameIsNull() {
+    void shouldThrowExceptionWhenUsernameIsNull() {
         assertThrows(BadCredentialsException.class, () ->
                 userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(null, randAlph(13)))
         );
     }
 
     @Test
-    public void shouldThrowExceptionWhenPasswordIsNull() {
+    void shouldThrowExceptionWhenPasswordIsNull() {
         assertThrows(BadCredentialsException.class, () ->
                 userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(randAlph(13), null)));
     }
 
     @Test
-    public void shouldThrowExceptionWhenUserIsNotInDb() {
+    void shouldThrowExceptionWhenUserIsNotInDb() {
         when(userService.findByUsernameAndFetchRoles(anyString())).thenReturn(Optional.empty());
 
         assertThrows(UsernameNotFoundException.class, () ->
@@ -81,7 +81,7 @@ public class UserAuthenticationProviderTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenPasswordsDoNotMatches() {
+    void shouldThrowExceptionWhenPasswordsDoNotMatches() {
         when(userService.findByUsernameAndFetchRoles(anyString())).thenReturn(Optional.of(randomUser()));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
@@ -90,7 +90,7 @@ public class UserAuthenticationProviderTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenUserIsNotEnabled() {
+    void shouldThrowExceptionWhenUserIsNotEnabled() {
         User user = randomUser();
         when(userService.findByUsernameAndFetchRoles(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);

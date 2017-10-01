@@ -21,7 +21,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class StatsServiceTest {
+class StatsServiceTest {
 
     private static final LocalDateTime NOW = LocalDateTime.now();
 
@@ -32,7 +32,7 @@ public class StatsServiceTest {
     private StatsService statsService;
 
     @Test
-    public void shouldGetAverageGradeForMonth() {
+    void shouldGetAverageGradeForMonth() {
         returnWhenFindingExams(
                 randomExamDto(NOW, 5.0),
                 randomExamDto(NOW, 4.0),
@@ -45,7 +45,7 @@ public class StatsServiceTest {
     }
 
     @Test
-    public void shouldGetAverageForManyMonths() {
+    void shouldGetAverageForManyMonths() {
         returnWhenFindingExams(
                 randomExamDto(NOW, 5.0),
                 randomExamDto(NOW, 4.0),
@@ -59,7 +59,7 @@ public class StatsServiceTest {
     }
 
     @Test
-    public void shouldDetectDifferentYears() {
+    void shouldDetectDifferentYears() {
         returnWhenFindingExams(
                 randomExamDto(NOW, 5.0),
                 randomExamDto(NOW.plusYears(1), 5.0)
@@ -71,7 +71,7 @@ public class StatsServiceTest {
     }
 
     @Test
-    public void shouldFindOnlyForGivenSubject() {
+    void shouldFindOnlyForGivenSubject() {
         returnWhenFindingExams(
                 randomExamDto(NOW, 4.0, 1L),
                 randomExamDto(NOW, 4.0, 2L)
@@ -83,7 +83,7 @@ public class StatsServiceTest {
     }
 
     @Test
-    public void shouldReturnEmptyListWhenNoExams() {
+    void shouldReturnEmptyListWhenNoExams() {
         returnWhenFindingExams();
 
         List<AverageExamsGradePerMonth> averages = statsService.getAverageExamsGradePerMonth(randomUser(), 2L);
@@ -92,7 +92,7 @@ public class StatsServiceTest {
 
 
     @Test
-    public void shouldReturnEmptyListWhenNoExamsWithGrade() {
+    void shouldReturnEmptyListWhenNoExamsWithGrade() {
         returnWhenFindingExams(
                 randomExamDto(NOW, null),
                 randomExamDto(NOW.plusYears(1), 0D),
@@ -105,7 +105,7 @@ public class StatsServiceTest {
 
 
     @Test
-    public void shouldReturnEmptyListWhenNoExamsForSubject() {
+    void shouldReturnEmptyListWhenNoExamsForSubject() {
         returnWhenFindingExams(
                 randomExamDto(NOW, 5.0, 2L),
                 randomExamDto(NOW.plusYears(1), 0D, 3L)

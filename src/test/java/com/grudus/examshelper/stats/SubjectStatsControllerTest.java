@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class SubjectStatsControllerTest extends AbstractControllerTest {
+class SubjectStatsControllerTest extends AbstractControllerTest {
 
     private static final String BASE_URL = "/api/stats";
 
@@ -35,13 +35,13 @@ public class SubjectStatsControllerTest extends AbstractControllerTest {
     private Long subjectId;
 
     @BeforeEach
-    public void init() {
+    void init() {
         login(USER);
         subjectId = addSubject();
     }
 
     @Test
-    public void shouldGetAverageExamsPerMonth() throws Exception {
+    void shouldGetAverageExamsPerMonth() throws Exception {
         addExamWithGrade(subjectId, NOW, 4.0);
         addExamWithGrade(subjectId, NOW, 5.0);
         addExamWithGrade(subjectId, NOW, 6.0);
@@ -53,7 +53,7 @@ public class SubjectStatsControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldNotBeAbleToGetSomeoneElseSubjectStats() throws Exception {
+    void shouldNotBeAbleToGetSomeoneElseSubjectStats() throws Exception {
         login(RoleName.ADMIN);
         Long subjectId = addSubject();
         addExamWithGrade(subjectId, NOW, 4.0);
@@ -64,7 +64,7 @@ public class SubjectStatsControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldGetAverageGradesForAllSubjectsWhenNoSubjectIdSpecified() throws Exception {
+    void shouldGetAverageGradesForAllSubjectsWhenNoSubjectIdSpecified() throws Exception {
         addExamWithGrade(subjectId, NOW, 6.0);
         addExamWithGrade(addSubject(), NOW, 3.0);
         addExamWithGrade(addSubject(), NOW, 3.0);
@@ -76,7 +76,7 @@ public class SubjectStatsControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldGetExamsPerMonth() throws Exception {
+    void shouldGetExamsPerMonth() throws Exception {
         addExamWithGrade(subjectId, NOW, 3.0);
         addExamWithGrade(subjectId, NOW.plusMonths(2), 3.0);
         addExamWithGrade(subjectId, NOW.minusMonths(1), 3.0);
@@ -89,7 +89,7 @@ public class SubjectStatsControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldReturnEmptyListWhenNoGradesForSubject() throws Exception {
+    void shouldReturnEmptyListWhenNoGradesForSubject() throws Exception {
         get(BASE_URL + "/average", param("subjectId", subjectId.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", emptyCollectionOf(AverageExamsGradePerMonth.class)));

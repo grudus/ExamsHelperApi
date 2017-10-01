@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserDaoTest extends SpringBasedTest {
+class UserDaoTest extends SpringBasedTest {
 
     private User user;
 
@@ -28,19 +28,19 @@ public class UserDaoTest extends SpringBasedTest {
     private UserDao userDao;
 
     @BeforeEach
-    public void init() {
+    void init() {
         user = randomUser();
         userDao.save(user);
     }
 
     @Test
-    public void shouldSaveUser() {
+    void shouldSaveUser() {
         assertNotNull(user.getId());
         assertTrue(userDao.findByUsername(user.getUsername()).isPresent());
     }
 
     @Test
-    public void shouldAddWaitingUser() {
+    void shouldAddWaitingUser() {
         String username = randAlph(10), password = randAlph(10), email = randomEmail(), token = randAlph(32);
         userDao.saveAddUserRequest(username, password, email, token);
 
@@ -55,7 +55,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFetchRoles() {
+    void shouldFetchRoles() {
         userDao.addRoles(user, asList(USER, ADMIN));
 
         assertTrue(user.getRoles().isEmpty());
@@ -67,7 +67,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldUpdateUser() {
+    void shouldUpdateUser() {
         LocalDateTime before = now().minusSeconds(1);
 
         user.setUsername(randAlph(12));
@@ -88,7 +88,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldNotBeAbleToSetLastModifiedToPast() {
+    void shouldNotBeAbleToSetLastModifiedToPast() {
         LocalDateTime now = now().minusSeconds(1);
         LocalDateTime past = now.minusDays(1);
 
@@ -103,7 +103,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldAddRoles() {
+    void shouldAddRoles() {
         User dbUser = userDao.findById(user.getId()).get();
         userDao.fetchUserRoles(dbUser);
         assertThat(dbUser.getRoles(), anyOf(is(nullValue()), hasSize(0)));
@@ -116,7 +116,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldDoNothingWhenAddRoleSecondTime() {
+    void shouldDoNothingWhenAddRoleSecondTime() {
         userDao.addRoles(user, asList(USER, ADMIN));
         userDao.addRoles(user, asList(USER, ADMIN));
         userDao.addRoles(user, singletonList(USER));
@@ -127,7 +127,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldAddToken() {
+    void shouldAddToken() {
         String token = randAlph(32);
         LocalDateTime now = now().minusSeconds(1);
 
@@ -141,7 +141,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFindByUsernameWhenEnabled() {
+    void shouldFindByUsernameWhenEnabled() {
         Optional<User> maybeUser = userDao.findByUsername(user.getUsername());
 
         assertTrue(maybeUser.isPresent());
@@ -150,14 +150,14 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFindByUsernameWhenWaiting() {
+    void shouldFindByUsernameWhenWaiting() {
         String username = randAlph(10), password = randAlph(10), email = randomEmail(), token = randAlph(32);
         userDao.saveAddUserRequest(username, password, email, token);
 
         assertTrue(userDao.findByUsername(username).isPresent());
     }
     @Test
-    public void shouldNotFindByTokenWhenWaiting() {
+    void shouldNotFindByTokenWhenWaiting() {
         String username = randAlph(10), password = randAlph(10), email = randomEmail(), token = randAlph(32);
         userDao.saveAddUserRequest(username, password, email, token);
 
@@ -166,7 +166,7 @@ public class UserDaoTest extends SpringBasedTest {
 
 
     @Test
-    public void shouldFindById() {
+    void shouldFindById() {
         Optional<User> maybeUser = userDao.findById(user.getId());
 
         assertTrue(maybeUser.isPresent());
@@ -175,7 +175,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFindByToken() {
+    void shouldFindByToken() {
         String token = randAlph(32);
         userDao.addToken(user.getId(), token);
 
@@ -187,7 +187,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldUpdateState() {
+    void shouldUpdateState() {
         LocalDateTime now = LocalDateTime.now().minusSeconds(1);
         userDao.updateState(user.getId(), DISABLED);
 
@@ -198,7 +198,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldDeleteUser() {
+    void shouldDeleteUser() {
         assertTrue(userDao.findById(user.getId()).isPresent());
 
         userDao.delete(user.getId());
@@ -207,7 +207,7 @@ public class UserDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFindAll() {
+    void shouldFindAll() {
         asList(randomUser(), randomUser(), randomUser())
                 .forEach(userDao::save);
 

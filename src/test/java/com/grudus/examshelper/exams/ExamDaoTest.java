@@ -25,7 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ExamDaoTest extends SpringBasedTest {
+class ExamDaoTest extends SpringBasedTest {
 
     private Exam exam1;
     private Exam exam2;
@@ -40,7 +40,7 @@ public class ExamDaoTest extends SpringBasedTest {
     private SubjectDao subjectDao;
 
     @BeforeEach
-    public void init() {
+    void init() {
         user = addUserWithRoles(USER);
         User user2 = addUserWithRoles(USER);
         subject = addSubject(user.getId());
@@ -54,31 +54,31 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldSaveExams() {
+    void shouldSaveExams() {
         assertEquals(2, dsl.fetchCount(EXAMS));
     }
 
     @Test
-    public void shouldReturnNewlyCreatedId() {
+    void shouldReturnNewlyCreatedId() {
         Long id = dao.save(randomExam(subject.getId()));
 
         assertNotNull(id);
     }
 
     @Test
-    public void shouldNotBeAbleToSaveWithoutSubjectId() {
+    void shouldNotBeAbleToSaveWithoutSubjectId() {
         assertThrows(DataAccessException.class, () ->
                 dao.save(randomExam(null)));
     }
 
     @Test
-    public void shouldNotBeAbleToSaveWithoutValidSubjectId() {
+    void shouldNotBeAbleToSaveWithoutValidSubjectId() {
         assertThrows(DataAccessException.class, () ->
                 dao.save(randomExam(new Random().nextLong())));
     }
 
     @Test
-    public void shouldFindAllAsExamDtoByUserId() {
+    void shouldFindAllAsExamDtoByUserId() {
         List<ExamDto> exams = dao.findAllAsExams(user.getId());
 
         assertThat(exams, hasSize(1));
@@ -92,14 +92,14 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldReturnEmptyListWhenFindByNotExistingUser() {
+    void shouldReturnEmptyListWhenFindByNotExistingUser() {
         List<ExamDto> exams = dao.findAllAsExams(new Random().nextLong());
 
         assertTrue(exams.isEmpty());
     }
 
     @Test
-    public void shouldReturnEmptyListWhenUserDoNotHaveAnyExams() {
+    void shouldReturnEmptyListWhenUserDoNotHaveAnyExams() {
         Long id = addUserWithRoles().getId();
         List<ExamDto> exams = dao.findAllAsExams(id);
 
@@ -107,7 +107,7 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFindAllFromDate() {
+    void shouldFindAllFromDate() {
         LocalDateTime bound = LocalDateTime.now().plusYears(11);
         dao.save(randomExam(subject.getId(), bound.plusDays(33)));
         dao.save(randomExam(subject.getId(), bound.plusDays(22)));
@@ -119,7 +119,7 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldReturnEmptyListWhenNoExamsAfterDate() {
+    void shouldReturnEmptyListWhenNoExamsAfterDate() {
         LocalDateTime bound = LocalDateTime.now().plusYears(11);
         dao.save(randomExam(subject.getId(), bound.minusDays(2)));
         dao.save(randomExam(subject.getId(), bound.minusDays(1)));
@@ -130,7 +130,7 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldCountNotGradedExams() {
+    void shouldCountNotGradedExams() {
         dao.save(randomPastExam(subject.getId(), null));
         dao.save(randomPastExam(addSubject(user.getId()).getId(), -1D));
         dao.save(randomPastExam(subject.getId(), 0D));
@@ -143,7 +143,7 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldCountNoExamsWithoutGrade() {
+    void shouldCountNoExamsWithoutGrade() {
         dao.save(randomExam(subject.getId(), -1D));
         dao.save(randomPastExam(subject.getId(), 5D));
 
@@ -153,7 +153,7 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFindOnlyWithoutGradeForSubject() {
+    void shouldFindOnlyWithoutGradeForSubject() {
         dao.save(randomPastExam(subject.getId(), -1D));
         dao.save(randomPastExam(subject.getId(), null));
         dao.save(randomPastExam(subject.getId(), 3D));
@@ -164,7 +164,7 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFindWithoutGradeOnlyForGivenSubject() {
+    void shouldFindWithoutGradeOnlyForGivenSubject() {
         dao.save(randomPastExam(subject.getId(), -1D));
         dao.save(randomPastExam(subject.getId(), null));
         dao.save(randomPastExam(addSubject(user.getId()).getId(), -1D));
@@ -177,14 +177,14 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldReturnEmptyWithoutGradesWhenNoExamsInSubject() {
+    void shouldReturnEmptyWithoutGradesWhenNoExamsInSubject() {
         List<ExamDto> exams = dao.findWithoutGradeForSubject(addSubject(user.getId()).getId());
 
         assertTrue(exams.isEmpty());
     }
 
     @Test
-    public void shouldReturnEmptyWithoutGradesWhenSubjectHasOnlyWithGrades() {
+    void shouldReturnEmptyWithoutGradesWhenSubjectHasOnlyWithGrades() {
         dao.save(randomPastExam(subject.getId(), 12D));
         List<ExamDto> exams = dao.findWithoutGradeForSubject(subject.getId());
 
@@ -192,7 +192,7 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFindWithoutGradeOnlyFromPast() {
+    void shouldFindWithoutGradeOnlyFromPast() {
         dao.save(randomExam(subject.getId(), (Double) null));
         dao.save(randomExam(subject.getId(), (Double) null));
         dao.save(randomPastExam(subject.getId(), null));
@@ -205,7 +205,7 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldDetectUserOwnership() {
+    void shouldDetectUserOwnership() {
         Long newUserId = addUserWithRoles().getId();
         Exam exam1 = randomExam(subject.getId());
         Exam exam2 = randomExam(addSubject(newUserId).getId());
@@ -219,7 +219,7 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldUpdateGrade() {
+    void shouldUpdateGrade() {
         Long examId = dao.save(randomExam(subject.getId(), (Double) null));
         Double grade = 4.0;
 
@@ -231,7 +231,7 @@ public class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldNotUpdateGradeWhenExamDoesNotExists() {
+    void shouldNotUpdateGradeWhenExamDoesNotExists() {
         Double crazyGrade = 21.37;
         dao.updateGrade(randomId(), crazyGrade);
 

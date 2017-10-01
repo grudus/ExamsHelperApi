@@ -17,7 +17,7 @@ import static com.grudus.examshelper.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class SubjectDaoTest extends SpringBasedTest {
+class SubjectDaoTest extends SpringBasedTest {
 
     private Subject subject1, subject2;
     private Long userId;
@@ -26,7 +26,7 @@ public class SubjectDaoTest extends SpringBasedTest {
     private SubjectDao dao;
 
     @BeforeEach
-    public void init() {
+    void init() {
         userId = addUserWithRoles().getId();
         subject1 = randomSubject(userId);
         subject2 = randomSubject(userId);
@@ -38,12 +38,12 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldSaveSubject() {
+    void shouldSaveSubject() {
         assertEquals(2, dsl.fetchCount(SUBJECTS));
     }
 
     @Test
-    public void shouldReturnNewlyCreatedId() {
+    void shouldReturnNewlyCreatedId() {
         Long id = dao.save(randomSubject(userId));
 
         assertNotNull(id);
@@ -51,14 +51,14 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldNotBeAbleToSaveWhenUserDoNotExists() {
+    void shouldNotBeAbleToSaveWhenUserDoNotExists() {
         assertThrows(DataAccessException.class, () ->
                 dao.save(randomSubject(new Random().nextLong())));
     }
 
 
     @Test
-    public void shouldNotBeAbleToSaveWhenLabelExistsForUser() {
+    void shouldNotBeAbleToSaveWhenLabelExistsForUser() {
         Subject subject = randomSubject(subject1.getUserId());
         subject.setLabel(subject1.getLabel());
 
@@ -66,7 +66,7 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldBeAbleToSaveWhenLabelExistsForAnotherUser() {
+    void shouldBeAbleToSaveWhenLabelExistsForAnotherUser() {
         Long userId = addUserWithRoles().getId();
         Subject subject = randomSubject(userId);
         subject.setLabel(subject2.getLabel());
@@ -75,7 +75,7 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldDetectExistence() {
+    void shouldDetectExistence() {
         Long id = dao.save(randomSubject(userId));
 
         Boolean exists = dao.exists(id);
@@ -84,14 +84,14 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldDetectNotExists() {
+    void shouldDetectNotExists() {
         Boolean exists = dao.exists(new Random().nextLong());
 
         assertFalse(exists);
     }
 
     @Test
-    public void shouldFindAllByUserId() {
+    void shouldFindAllByUserId() {
         List<Subject> subjectList = dao.findByUserId(userId);
 
         assertEquals(2, subjectList.size());
@@ -99,12 +99,12 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldReturnEmptyListWhenFindByNotExistingUserId() {
+    void shouldReturnEmptyListWhenFindByNotExistingUserId() {
         assertTrue(dao.findByUserId(new Random().nextLong()).isEmpty());
     }
 
     @Test
-    public void shouldFindById() {
+    void shouldFindById() {
         Subject dbSubject = dao.findById(subject2.getId()).get();
 
         assertEquals(subject2.getLabel(), dbSubject.getLabel());
@@ -113,12 +113,12 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldNotFindById() {
+    void shouldNotFindById() {
         assertFalse(dao.findById(new Random().nextLong()).isPresent());
     }
 
     @Test
-    public void shouldUpdateSubject() {
+    void shouldUpdateSubject() {
         String previousLabel = subject2.getLabel();
         String previousColor = subject2.getColor();
         LocalDateTime previousLastModified = subject2.getLastModified().minusSeconds(1);
@@ -135,7 +135,7 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldBeAbleToUpdateWithoutChanges() {
+    void shouldBeAbleToUpdateWithoutChanges() {
         dao.update(subject1);
 
         Subject dbSubject = dao.findById(subject1.getId()).get();
@@ -145,7 +145,7 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldDeleteSubjectWhenValidId() {
+    void shouldDeleteSubjectWhenValidId() {
         dao.delete(subject2.getId());
 
         assertEquals(1, dsl.fetchCount(SUBJECTS));
@@ -154,7 +154,7 @@ public class SubjectDaoTest extends SpringBasedTest {
 
 
     @Test
-    public void shouldDeleteNothingWhenIdNotInDb() {
+    void shouldDeleteNothingWhenIdNotInDb() {
         dao.delete(-13L);
 
         assertEquals(2, dsl.fetchCount(SUBJECTS));
@@ -163,7 +163,7 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldFindByLabel() {
+    void shouldFindByLabel() {
         Optional<SubjectDto> s = dao.findByUserIdAndLabel(userId, subject1.getLabel());
 
         assertTrue(s.isPresent());
@@ -172,14 +172,14 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldReturnEmptyWhenFindNonExistingSubjectByLabel() {
+    void shouldReturnEmptyWhenFindNonExistingSubjectByLabel() {
         Optional<SubjectDto> s = dao.findByUserIdAndLabel(userId, randAlph(11));
 
         assertFalse(s.isPresent());
     }
 
     @Test
-    public void shouldReturnEmptyWhenFindByAnotherUserAndLabel() {
+    void shouldReturnEmptyWhenFindByAnotherUserAndLabel() {
         Long id2 = addUserWithRoles().getId();
 
         Optional<SubjectDto> s = dao.findByUserIdAndLabel(id2, subject1.getLabel());
@@ -188,21 +188,21 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldReturnEmptyWhenFindByNonExistingUserAndLabel() {
+    void shouldReturnEmptyWhenFindByNonExistingUserAndLabel() {
         Optional<SubjectDto> s = dao.findByUserIdAndLabel(new Random().nextLong(), subject1.getLabel());
 
         assertFalse(s.isPresent());
     }
 
     @Test
-    public void shouldDetectLabelExistence() {
+    void shouldDetectLabelExistence() {
         boolean exists = dao.labelExists(subject1.getLabel(), subject1.getUserId());
 
         assertTrue(exists);
     }
 
     @Test
-    public void shouldNotDetectExistenceWhenLabelExistsForAnotherUser() {
+    void shouldNotDetectExistenceWhenLabelExistsForAnotherUser() {
         Long userId = addUserWithRoles().getId();
 
         boolean exists = dao.labelExists(subject1.getLabel(), userId);
@@ -211,14 +211,14 @@ public class SubjectDaoTest extends SpringBasedTest {
     }
 
     @Test
-    public void shouldNotDetectExistenceWhenLabelNotExists() {
+    void shouldNotDetectExistenceWhenLabelNotExists() {
         boolean exists = dao.labelExists(randAlph(11), subject1.getUserId());
 
         assertFalse(exists);
     }
 
     @Test
-    public void shouldDetectIfSubjectBelongsToUser() {
+    void shouldDetectIfSubjectBelongsToUser() {
         boolean belongsToUser = dao.belongsToUser(userId, subject1.getId());
 
         assertTrue(belongsToUser);
@@ -226,7 +226,7 @@ public class SubjectDaoTest extends SpringBasedTest {
 
 
     @Test
-    public void shouldDetectIfSubjectDoesNotBelongToUser() {
+    void shouldDetectIfSubjectDoesNotBelongToUser() {
         boolean belongsToUser = dao.belongsToUser(addUserWithRoles().getId(), subject1.getId());
 
         assertFalse(belongsToUser);

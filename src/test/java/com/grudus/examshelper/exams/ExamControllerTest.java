@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class ExamControllerTest extends AbstractControllerTest {
+class ExamControllerTest extends AbstractControllerTest {
 
     static final String BASE_URL = "/api/exams";
 
@@ -32,13 +32,13 @@ public class ExamControllerTest extends AbstractControllerTest {
     private Long subjectId;
 
     @BeforeEach
-    public void init() {
+    void init() {
         login(USER);
         subjectId = addSubject();
     }
 
     @Test
-    public void shouldCreateExam() throws Exception {
+    void shouldCreateExam() throws Exception {
         CreateExamRequest request = new CreateExamRequest(randAlph(11), subjectId, now());
 
         post(BASE_URL, request)
@@ -47,7 +47,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldCreateExamWithoutInfo() throws Exception {
+    void shouldCreateExamWithoutInfo() throws Exception {
         CreateExamRequest request = new CreateExamRequest(null, subjectId, now());
 
         post(BASE_URL, request)
@@ -56,7 +56,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldCreateExamInPast() throws Exception {
+    void shouldCreateExamInPast() throws Exception {
         CreateExamRequest request = new CreateExamRequest(null, subjectId, now().minusDays(11));
 
         post(BASE_URL, request)
@@ -65,7 +65,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldNotCreateExamWithoutSubjectId() throws Exception {
+    void shouldNotCreateExamWithoutSubjectId() throws Exception {
         CreateExamRequest request = new CreateExamRequest(randAlph(11), null, now());
 
         post(BASE_URL, request)
@@ -73,7 +73,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldNotCreateExamWithInvalidSubjectId() throws Exception {
+    void shouldNotCreateExamWithInvalidSubjectId() throws Exception {
         CreateExamRequest request = new CreateExamRequest(randAlph(11), new Random().nextLong(), now());
 
         post(BASE_URL, request)
@@ -81,7 +81,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldNotCreateExamWithoutDate() throws Exception {
+    void shouldNotCreateExamWithoutDate() throws Exception {
         CreateExamRequest request = new CreateExamRequest(randAlph(11), subjectId, null);
 
         post(BASE_URL, request)
@@ -89,7 +89,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldGetAllExams() throws Exception {
+    void shouldGetAllExams() throws Exception {
         Long[] ids = {subjectId, addSubject()};
         range(0, 10).mapToObj(i -> new CreateExamRequest(randAlph(11), ids[i % 2], now()))
                 .forEach(this::addExam);
@@ -100,14 +100,14 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldReturnEmptyListWhenNoExams() throws Exception {
+    void shouldReturnEmptyListWhenNoExams() throws Exception {
         get(BASE_URL)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", hasSize(0)));
     }
 
     @Test
-    public void shouldGetAllExamsPerDay() throws Exception {
+    void shouldGetAllExamsPerDay() throws Exception {
         Long[] ids = {subjectId, addSubject()};
         range(0, 10).mapToObj(i -> new CreateExamRequest(randAlph(11), ids[i % 2], now().plusDays(i % 3)))
                 .forEach(this::addExam);
@@ -122,7 +122,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldGetAllExamsPerDayFromDate() throws Exception {
+    void shouldGetAllExamsPerDayFromDate() throws Exception {
         Long[] ids = {subjectId, addSubject()};
         range(0, 10).mapToObj(i -> new CreateExamRequest(randAlph(11), ids[i % 2], now().plusDays(i)))
                 .forEach(this::addExam);
@@ -132,7 +132,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldCountExamsWithoutGrade() throws Exception {
+    void shouldCountExamsWithoutGrade() throws Exception {
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().plusDays(4)));
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().minusDays(4)));
         addExam(new CreateExamRequest(randAlph(11), addSubject(), now().minusDays(1)));
@@ -143,7 +143,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldCountNoExamsWithoutGrade() throws Exception {
+    void shouldCountNoExamsWithoutGrade() throws Exception {
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().plusDays(4)));
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().plusDays(4)));
 
@@ -153,7 +153,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldUpdateGrade() throws Exception {
+    void shouldUpdateGrade() throws Exception {
         Long examId = addExam(new CreateExamRequest(randAlph(11), subjectId, now()));
         Double grade = 66D;
 
@@ -166,7 +166,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldUpdateGradeToNull() throws Exception {
+    void shouldUpdateGradeToNull() throws Exception {
         Long examId = addExam(new CreateExamRequest(randAlph(11), subjectId, now()));
         Double grade = 66D;
 
@@ -181,7 +181,7 @@ public class ExamControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldNotBeAbleToUpdateSomeoneElseExam() throws Exception {
+    void shouldNotBeAbleToUpdateSomeoneElseExam() throws Exception {
         Long subjectId = addSubject(new AuthenticatedUser(addUserWithRoles()));
         Long examId = addExam(new CreateExamRequest(randAlph(11), subjectId, now()));
 

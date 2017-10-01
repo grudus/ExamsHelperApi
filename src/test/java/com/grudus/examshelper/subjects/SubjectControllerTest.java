@@ -12,17 +12,17 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class SubjectControllerTest extends AbstractControllerTest {
+class SubjectControllerTest extends AbstractControllerTest {
 
     private static final String SUBJECT_BASIC_URL = "/api/subjects";
 
     @BeforeEach
-    public void addUser() {
+    void addUser() {
         login(USER);
     }
 
     @Test
-    public void shouldFindByLabel() throws Exception {
+    void shouldFindByLabel() throws Exception {
         Subject subject = randomSubject(authentication.getUserId());
         addSubject(subject);
 
@@ -34,13 +34,13 @@ public class SubjectControllerTest extends AbstractControllerTest {
 
 
     @Test
-    public void shouldNotFindByLabel() throws Exception {
+    void shouldNotFindByLabel() throws Exception {
         get(format("%s/%s", SUBJECT_BASIC_URL, randAlph(11)))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void shouldAddSubject() throws Exception {
+    void shouldAddSubject() throws Exception {
         Subject subject = randomSubject(authentication.getUserId());
 
         addSubject(subject);
@@ -50,7 +50,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldFindAllSubjects() throws Exception {
+    void shouldFindAllSubjects() throws Exception {
         Long userId = authentication.getUserId();
         Subject subject1 = randomSubject(userId), subject2 = randomSubject(userId);
 
@@ -63,7 +63,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldUpdateSubject() throws Exception {
+    void shouldUpdateSubject() throws Exception {
         Long userId = authentication.getUserId();
         Subject subject = randomSubject(userId);
         subject.setId(11L);
@@ -79,7 +79,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldDeleteSubjectWhenIdInDb() throws Exception {
+    void shouldDeleteSubjectWhenIdInDb() throws Exception {
         Subject subject = randomSubject(authentication.getUserId());
         subject.setId(15L);
         addSubject(subject);
@@ -94,7 +94,7 @@ public class SubjectControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void shouldDeleteNothingWhenIdNotInDb() throws Exception {
+    void shouldDeleteNothingWhenIdNotInDb() throws Exception {
         addSubject(randomSubject(authentication.getUserId()));
         addSubject(randomSubject(authentication.getUserId()));
 

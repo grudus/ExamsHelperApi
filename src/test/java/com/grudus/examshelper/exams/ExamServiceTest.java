@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ExamServiceTest {
+class ExamServiceTest {
 
     @Mock
     private ExamDao dao;
@@ -37,7 +37,7 @@ public class ExamServiceTest {
     private ExamService service;
 
     @Test
-    public void shouldFindAllExamsPerDay() throws Exception {
+    void shouldFindAllExamsPerDay() throws Exception {
         LocalDateTime now = now();
         List<ExamDto> exams = asList(randomAtDate(now), randomAtDate(now), randomAtDate(now),
                 randomAtDate(now.plusDays(6)), randomAtDate(now.plusDays(6)),
@@ -57,7 +57,7 @@ public class ExamServiceTest {
     }
 
     @Test
-    public void shouldFindAllPerDayFromDate() {
+    void shouldFindAllPerDayFromDate() {
         LocalDateTime now = now();
         List<ExamDto> exams = asList(
                 randomAtDate(now.plusDays(6)), randomAtDate(now.plusDays(6)),
@@ -76,7 +76,7 @@ public class ExamServiceTest {
     }
 
     @Test
-    public void shouldMapToExamAndSave() throws Exception {
+    void shouldMapToExamAndSave() throws Exception {
         CreateExamRequest request = new CreateExamRequest(randAlph(11), new Random().nextLong(), now());
 
         ArgumentCaptor<Exam> capturedExam = ArgumentCaptor.forClass(Exam.class);

@@ -25,7 +25,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TokenAuthenticationServiceTest {
+class TokenAuthenticationServiceTest {
 
     private static final String SECRET = randAlph(32);
 
@@ -43,7 +43,7 @@ public class TokenAuthenticationServiceTest {
     private TokenAuthenticationService tokenAuthenticationService;
 
     @BeforeEach
-    public void init() {
+    void init() {
         tokenAuthenticationService = new TokenAuthenticationService(SECRET, userService);
         user = randomUser();
         authentication = new AuthenticatedUser(user);
@@ -53,7 +53,7 @@ public class TokenAuthenticationServiceTest {
     }
 
     @Test
-    public void shouldAddAuthHeaderWhenUserDoNotHaveOne() {
+    void shouldAddAuthHeaderWhenUserDoNotHaveOne() {
         user.setId(1L);
         doNothing().when(userService).addToken(eq(1L), anyString());
 
@@ -64,7 +64,7 @@ public class TokenAuthenticationServiceTest {
     }
 
     @Test
-    public void shouldSetUserToken() {
+    void shouldSetUserToken() {
         user.setId(1L);
         user.setToken(randAlph(32));
 
@@ -75,7 +75,7 @@ public class TokenAuthenticationServiceTest {
     }
 
     @Test
-    public void shouldReturnProperAuthentication() {
+    void shouldReturnProperAuthentication() {
         String token = randAlph(32);
         when(request.getHeader(eq(AUTH_HEADER_NAME))).thenReturn(token);
         when(userService.findEnabledByToken(eq(token))).thenReturn(Optional.of(((AuthenticatedUser)authentication).getUser()));
@@ -92,7 +92,7 @@ public class TokenAuthenticationServiceTest {
     }
 
     @Test
-    public void shouldReturnNullWhenTokenDoNotExists() {
+    void shouldReturnNullWhenTokenDoNotExists() {
         when(request.getHeader(eq(AUTH_HEADER_NAME))).thenReturn(null);
 
         Authentication auth = tokenAuthenticationService.getAuthentication(request);
@@ -101,7 +101,7 @@ public class TokenAuthenticationServiceTest {
     }
 
     @Test
-    public void shouldReturnNullWhenTokenAndUserTokenDoNotMatch() {
+    void shouldReturnNullWhenTokenAndUserTokenDoNotMatch() {
         when(request.getHeader(eq(AUTH_HEADER_NAME))).thenReturn(randAlph(32));
         when(userService.findEnabledByToken(anyString())).thenReturn(Optional.empty());
 

@@ -27,7 +27,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AddUserRequestValidatorTest {
+class AddUserRequestValidatorTest {
 
     @Mock
     private EmailValidator emailValidator;
@@ -41,7 +41,7 @@ public class AddUserRequestValidatorTest {
     private Errors errors;
 
     @BeforeEach
-    public void init() {
+    void init() {
         validatedObject = new AddUserRequest(randAlph(10), randAlph(10), randomEmail());
         errors = new BeanPropertyBindingResult(validatedObject, "addUserRequest");
         validator = new AddUserRequestValidator(userService, emailValidator);
@@ -52,13 +52,13 @@ public class AddUserRequestValidatorTest {
     }
 
     @Test
-    public void shouldValidateProperly() {
+    void shouldValidateProperly() {
         validator.validate(validatedObject, errors);
         assertEquals(0, errors.getErrorCount());
     }
 
     @Test
-    public void shouldNotPassValidationWhenEmptyEmail() {
+    void shouldNotPassValidationWhenEmptyEmail() {
         validatedObject.setEmail(null);
 
         validator.validate(validatedObject, errors);
@@ -68,7 +68,7 @@ public class AddUserRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPassValidationWhenInvalidEmail() {
+    void shouldNotPassValidationWhenInvalidEmail() {
         when(emailValidator.isValid(anyString())).thenReturn(false);
 
         validator.validate(validatedObject, errors);
@@ -78,7 +78,7 @@ public class AddUserRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPassValidationWhenEmptyUsername() {
+    void shouldNotPassValidationWhenEmptyUsername() {
         validatedObject.setUsername(null);
 
         validator.validate(validatedObject, errors);
@@ -88,7 +88,7 @@ public class AddUserRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPassValidationWhenEmptyPassword() {
+    void shouldNotPassValidationWhenEmptyPassword() {
         validatedObject.setPassword(null);
 
         validator.validate(validatedObject, errors);
@@ -99,7 +99,7 @@ public class AddUserRequestValidatorTest {
 
 
     @Test
-    public void shouldNotPassValidationWhenPasswordTooShort() {
+    void shouldNotPassValidationWhenPasswordTooShort() {
         validatedObject.setPassword(randAlph(5));
 
         validator.validate(validatedObject, errors);
@@ -109,7 +109,7 @@ public class AddUserRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPassValidationWhenEmailInvalid() {
+    void shouldNotPassValidationWhenEmailInvalid() {
         when(emailValidator.isValid(anyString())).thenReturn(false);
 
         validator.validate(validatedObject, errors);
@@ -119,7 +119,7 @@ public class AddUserRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPassValidationWhenEmailInDb() {
+    void shouldNotPassValidationWhenEmailInDb() {
         when(userService.findByEmail(anyString())).thenReturn(Optional.of(new User()));
 
         validator.validate(validatedObject, errors);
@@ -129,7 +129,7 @@ public class AddUserRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPassValidationWhenUsernameInDb() {
+    void shouldNotPassValidationWhenUsernameInDb() {
         when(userService.findByUsername(anyString())).thenReturn(Optional.of(new User()));
 
         validator.validate(validatedObject, errors);
@@ -139,7 +139,7 @@ public class AddUserRequestValidatorTest {
     }
 
     @Test
-    public void shouldHasMultipleErrors() {
+    void shouldHasMultipleErrors() {
         validatedObject.setPassword("   ");
         validatedObject.setEmail("  ");
         validatedObject.setUsername(" ");

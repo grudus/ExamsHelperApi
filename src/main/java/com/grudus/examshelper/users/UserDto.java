@@ -2,8 +2,8 @@ package com.grudus.examshelper.users;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.grudus.examshelper.commons.JsonLocalDateTimeDeserializer;
-import com.grudus.examshelper.commons.JsonLocalDateTimeSerializer;
+import com.grudus.examshelper.commons.json.JsonLocalDateTimeDeserializer;
+import com.grudus.examshelper.commons.json.JsonLocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
 
