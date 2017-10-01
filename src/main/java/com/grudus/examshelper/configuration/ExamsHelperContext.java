@@ -5,7 +5,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.jooq.ConnectionProvider;
 import org.jooq.impl.DataSourceConnectionProvider;
 import org.jooq.impl.DefaultDSLContext;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,9 +28,18 @@ public class ExamsHelperContext {
 
 
     @Bean
-    @ConfigurationProperties(prefix="spring.datasource")
-    public DataSource primaryDataSource() {
-        return DataSourceBuilder.create().build();
+    public DataSource primaryDataSource(
+            @Value("${spring.datasource.url}") String url,
+            @Value("${spring.datasource.username}") String username,
+            @Value("${spring.datasource.password}") String password,
+            @Value("${spring.datasource.driver-class-name}") String driver
+    ) {
+        return DataSourceBuilder.create()
+                .url(url)
+                .username(username)
+                .password(password)
+                .driverClassName(driver)
+                .build();
     }
 
     @Bean
