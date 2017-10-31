@@ -23,7 +23,7 @@ class SubjectSecurityServiceTest {
 
     @Test
     void shouldThrowExceptionWhenSubjectDoNotBelongsToUser() throws Exception {
-        when(subjectService.belongsToUser(anyLong(), anyLong())).thenReturn(false);
+        when(subjectService.belongsToAnotherUser(anyLong(), anyLong())).thenReturn(true);
 
         assertThrows(IllegalActionException.class, () ->
                 subjectSecurityService.assertSubjectBelongsToUser(randomId(), randomId()));

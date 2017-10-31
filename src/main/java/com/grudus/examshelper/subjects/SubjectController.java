@@ -21,11 +21,13 @@ public class SubjectController {
 
     private final SubjectService subjectService;
     private final CreateSubjectRequestValidator validator;
+    private final SubjectSecurityService subjectSecurityService;
 
     @Autowired
-    public SubjectController(SubjectService subjectService, CreateSubjectRequestValidator validator) {
+    public SubjectController(SubjectService subjectService, CreateSubjectRequestValidator validator, SubjectSecurityService subjectSecurityService) {
         this.subjectService = subjectService;
         this.validator = validator;
+        this.subjectSecurityService = subjectSecurityService;
     }
 
     @GetMapping
@@ -36,9 +38,10 @@ public class SubjectController {
                 .collect(toList());
     }
 
-    @GetMapping("/{label}")
-    public SubjectDto findByLabel(@PathVariable String label, AuthenticatedUser user) {
-        return subjectService.findByLabel(user.getUserId(), label)
+    @GetMapping("/{id}")
+    public SubjectDto findById(@PathVariable Long id, AuthenticatedUser user) {
+        subjectSecurityService.assertSubjectBelongsToUser(user.getUserId(), id);
+        return subjectService.findById(id)
                 .orElseThrow(SubjectNotFoundException::new);
     }
 
@@ -55,7 +58,8 @@ public class SubjectController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSubject(@PathVariable Long id) {
+    public void deleteSubject(@PathVariable Long id, AuthenticatedUser user) {
+        subjectSecurityService.assertSubjectBelongsToUser(user.getUserId(), id);
         subjectService.delete(id);
     }
 

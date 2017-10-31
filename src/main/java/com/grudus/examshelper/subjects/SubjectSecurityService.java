@@ -15,7 +15,7 @@ public class SubjectSecurityService {
     }
 
     public void assertSubjectBelongsToUser(Long userId, Long subjectId) {
-        if (!(subjectId == null || subjectService.belongsToUser(userId, subjectId)))
+        if (subjectService.belongsToAnotherUser(userId, subjectId))
             throw new IllegalActionException("User {%d} tries to steal someone else's subject {%d}!", userId, subjectId);
     }
 }

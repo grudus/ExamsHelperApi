@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -20,8 +21,10 @@ public class SubjectService {
         return subjectDao.save(subject);
     }
 
-    boolean belongsToUser(Long userId, Long subjectId) {
-        return subjectDao.belongsToUser(userId, subjectId);
+    boolean belongsToAnotherUser(Long userId, Long subjectId) {
+        return subjectDao.findById(subjectId)
+                .filter(subject -> !Objects.equals(subject.getUserId(), userId))
+                .isPresent();
     }
 
     void update(Subject subject) {
@@ -44,7 +47,7 @@ public class SubjectService {
         subjectDao.delete(id);
     }
 
-    Optional<SubjectDto> findByLabel(Long userId, String label) {
-        return subjectDao.findByUserIdAndLabel(userId, label);
+    Optional<SubjectDto> findById(Long id) {
+        return subjectDao.findById(id).map(Subject::toDto);
     }
 }

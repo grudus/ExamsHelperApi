@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
@@ -42,6 +43,7 @@ public class ExamService {
                 .collect(groupingBy(exam -> exam.getDate().toLocalDate()))
                 .entrySet().stream()
                 .map(entry -> new ExamsPerDay(entry.getKey(), entry.getValue()))
+                .sorted(comparing(ExamsPerDay::getDate).reversed())
                 .collect(toList());
     }
 

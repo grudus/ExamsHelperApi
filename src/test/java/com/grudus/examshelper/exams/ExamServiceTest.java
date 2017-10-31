@@ -65,13 +65,11 @@ class ExamServiceTest {
 
         when(dao.findAllFromDate(anyLong(), any())).thenReturn(exams);
 
-        List<ExamsPerDay> examsPerDay = service.findAllExamsPerDay(new User(), now)
-                .stream().sorted(comparing(ExamsPerDay::getDate))
-                .collect(toList());
+        List<ExamsPerDay> examsPerDay = service.findAllExamsPerDay(new User(), now);
 
         assertEquals(2, examsPerDay.size());
-        assertEquals(2, examsPerDay.get(0).getExams().size());
-        assertEquals(1, examsPerDay.get(1).getExams().size());
+        assertEquals(1, examsPerDay.get(0).getExams().size());
+        assertEquals(2, examsPerDay.get(1).getExams().size());
 
     }
 

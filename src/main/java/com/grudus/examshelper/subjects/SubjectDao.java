@@ -66,7 +66,4 @@ public class SubjectDao {
         return dsl.fetchExists(S, S.LABEL.eq(label).and(S.USER_ID.eq(userId)));
     }
 
-    boolean belongsToUser(Long userId, Long subjectId) {
-        return dsl.fetchExists(S, S.USER_ID.eq(userId).and(S.ID.eq(subjectId)));
-    }
 }

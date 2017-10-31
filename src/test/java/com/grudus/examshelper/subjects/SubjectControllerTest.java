@@ -22,11 +22,12 @@ class SubjectControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void shouldFindByLabel() throws Exception {
+    void shouldFindId() throws Exception {
         Subject subject = randomSubject(authentication.getUserId());
+        subject.setId(randomId());
         addSubject(subject);
 
-        get(format("%s/%s", SUBJECT_BASIC_URL, subject.getLabel()))
+        get(format("%s/%s", SUBJECT_BASIC_URL, subject.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.label", is(subject.getLabel())))
                 .andExpect(jsonPath("$.color", is(subject.getColor())));
@@ -34,8 +35,8 @@ class SubjectControllerTest extends AbstractControllerTest {
 
 
     @Test
-    void shouldNotFindByLabel() throws Exception {
-        get(format("%s/%s", SUBJECT_BASIC_URL, randAlph(11)))
+    void shouldNotFindById() throws Exception {
+        get(format("%s/%s", SUBJECT_BASIC_URL, randomId()))
                 .andExpect(status().isNotFound());
     }
 
