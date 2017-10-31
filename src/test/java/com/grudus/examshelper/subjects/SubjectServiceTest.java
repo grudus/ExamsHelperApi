@@ -83,6 +83,7 @@ class SubjectServiceTest {
     @Test
     void shouldNotBelongsToAnotherUser() {
         Subject subject = randomSubject(randomId());
+        subject.setId(randomId());
         when(subjectDao.findById(anyLong())).thenReturn(Optional.of(subject));
 
         assertFalse(
@@ -91,8 +92,21 @@ class SubjectServiceTest {
     }
 
     @Test
+    void shouldNotBelongsToAnotherUserWhenNoSubjectId() {
+        Subject subject = randomSubject(randomId());
+        subject.setId(null);
+        when(subjectDao.findById(anyLong())).thenReturn(Optional.of(subject));
+
+        assertFalse(
+                subjectService.belongsToAnotherUser(subject.getUserId(), subject.getId())
+        );
+    }
+
+
+    @Test
     void shouldBelongsToAnotherUser() {
         Subject subject = randomSubject(randomId());
+        subject.setId(randomId());
         when(subjectDao.findById(anyLong())).thenReturn(Optional.of(subject));
 
         assertTrue(

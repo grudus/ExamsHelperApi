@@ -5,11 +5,13 @@ import com.grudus.examshelper.exams.ExamService;
 import com.grudus.examshelper.exams.domain.ExamDto;
 import com.grudus.examshelper.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
@@ -23,7 +25,8 @@ public class StatsService {
         this.examService = examService;
     }
 
-    List<AverageExamsGradePerMonth> getAverageExamsGradePerMonth(User user, Long subjectId) {
+    List<AverageExamsGradePerMonth> getAverageExamsGradePerMonth(User user, @Nullable Long subjectId) {
+        requireNonNull(user);
         List<ExamDto> allExams = examService.findAllExamsAsDtoByUser(user);
 
         Map<Pair<Integer, Month>, List<ExamDto>> examsPerMonth = allExams.stream()

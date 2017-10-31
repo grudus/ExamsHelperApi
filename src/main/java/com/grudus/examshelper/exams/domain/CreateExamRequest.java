@@ -1,5 +1,7 @@
 package com.grudus.examshelper.exams.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.grudus.examshelper.commons.json.JsonLocalDateTimeDeserializer;
@@ -14,11 +16,11 @@ public class CreateExamRequest {
     @JsonDeserialize(using = JsonLocalDateTimeDeserializer.class)
     private final LocalDateTime date;
 
-    public CreateExamRequest() {
-        this(null, null, null);
-    }
-
-    public CreateExamRequest(String info, Long subjectId, LocalDateTime date) {
+    @JsonCreator
+    public CreateExamRequest(
+            @JsonProperty("info") String info,
+            @JsonProperty("subjectId") Long subjectId,
+            @JsonProperty("date") LocalDateTime date) {
         this.info = info;
         this.subjectId = subjectId;
         this.date = date;

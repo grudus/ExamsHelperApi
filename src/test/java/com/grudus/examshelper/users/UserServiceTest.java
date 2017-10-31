@@ -34,6 +34,7 @@ class UserServiceTest {
     @BeforeEach
     void init() {
         user = randomUser();
+        user.setId(randomId());
         userService = new UserService(userDao, passwordEncoder);
 
         when(passwordEncoder.encode(anyString())).thenReturn("");
