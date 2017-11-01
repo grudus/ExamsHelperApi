@@ -137,7 +137,7 @@ class ExamControllerTest extends AbstractControllerTest {
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().minusDays(4)));
         addExam(new CreateExamRequest(randAlph(11), addSubject(), now().minusDays(1)));
 
-        get(BASE_URL + "/without-grade")
+        get(BASE_URL + "/without-grade/count")
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count", is(2)));
     }
@@ -147,7 +147,7 @@ class ExamControllerTest extends AbstractControllerTest {
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().plusDays(4)));
         addExam(new CreateExamRequest(randAlph(11), subjectId, now().plusDays(4)));
 
-        get(BASE_URL + "/without-grade")
+        get(BASE_URL + "/without-grade/count")
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count", is(0)));
     }

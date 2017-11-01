@@ -63,6 +63,14 @@ class ExamDao {
                 .fetchInto(ExamDto.class);
     }
 
+    List<ExamDto> findWithoutGrade() {
+        return selectExamsAsDto()
+                .where(E.DATE.lt(now()))
+                .and(withoutGradeCondition())
+                .fetchInto(ExamDto.class);
+    }
+
+
     boolean belongsToAnotherUser(Long userId, Long examId) {
         return dsl.fetchExists(E.join(S).onKey(), E.ID.eq(examId).and(S.USER_ID.notEqual(userId)));
     }

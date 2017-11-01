@@ -50,7 +50,7 @@ public class ExamController {
         return examService.findAllExamsPerDay(user.getUser(), dateFrom);
     }
 
-    @GetMapping("/without-grade")
+    @GetMapping("/without-grade/count")
     public NotGradedExamsCount getNumberOfNotGradedExams(AuthenticatedUser user) {
         return new NotGradedExamsCount(examService.countNotGraded(user.getUser()));
     }

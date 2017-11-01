@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import static java.util.Objects.requireNonNull;
+
 @Service
 public class SubjectSecurityService {
-
-    public static final String ACCESS_FORMAT = "@subjectSecurityService.hasAccessToSubject(%s, %d)";
 
     private final SubjectService subjectService;
 
@@ -18,6 +18,7 @@ public class SubjectSecurityService {
     }
 
     public boolean hasAccessToSubject(AuthenticatedUser user, @Nullable Long subjectId) {
+        requireNonNull(user);
         return !subjectService.belongsToAnotherUser(user.getUserId(), subjectId);
     }
 }

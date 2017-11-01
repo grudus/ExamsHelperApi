@@ -62,9 +62,10 @@ public class ExamService {
         return examDao.countNotGradedFromPast(user.getId());
     }
 
-    List<ExamDto> findWithoutGradeForSubject(Long subjectId) {
-        requireNonNull(subjectId);
-        return examDao.findWithoutGradeForSubject(subjectId);
+    List<ExamDto> findWithoutGrade(@Nullable Long subjectId) {
+        return subjectId == null
+                ? examDao.findWithoutGrade()
+                : examDao.findWithoutGradeForSubject(subjectId);
     }
 
     boolean belongsToAnotherUser(Long userId, Long examId) {

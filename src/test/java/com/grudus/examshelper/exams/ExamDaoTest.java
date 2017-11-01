@@ -205,6 +205,20 @@ class ExamDaoTest extends SpringBasedTest {
     }
 
     @Test
+    void shouldFindWithoutGradesForAllSubjects() {
+        dao.save(randomPastExam(subject.getId(), -1D));
+        dao.save(randomPastExam(subject.getId(), null));
+        dao.save(randomPastExam(addSubject(user.getId()).getId(), -1D));
+        dao.save(randomPastExam(addSubject(user.getId()).getId(), -1D));
+        dao.save(randomPastExam(subject.getId(), 31D));
+
+        List<ExamDto> exams = dao.findWithoutGrade();
+
+        assertEquals(4, exams.size());
+
+    }
+
+    @Test
     void shouldDetectUserOwnership() {
         Long newUserId = addUserWithRoles().getId();
         Exam exam1 = randomExam(subject.getId());
