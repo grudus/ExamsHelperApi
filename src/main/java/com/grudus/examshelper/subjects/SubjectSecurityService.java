@@ -1,12 +1,14 @@
 package com.grudus.examshelper.subjects;
 
-import com.grudus.examshelper.exceptions.IllegalActionException;
+import com.grudus.examshelper.configuration.security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SubjectSecurityService {
+
+    public static final String ACCESS_FORMAT = "@subjectSecurityService.hasAccessToSubject(%s, %d)";
 
     private final SubjectService subjectService;
 
@@ -15,8 +17,7 @@ public class SubjectSecurityService {
         this.subjectService = subjectService;
     }
 
-    public void assertSubjectBelongsToUser(Long userId, @Nullable Long subjectId) {
-        if (subjectService.belongsToAnotherUser(userId, subjectId))
-            throw new IllegalActionException("User {%d} tries to steal someone else's subject {%d}!", userId, subjectId);
+    public boolean hasAccessToSubject(AuthenticatedUser user, @Nullable Long subjectId) {
+        return !subjectService.belongsToAnotherUser(user.getUserId(), subjectId);
     }
 }
