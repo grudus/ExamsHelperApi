@@ -79,6 +79,11 @@ public class ExamService {
         examDao.updateGrade(examId, grade);
     }
 
+    void delete(Long examId) {
+        requireNonNull(examId);
+        examDao.delete(examId);
+    }
+
     private List<ExamDto> findAllExamsByUserFromDate(User user, LocalDateTime dateFrom) {
         requireNonNull(user);
         requireNonNull(dateFrom);

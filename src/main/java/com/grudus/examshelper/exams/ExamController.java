@@ -62,6 +62,12 @@ public class ExamController {
         examService.updateGrade(examId, grade);
     }
 
+    @DeleteMapping("/{examId}")
+    @PreAuthorize("@examsSecurityService.hasAccessToExam(#user, #examId)")
+    public void deleteExam(AuthenticatedUser user, @PathVariable("examId") Long examId) {
+        examService.delete(examId);
+    }
+
     @InitBinder("createExamRequest")
     public void initValidator(WebDataBinder binder) {
         binder.addValidators(validator);

@@ -83,6 +83,12 @@ class ExamDao {
                 .execute();
     }
 
+    void delete(Long examId) {
+        dsl.deleteFrom(E)
+                .where(E.ID.eq(examId))
+                .execute();
+    }
+
     private Condition withoutGradeCondition() {
         return E.GRADE.isNull().or(E.GRADE.le(0D));
     }
@@ -92,5 +98,4 @@ class ExamDao {
                 S.ID.as("subject.id"), S.LABEL.as("subject.label"), S.COLOR.as("subject.color"))
                 .from(E).innerJoin(S).onKey();
     }
-
 }

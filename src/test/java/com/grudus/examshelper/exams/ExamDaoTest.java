@@ -49,13 +49,13 @@ class ExamDaoTest extends SpringBasedTest {
         exam1 = randomExam(subject.getId());
         exam2 = randomExam(subject2.getId());
 
-        dao.save(exam1);
-        dao.save(exam2);
+        exam1.setId(dao.save(exam1));
+        exam2.setId(dao.save(exam2));
     }
 
     @Test
     void shouldSaveExams() {
-        assertEquals(2, dsl.fetchCount(EXAMS));
+        assertEquals(2, getExamsCount());
     }
 
     @Test
@@ -251,6 +251,24 @@ class ExamDaoTest extends SpringBasedTest {
 
         dao.findAllAsExams(user.getId())
                 .forEach(exam -> assertNotEquals(crazyGrade, exam.getGrade()));
+    }
+
+    @Test
+    void shouldDeleteExam() {
+        dao.delete(exam2.getId());
+
+        assertEquals(1, getExamsCount());
+    }
+
+    @Test
+    void shouldNotDeleteAnyExamWhenInvalidId() {
+        dao.delete(randomId());
+
+        assertEquals(2, getExamsCount());
+    }
+
+    private int getExamsCount() {
+        return dsl.fetchCount(EXAMS);
     }
 
     private Subject addSubject(Long userId) {

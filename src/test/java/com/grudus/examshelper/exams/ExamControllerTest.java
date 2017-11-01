@@ -15,6 +15,7 @@ import static com.grudus.examshelper.users.roles.RoleName.USER;
 import static com.grudus.examshelper.utils.RequestParam.param;
 import static com.grudus.examshelper.utils.SubjectUtils.randomSubjectDto;
 import static com.grudus.examshelper.utils.Utils.randAlph;
+import static com.grudus.examshelper.utils.Utils.randomId;
 import static java.time.LocalDateTime.now;
 import static java.util.stream.IntStream.range;
 import static org.hamcrest.Matchers.*;
@@ -167,7 +168,7 @@ class ExamControllerTest extends AbstractControllerTest {
 
     @Test
     void shouldUpdateGradeToNull() throws Exception {
-        Long examId = addExam(new CreateExamRequest(randAlph(11), subjectId, now()));
+        Long examId = addExam();
         Double grade = 66D;
 
         putWithParams(BASE_URL + "/" + examId, param("grade", grade.toString()))
@@ -180,6 +181,10 @@ class ExamControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.[0].grade", nullValue()));
     }
 
+    private long addExam() {
+        return addExam(new CreateExamRequest(randAlph(11), subjectId, now()));
+    }
+
     @Test
     void shouldNotBeAbleToUpdateSomeoneElseExam() throws Exception {
         Long subjectId = addSubject(new AuthenticatedUser(addUserWithRoles()));
@@ -187,6 +192,38 @@ class ExamControllerTest extends AbstractControllerTest {
 
         putWithParams(BASE_URL + "/" + examId, param("grade", "33.0"))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void shouldDeleteExam() throws Exception {
+        Long examId = addExam(new CreateExamRequest(randAlph(11), subjectId, now()));
+
+        delete(BASE_URL + "/" + examId)
+                .andExpect(status().isOk());
+
+        get(BASE_URL)
+                .andExpect(jsonPath("$.*", hasSize(0)));
+    }
+
+    @Test
+    void shouldNotBeAbleToDeleteSomeoneElseExam() throws Exception {
+        Long subjectId = addSubject(new AuthenticatedUser(addUserWithRoles()));
+        Long examId = addExam(new CreateExamRequest(randAlph(11), subjectId, now()));
+
+        delete(BASE_URL + "/" + examId)
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void shouldDeleteNothingWhenInvalidId() throws Exception {
+        addExam(new CreateExamRequest(randAlph(11), subjectId, now()));
+
+        delete(BASE_URL + "/" + randomId())
+                .andExpect(status().isOk());
+
+        get(BASE_URL)
+                .andExpect(jsonPath("$.*", hasSize(1)));
+
     }
 
 
