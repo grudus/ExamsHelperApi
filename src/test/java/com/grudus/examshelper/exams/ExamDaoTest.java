@@ -214,8 +214,8 @@ class ExamDaoTest extends SpringBasedTest {
         dao.save(randomExam(subject.getId()));
         Long exam2Id = dao.save(exam2);
 
-        assertFalse(dao.belongsToUser(newUserId, exam1Id));
-        assertTrue(dao.belongsToUser(newUserId, exam2Id));
+        assertTrue(dao.belongsToAnotherUser(newUserId, exam1Id));
+        assertFalse(dao.belongsToAnotherUser(newUserId, exam2Id));
     }
 
     @Test

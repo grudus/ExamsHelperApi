@@ -63,8 +63,8 @@ class ExamDao {
                 .fetchInto(ExamDto.class);
     }
 
-    boolean belongsToUser(Long userId, Long examId) {
-        return dsl.fetchExists(E.join(S).onKey(), S.USER_ID.eq(userId).and(E.ID.eq(examId)));
+    boolean belongsToAnotherUser(Long userId, Long examId) {
+        return dsl.fetchExists(E.join(S).onKey(), E.ID.eq(examId).and(S.USER_ID.notEqual(userId)));
     }
 
     void updateGrade(Long examId, Double grade) {

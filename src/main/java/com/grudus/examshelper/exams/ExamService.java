@@ -67,10 +67,10 @@ public class ExamService {
         return examDao.findWithoutGradeForSubject(subjectId);
     }
 
-    boolean belongsToUser(Long userId, Long examId) {
+    boolean belongsToAnotherUser(Long userId, Long examId) {
         requireNonNull(userId);
         requireNonNull(examId);
-        return examDao.belongsToUser(userId, examId);
+        return examDao.belongsToAnotherUser(userId, examId);
     }
 
     void updateGrade(Long examId, @Nullable Double grade) {

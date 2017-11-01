@@ -1,5 +1,6 @@
 package com.grudus.examshelper;
 
+import com.grudus.examshelper.exams.ExamsSecurityService;
 import com.grudus.examshelper.subjects.SubjectSecurityService;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.support.AopUtils;
@@ -22,6 +23,7 @@ class SecurityServiceSpelTest extends SpringBasedTest {
 
     static {
         classToPattern.put(SubjectSecurityService.class, Pattern.compile("@subjectSecurityService\\.hasAccessToSubject\\(#(\\w+.?)+,\\s+#(\\w+.?)+\\)"));
+        classToPattern.put(ExamsSecurityService.class, Pattern.compile("@examsSecurityService\\.hasAccessToExam\\(#(\\w+.?)+,\\s+#(\\w+.?)+\\)"));
     }
 
 
