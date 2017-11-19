@@ -212,7 +212,7 @@ class ExamDaoTest extends SpringBasedTest {
         dao.save(randomPastExam(addSubject(user.getId()).getId(), -1D));
         dao.save(randomPastExam(subject.getId(), 31D));
 
-        List<ExamDto> exams = dao.findWithoutGrade();
+        List<ExamDto> exams = dao.findWithoutGrade(user.getId());
 
         assertEquals(4, exams.size());
 

@@ -62,9 +62,9 @@ public class ExamService {
         return examDao.countNotGradedFromPast(user.getId());
     }
 
-    List<ExamDto> findWithoutGrade(@Nullable Long subjectId) {
+    List<ExamDto> findWithoutGrade(Long userId, @Nullable Long subjectId) {
         return subjectId == null
-                ? examDao.findWithoutGrade()
+                ? examDao.findWithoutGrade(userId)
                 : examDao.findWithoutGradeForSubject(subjectId);
     }
 

@@ -63,9 +63,9 @@ class ExamDao {
                 .fetchInto(ExamDto.class);
     }
 
-    List<ExamDto> findWithoutGrade() {
+    List<ExamDto> findWithoutGrade(Long userId) {
         return selectExamsAsDto()
-                .where(E.DATE.lt(now()))
+                .where(S.USER_ID.eq(userId).and(E.DATE.lt(now())))
                 .and(withoutGradeCondition())
                 .fetchInto(ExamDto.class);
     }

@@ -26,6 +26,6 @@ public class ExamsSubjectController {
     @PreAuthorize("@subjectSecurityService.hasAccessToSubject(#user, #subjectId)")
     public List<ExamDto> getExamsWithoutGrade(AuthenticatedUser user,
                                               @RequestParam(value = "subjectId", required = false) Long subjectId) {
-        return examService.findWithoutGrade(subjectId);
+        return examService.findWithoutGrade(user.getUserId(), subjectId);
     }
 }
